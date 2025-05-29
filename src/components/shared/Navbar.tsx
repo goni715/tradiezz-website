@@ -18,12 +18,8 @@ export default function Navbar() {
       <div className="mx-auto h-full flex max-w-7xl items-center justify-between px-4 py-3">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <Image src="/images/logo.png" alt="logo" width={120} height={120} />
+          <Image src="/images/logo.png" alt="logo" width={80} height={80} className="w-20 h-12"/>
         </Link>
-        {/* <Link href="/" className="flex items-center">
-            <span className="text-xl font-bold text-rose-500">Tradieez</span>
-          </Link> */}
-
         {/* Desktop Navigation */}
         <div className="hidden space-x-6 md:flex">
           <Link

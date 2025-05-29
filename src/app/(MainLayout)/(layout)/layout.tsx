@@ -8,7 +8,6 @@ const layout = ({ children }: TProps) => {
   return (
     <>
       {children}
-
       <Footer />
     </>
   );

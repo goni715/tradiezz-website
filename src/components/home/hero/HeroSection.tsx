@@ -5,7 +5,7 @@ import HeroForm from "./HeroForm";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-[calc(100vh-80px)] w-full bg-[url('/images/hero.jpeg')] bg-center bg-no-repeat bg-cover flex items-center justify-center px-4">
+    <section className="relative min-h-[calc(100vh-80px)] w-full bg-[url('/images/hero.png')] bg-center bg-no-repeat bg-cover flex items-center justify-center px-4">
       {/* Overlay */}
       <div className="absolute inset-0 bg-[rgba(17,24,39,0.7)] z-10"></div>
 
