@@ -16,7 +16,7 @@ const blogs = [
       "Discover the most sought-after skills that manufacturing employers are looking for in today's competitive job market.",
     author: "Michael Chen",
     date: "May 15, 2025",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "https://images.pexels.com/photos/8486928/pexels-photo-8486928.jpeg?auto=compress&cs=tinysrgb&w=600",
     slug: "/blog/top-10-skills",
   },
   {
@@ -28,7 +28,7 @@ const blogs = [
       "Artificial intelligence is changing how companies find and hire top engineering talent. Learn how AI is transforming the recruitment landscape.",
     author: "Sarah Johnson",
     date: "May 10, 2025",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "https://images.pexels.com/photos/8486928/pexels-photo-8486928.jpeg?auto=compress&cs=tinysrgb&w=600",
     slug: "/blog/ai-revolutionizing-recruitment",
   },
   {
@@ -40,7 +40,7 @@ const blogs = [
       "Explore how the push for sustainability is creating new roles and opportunities in the manufacturing industry.",
     author: "David Rodriguez",
     date: "May 5, 2025",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "https://images.pexels.com/photos/8486928/pexels-photo-8486928.jpeg?auto=compress&cs=tinysrgb&w=600",
     slug: "/blog/sustainable-manufacturing",
   },
   {
@@ -51,7 +51,7 @@ const blogs = [
     excerpt: "How virtual replicas are transforming product development, testing, and maintenance across industries.",
     author: "Lisa Wong",
     date: "May 2, 2025",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "https://images.pexels.com/photos/8486928/pexels-photo-8486928.jpeg?auto=compress&cs=tinysrgb&w=600",
     slug: "/blog/digital-twins",
   },
   {
@@ -63,7 +63,7 @@ const blogs = [
       "Key strategies manufacturing companies are implementing to build more robust and adaptable supply chains.",
     author: "James Peterson",
     date: "April 28, 2025",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "https://images.pexels.com/photos/8486928/pexels-photo-8486928.jpeg?auto=compress&cs=tinysrgb&w=600",
     slug: "/blog/supply-chain-resilience",
   },
 ]
@@ -76,7 +76,7 @@ const categoryColors: Record<string, string> = {
   "Technology Trends": "bg-purple-100 text-purple-800",
 }
 
-export default function RecentBlogs() {
+const RecentBlogs = () => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [width, setWidth] = useState(0)
   const carousel = useRef<HTMLDivElement>(null)
@@ -129,21 +129,21 @@ export default function RecentBlogs() {
     },
   }
 
-  const cardHoverVariants = {
-    rest: { scale: 1, y: 0 },
-    hover: {
-      scale: 1.02,
-      y: -5,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 10,
-      },
-    },
-  }
+//   const cardHoverVariants = {
+//     rest: { scale: 1, y: 0 },
+//     hover: {
+//       scale: 1.02,
+//       y: -5,
+//       transition: {
+//         type: "spring",
+//         stiffness: 400,
+//         damping: 10,
+//       },
+//     },
+//   }
 
   return (
-    <section className="py-16 px-4 bg-gradient-to-b from-white to-gray-50">
+    <section className="py-12 px-4 bg-gray-50">
       <motion.div
         className="max-w-7xl mx-auto"
         initial="hidden"
@@ -161,7 +161,7 @@ export default function RecentBlogs() {
             <div className="flex gap-2">
               <button
                 onClick={prevSlide}
-                className="p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-colors"
+                className="p-2 rounded-full bg-white shadow-md cursor-pointer hover:bg-gray-50 transition-colors"
                 aria-label="Previous slide"
               >
                 <svg
@@ -181,7 +181,7 @@ export default function RecentBlogs() {
               </button>
               <button
                 onClick={nextSlide}
-                className="p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-colors"
+                className="p-2 rounded-full cursor-pointer bg-white shadow-md hover:bg-gray-50 transition-colors"
                 aria-label="Next slide"
               >
                 <svg
@@ -337,3 +337,6 @@ function BlogCard({ blog }: { blog: (typeof blogs)[0] }) {
     </motion.div>
   )
 }
+
+
+export default RecentBlogs;

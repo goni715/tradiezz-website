@@ -1,15 +1,14 @@
 "use client"
 
-import { useState } from "react"
 import { jobData } from "@/data/job.data"
 import FavouriteJobList from "@/components/favouriteJobs/FavouriteJobList"
 
 const FavouriteJobsPage = () => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const totalPages = 10;
-  const jobsPerPage = 10
+  //const [currentPage, setCurrentPage] = useState(1)
+  //const totalPages = 10;
+ // const jobsPerPage = 10
 
-  const startIndex = (currentPage - 1) * jobsPerPage
+  //const startIndex = (currentPage - 1) * jobsPerPage
 
   return (
     <>
