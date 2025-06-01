@@ -3,6 +3,8 @@
 "use client";
 
 import LocationMap from "@/components/Location/LocationMap";
+import { Map } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 
 const PostJobForm = () => {
@@ -20,6 +22,18 @@ const PostJobForm = () => {
   const [description, setDescription] = useState("");
   const [responsibilities, setResponsibilities] = useState("");
   const [selectedLocation, setSelectedLocation] = useState();
+  
+   const MapComponent = dynamic(() => import('@/components/Location/LocationMap'), {
+    ssr: false, // This is critical - it prevents the component from loading during SSR
+    loading: () => (
+      <div className="h-full flex items-center justify-center bg-gray-100 rounded-lg">
+        <div className="text-center">
+          <Map size={32} className="mx-auto text-blue-500 animate-pulse" />
+          <p className="mt-2 text-gray-600 text-sm">Loading map...</p>
+        </div>
+      </div>
+    ),
+  });
 
 
   const typeOptions = [
@@ -354,7 +368,11 @@ const PostJobForm = () => {
               </div>
             </div>
             <div className="order-1 lg:order-2 h-[350px] lg:h-[500px] mb-6">
-              <LocationMap
+              {/* <LocationMap
+                onLocationSelect={handleLocationSelect}
+                selectedLocation={selectedLocation}
+              /> */}
+               <MapComponent
                 onLocationSelect={handleLocationSelect}
                 selectedLocation={selectedLocation}
               />
