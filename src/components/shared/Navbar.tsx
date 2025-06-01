@@ -14,7 +14,7 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className="sticky top-0 h-[88px] z-50 w-full bg-primary text-white shadow-md">
+    <nav className="sticky top-0 h-[88px] z-50 w-full bg-gray-900 text-white shadow-md">
       <div className="mx-auto h-full flex max-w-7xl items-center justify-between px-4 py-3">
         {/* Logo */}
         <Link href="/" className="flex items-center">
