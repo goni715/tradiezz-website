@@ -2,8 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { Map } from "lucide-react";
-import dynamic from "next/dynamic";
+import LocationMap from "@/components/Location/LocationMap";
 import { useState } from "react";
 
 const PostJobForm = () => {
@@ -133,9 +132,13 @@ const PostJobForm = () => {
                       </option>
                     ))} */}
                     <option>Electrician</option>
+                    <option value="">Carpentar</option>
                     <option value="">Plumber</option>
                     <option value="">Welder</option>
                     <option value="">Painter</option>
+                    <option value="">Mason</option>
+                    <option value="">Roofer</option>
+                    <option value="">Tile Setter</option>
                   </select>
                   <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                     <svg
@@ -350,12 +353,12 @@ const PostJobForm = () => {
                 </div>
               </div>
             </div>
-            {/* <div className="order-1 lg:order-2 h-[350px] lg:h-[500px] mb-6">
-              <MapComponent
+            <div className="order-1 lg:order-2 h-[350px] lg:h-[500px] mb-6">
+              <LocationMap
                 onLocationSelect={handleLocationSelect}
                 selectedLocation={selectedLocation}
               />
-            </div> */}
+            </div>
 
             <div className="mb-6">
               <label

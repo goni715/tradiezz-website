@@ -48,12 +48,12 @@ const BlogPagination : React.FC<PaginationProps> = ({
   }
   
   return (
-    <nav className="flex items-center justify-center px-4 py-3 sm:px-6" aria-label="Pagination">
+    <nav className="flex items-center justify-center px-4 py-3 sm:px-6 mt-8" aria-label="Pagination">
       <div className="flex-1 flex justify-between sm:justify-center">
         <button
           onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="relative inline-flex items-center px-2 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="relative inline-flex cursor-pointer items-center px-2 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="sr-only">Previous</span>
           <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
@@ -67,7 +67,7 @@ const BlogPagination : React.FC<PaginationProps> = ({
               ) : (
                 <button
                   onClick={() => typeof page === 'number' && onPageChange(page)}
-                  className={`mx-1 px-4 py-2 text-sm font-medium rounded-md ${
+                  className={`mx-1 px-4 py-2 text-sm font-medium rounded-md cursor-pointer ${
                     currentPage === page
                       ? 'bg-blue-600 text-white'
                       : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
@@ -83,7 +83,7 @@ const BlogPagination : React.FC<PaginationProps> = ({
         <button
           onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="relative inline-flex items-center px-2 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="relative inline-flex items-center px-2 py-2 cursor-pointer rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="sr-only">Next</span>
           <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />

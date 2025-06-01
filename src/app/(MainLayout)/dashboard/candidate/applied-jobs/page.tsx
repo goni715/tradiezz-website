@@ -314,7 +314,7 @@ const AppliedJobs = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="rounded-md  bg-gray-100 cursor-pointer hover:bg-primary border border-gray-300 hover:border-primary hover:text-white px-4 py-2 text-sm font-medium text-gray-700 duration-200">
+                    <button className="rounded-md  bg-gray-100 cursor-pointer hover:bg-gray-900 border border-gray-300 hover:border-bg-gray-900 hover:text-white px-4 py-2 text-sm font-medium text-gray-700 duration-200">
                       View Details
                     </button>
                   </td>

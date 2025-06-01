@@ -1,5 +1,17 @@
 "use client"
 
+import LocationDropdown from "./LocationDropdown";
+
+
+  export const typeOptions = [
+    "Full-time",
+    "Part-time",
+    "Fixed-Term / Contract",
+    "Temporary",
+    "Apprenticeship",
+    "Graduate / Entry-Level",
+    "Remote / Hybrid",
+  ];
 
 const AdvancedFilter = () => {
   //const [isOpen, setIsOpen] = useState(false)
@@ -37,6 +49,8 @@ const AdvancedFilter = () => {
   //   }
   // }
 
+
+
   return (
     <div className="w-full">
       {/* Search Bar */}
@@ -60,37 +74,12 @@ const AdvancedFilter = () => {
           </div>
           <input
             type="text"
-            placeholder="search by title, location..."
+            placeholder="search by job title, skills, keywords, city, postcode..."
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
 
         {/* <div className="relative flex-1">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg
-              className="w-4 h-4 text-gray-500"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-              />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </div>
-          <input
-            type="text"
-            placeholder="Location"
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div> */}
-
-        <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
               className="w-4 h-4 text-gray-500"
@@ -122,9 +111,9 @@ const AdvancedFilter = () => {
             <option>Automation & Robotics</option>
             <option>Project & Design Engineering</option>
           </select>
-        </div>
+        </div> */}
 
-        <div className="relative flex-1">
+        {/* <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
               className="w-4 h-4 text-gray-500"
@@ -143,12 +132,15 @@ const AdvancedFilter = () => {
           </div>
           <select className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500 appearance-none text-gray-600">
             <option>Select Type</option>
-            <option>Part Time</option>
-            <option>Full Time</option>
-            <option>Internship</option>
-            <option>Remote</option>
-            <option>Temporary</option>
+             {typeOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
           </select>
+        </div> */}
+        <div className="relative flex-1">
+          <LocationDropdown/>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2">

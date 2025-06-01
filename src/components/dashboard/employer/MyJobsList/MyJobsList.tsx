@@ -1,236 +1,281 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState, useMemo } from "react";
 import {
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
+  Search,
+  Edit,
+  Trash2,
+  Eye,
   CheckCircle,
   XCircle,
-  Eye,
-  SquarePen,
-} from "lucide-react"
-import { useRouter } from "next/navigation"
-import DeleteJobModal from "@/components/modal/job/DeleteJobModal"
+  Clock
+} from "lucide-react";
+import BlogPagination from "@/components/BlogList/BlogPagination";
+
+interface Job {
+  id: number;
+  title: string;
+  type: string;
+  status: "active" | "expired";
+  applications: number;
+}
+
+const mockJobs: Job[] = [
+  {
+    id: 1,
+    title: "Water Supply",
+    type: "Part Time",
+    status: "active",
+    applications: 798,
+  },
+  {
+    id: 2,
+    title: "Water Supply",
+    type: "Short Time",
+    status: "active",
+    applications: 185,
+  },
+  {
+    id: 3,
+    title: "Water Supply",
+    type: "Contract Base",
+    status: "active",
+    applications: 583,
+  },
+  {
+    id: 4,
+    title: "Water Supply",
+    type: "Hourly",
+    status: "expired",
+    applications: 740,
+  },
+  {
+    id: 5,
+    title: "Water Supply",
+    type: "Part Time",
+    status: "active",
+    applications: 556,
+  },
+  {
+    id: 6,
+    title: "Water Supply",
+    type: "Contract Base",
+    status: "expired",
+    applications: 426,
+  },
+  {
+    id: 7,
+    title: "Water Supply",
+    type: "Temporary",
+    status: "active",
+    applications: 922,
+  },
+  {
+    id: 8,
+    title: "Water Supply",
+    type: "Hourly",
+    status: "active",
+    applications: 994,
+  },
+  {
+    id: 9,
+    title: "Water Supply",
+    type: "Temporary",
+    status: "expired",
+    applications: 196,
+  },
+];
 
 const MyJobsList = () => {
-  //const [activeMenu, setActiveMenu] = useState("my-jobs")
-  const [activeDropdown, setActiveDropdown] = useState(4)
-  const [activePage, setActivePage] = useState(1)
-  const [filterValue, setFilterValue] = useState("All Jobs");
-  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 5;
 
-  const jobs = [
-    {
-      id: 1,
-      title: "Water Supply",
-      type: "Full Time",
-      timeLeft: "27 days remaining",
-      status: "Active",
-      applications: 798,
-    },
-    {
-      id: 2,
-      title: "Water Supply",
-      type: "Internship",
-      timeLeft: "8 days remaining",
-      status: "Active",
-      applications: 185,
-    },
-    {
-      id: 3,
-      title: "Water Supply",
-      type: "Full Time",
-      timeLeft: "24 days remaining",
-      status: "Active",
-      applications: 583,
-    },
-    { id: 4, title: "Water Supply", type: "Full Time", timeLeft: "Dec 7, 2019", status: "Expire", applications: 740 },
-    {
-      id: 5,
-      title: "Water Supply",
-      type: "Part Time",
-      timeLeft: "4 days remaining",
-      status: "Active",
-      applications: 556,
-    },
-    {
-      id: 6,
-      title: "Water Supply",
-      type: "Contract Base",
-      timeLeft: "Feb 2, 2019",
-      status: "Expire",
-      applications: 426,
-    },
-    {
-      id: 7,
-      title: "Water Supply",
-      type: "Temporary",
-      timeLeft: "9 days remaining",
-      status: "Active",
-      applications: 922,
-    },
-    {
-      id: 8,
-      title: "Water Supply",
-      type: "Full Time",
-      timeLeft: "7 days remaining",
-      status: "Active",
-      applications: 994,
-    },
-    { id: 9, title: "Water Supply", type: "Full Time", timeLeft: "Dec 4, 2019", status: "Expire", applications: 196 },
-    {
-      id: 10,
-      title: "Water Supply",
-      type: "Full Time",
-      timeLeft: "4 days remaining",
-      status: "Active",
-      applications: 492,
-    },
-  ]
+  const filteredJobs = useMemo(() => {
+    return mockJobs.filter((job) => {
+      const matchesSearch =
+        job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.type.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" || job.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [searchTerm, statusFilter]);
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "active":
+        return <CheckCircle className="w-5 h-5 text-green-500" />;
+      case "expired":
+        return <XCircle className="w-5 h-5 text-red-500" />;
+      case "pending":
+        return <Clock className="w-5 h-5 text-yellow-500" />;
+      default:
+        return null;
+    }
+  };
 
-  const toggleDropdown = (id:number) => {
-    // if (activeDropdown === id) {
-    //   setActiveDropdown(null)
-    // } else {
-    //   setActiveDropdown(id)
-    // }
-  }
+  const getStatusBadge = (status: string) => {
+    const baseClasses =
+      "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";
+    switch (status) {
+      case "active":
+        return `${baseClasses} bg-green-100 text-green-800`;
+      case "expired":
+        return `${baseClasses} bg-red-100 text-red-800`;
+      case "pending":
+        return `${baseClasses} bg-yellow-100 text-yellow-800`;
+      default:
+        return baseClasses;
+    }
+  };
+
+  const getTypeColor = (type: string) => {
+    const colors = {
+      "Short Time": "bg-blue-100 text-blue-800",
+      "Part Time": "bg-purple-100 text-purple-800",
+      Hourly: "bg-orange-100 text-orange-800",
+      "Contract Base": "bg-indigo-100 text-indigo-800",
+      Temporary: "bg-pink-100 text-pink-800",
+    };
+    return colors[type as keyof typeof colors] || "bg-gray-100 text-gray-800";
+  };
 
   return (
     <>
-       {/* Main Content */}
-        <div className="flex-1 overflow-auto p-3 sm:p-4 md:p-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-6">
-            <h1 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 md:mb-0">
-              My Jobs <span className="text-gray-500 font-normal">(589)</span>
-            </h1>
-            <div className="flex items-center">
-              <span className="text-xs sm:text-sm text-gray-600 mr-2">Job status</span>
+      <div className="flex-1 overflow-auto p-4 md:p-6">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">My Jobs</h1>
+              <p className="text-gray-600 mt-1">
+                ({filteredJobs.length} of {mockJobs.length} jobs)
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Search */}
               <div className="relative">
-                <select
-                  value={filterValue}
-                  onChange={(e) => setFilterValue(e.target.value)}
-                  className="appearance-none bg-white border border-gray-300 rounded-md pl-2 sm:pl-3 pr-8 sm:pr-10 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-                >
-                  <option>All Jobs</option>
-                  <option>Active Jobs</option>
-                  <option>Expired Jobs</option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                  <ChevronDown className="h-3 sm:h-4 w-3 sm:w-4 text-gray-500" />
-                </div>
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search jobs..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-64"
+                />
               </div>
-            </div>
-          </div>
 
-          {/* Jobs Table */}
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            {/* Table Header */}
-            <div className="grid grid-cols-12 bg-gray-100 py-3 px-3 sm:px-4 text-xs sm:text-sm font-medium text-gray-600">
-              <div className="col-span-6 md:col-span-6">JOBS</div>
-              <div className="col-span-3 md:col-span-2 text-center">STATUS</div>
-               {/* <div className="col-span-3 md:col-span-2 text-center">View Details</div> */}
-              <div className="col-span-3 md:col-span-2 text-center hidden sm:block">APPLICATIONS</div>
-              <div className="hidden md:block md:col-span-2 text-center">ACTIONS</div>
-            </div>
-
-            {/* Table Body */}
-            <div className="divide-y divide-gray-200">
-              {jobs.map((job) => (
-                <div
-                  key={job.id}
-                  className="grid grid-cols-12 py-3 sm:py-4 px-3 sm:px-4 text-xs sm:text-sm hover:bg-blue-50 duration-200 rounded-md"
-                >
-                  <div className="col-span-6 md:col-span-6">
-                    <div className="font-medium text-gray-800 truncate">{job.title}</div>
-                    <div className="text-gray-500 flex flex-col sm:flex-row sm:items-center mt-1">
-                      <span className="text-xs sm:text-sm">{job.type}</span>
-                      <span className="hidden sm:inline mx-2">•</span>
-                      <span onClick={()=>router.push(`/job-details/${job.id}`)} className="underline text-blue-400 cursor-pointer hover:text-blue-600">view details</span>
-                      {/* <span className="flex items-center text-xs sm:text-sm mt-1 sm:mt-0">
-                        {job.status === "Active" ? (
-                          <Clock className="h-3 w-3 text-gray-400 mr-1" />
-                        ) : (
-                          <Clock className="h-3 w-3 text-gray-400 mr-1" />
-                        )}
-                        <span className="truncate">{job.timeLeft}</span>
-                      </span> */}
-                    </div>
-                  </div>
-                  <div className="col-span-3 md:col-span-2 flex justify-center items-center">
-                    {job.status === "Active" ? (
-                      <div className="flex items-center text-green-600 text-xs sm:text-sm">
-                        <CheckCircle className="h-3 sm:h-4 w-3 sm:w-4 mr-1" />
-                        <span className="hidden xs:inline">Active</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center text-red-500 text-xs sm:text-sm">
-                        <XCircle className="h-3 sm:h-4 w-3 sm:w-4 mr-1" />
-                        <span className="hidden xs:inline">Expire</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="col-span-3 md:col-span-2 flex justify-center gap-1 items-center text-gray-600 text-xs sm:text-sm">
-                    {/* <FileText className="h-3 sm:h-4 w-3 sm:w-4 mr-1" /> */}
-                    <span className="hidden sm:inline">{job.applications}</span>
-                      <Eye  onClick={() => router.push(`/dashboard/employer/applications/${job.id}`)} className="h-3 sm:h-4 w-3 sm:w-4 mr-1 text-blue-500 cursor-pointer" /> 
-                    <span className="sm:hidden">{job.applications}</span>
-                    <span className="sm:hidden text-xs text-blue-500 underline hover:text-blue-600">Applications</span>
-                  </div>
-                  <div className="hidden md:flex md:col-span-2 justify-center items-center gap-2">
-                    {/* <button
-                      onClick={() => router.push(`/dashboard/employer/applications/${job.id}`)}
-                      className="rounded-md bg-gray-100 hover:bg-primary border border-gray-300 hover:border-primary hover:text-white px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 cursor-pointer duration-200 whitespace-nowrap"
-                    >
-                      View Applications                     
-                    </button> */}
-                     <SquarePen onClick={() => router.push(`/dashboard/employer/edit-job/${job.id}`)} className="h-3 sm:h-4 w-3 sm:w-4 mr-1 text-green-500 cursor-pointer" /> 
-                     <DeleteJobModal/>                     
-                  </div>
-                  {/* Mobile Actions - Only visible on small screens */}
-                  <div className="col-span-12 mt-2 flex justify-end md:hidden">
-                    {/* <button
-                      onClick={() => router.push(`/dashboard/employer/applications/${job.id}`)}
-                      className="rounded-md bg-gray-100 hover:bg-primary border border-gray-300 hover:border-primary hover:text-white px-3 py-1 text-xs font-medium text-gray-700 cursor-pointer duration-200"
-                    >
-                      View Applications
-                    </button> */}
-                     <SquarePen onClick={() => router.push(`/dashboard/employer/edit-job/${job.id}`)} className="h-3 sm:h-4 w-3 sm:w-4 mr-1 text-green-500 cursor-pointer" /> 
-                     <DeleteJobModal/>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Pagination */}
-            <div className="flex justify-center items-center py-3 sm:py-4 border-t border-gray-200">
-              <button className="p-1 sm:p-2 rounded-full hover:bg-gray-100">
-                <ChevronLeft className="h-4 w-4 text-gray-500" />
-              </button>
-              {[1, 2, 3, 4, 5].map((page) => (
-                <button
-                  key={page}
-                  className={`w-6 h-6 sm:w-8 sm:h-8 mx-0.5 sm:mx-1 rounded-full flex items-center justify-center text-xs sm:text-sm ${
-                    activePage === page ? "bg-blue-800 text-white" : "text-gray-600 hover:bg-gray-100"
-                  }`}
-                  onClick={() => setActivePage(page)}
-                >
-                  {page.toString().padStart(2, "0")}
-                </button>
-              ))}
-              <button className="p-1 sm:p-2 rounded-full hover:bg-gray-100">
-                <ChevronRight className="h-4 w-4 text-gray-500" />
-              </button>
+              {/* Status Filter */}
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="expired">Expired</option>
+              </select>
             </div>
           </div>
         </div>
+
+        {/* Jobs Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredJobs.map((job) => (
+            <div
+              key={job.id}
+              className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 overflow-hidden"
+            >
+              {/* Card Header */}
+              <div className="p-6 pb-4">
+                <div className="flex items-start justify-between mb-3">
+                  <h3 className="text-lg font-semibold text-gray-900 truncate">
+                    {job.title}
+                  </h3>
+                  <div className="flex items-center gap-1">
+                    {getStatusIcon(job.status)}
+                  </div>
+                </div>
+
+                {/* Job Type Badge */}
+                <span
+                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(
+                    job.type
+                  )}`}
+                >
+                  {job.type}
+                </span>
+              </div>
+
+              {/* Card Body */}
+              <div className="px-6 pb-4">
+                {/* Status */}
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm text-gray-600">Status</span>
+                  <span className={getStatusBadge(job.status)}>
+                    {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
+                  </span>
+                </div>
+
+                {/* Applications */}
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm text-gray-600">Applications</span>
+                  <div className="flex items-center gap-1">
+                    <Eye className="w-4 h-4 text-gray-400 cursor-pointer" />
+                    <span className="font-semibold text-gray-900">
+                      {job.applications}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card Footer */}
+              <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
+                <div className="flex items-center justify-between">
+                  <button className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1">
+                    <Eye className="w-4 h-4" />
+                    View Details
+                  </button>
+
+                  <div className="flex items-center gap-2">
+                    <button className="p-2 text-gray-400 hover:text-blue-600 cursor-pointer hover:bg-blue-50 rounded-lg transition-colors">
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button className="p-2 text-gray-400 hover:text-red-600 cursor-pointer hover:bg-red-50 rounded-lg transition-colors">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Empty State */}
+        {filteredJobs.length === 0 && (
+          <div className="text-center py-12">
+            <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+              <Search className="w-8 h-8 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No jobs found
+            </h3>
+            <p className="text-gray-600">
+              Try adjusting your search or filter criteria
+            </p>
+          </div>
+        )}
+
+        <BlogPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </>
-  )
-}
+  );
+};
 
 export default MyJobsList;

@@ -1,7 +1,7 @@
 import React from 'react';
-import { MapPin, Clock, Bookmark } from 'lucide-react';
-import CategoryBadge from './CategoryBadge';
+import { MapPin, Clock, BookmarkCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import CategoryBadge from '../FindWork/JobListing/CategoryBadge';
 
 type JobCardProps = {
   job: {
@@ -13,7 +13,7 @@ type JobCardProps = {
   };
 };
 
-const JobCard: React.FC<JobCardProps> = ({ job }) => {
+const FavouriteJobCard : React.FC<JobCardProps> = ({ job }) => {
   const router = useRouter();
   return (
     <div className="bg-white rounded-lg shadow-md transition-all duration-300 hover:shadow-lg border border-gray-100 overflow-hidden flex flex-col h-full">
@@ -22,7 +22,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           <h2 className="text-lg font-semibold text-gray-800 line-clamp-2">
             {job.title}
           </h2>
-            <Bookmark className="h-5 w-5 cursor-pointer text-gray-800"/>
+            <BookmarkCheck className="h-5 w-5 text-blue-500 cursor-pointer"/>
         </div>
 
         <div className="flex items-center text-gray-600 mt-1 mb-2">
@@ -50,4 +50,4 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   );
 };
 
-export default JobCard;
+export default FavouriteJobCard;
