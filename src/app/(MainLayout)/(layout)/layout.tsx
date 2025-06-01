@@ -7,7 +7,9 @@ type TProps = {
 const layout = ({ children }: TProps) => {
   return (
     <>
-      {children}
+      <div className="min-h-[calc(100vh-80px)]">
+         {children}
+      </div>
       <Footer />
     </>
   );
