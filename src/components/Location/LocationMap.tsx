@@ -1,78 +1,113 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
-import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
-import { Icon } from 'leaflet';
-import { Map } from 'lucide-react';
-import 'leaflet/dist/leaflet.css';
+"use client";
 
+import { useEffect, useRef, useState } from "react";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { Icon, Map as LeafletMap } from "leaflet";
+import { Map } from "lucide-react";
+import "leaflet/dist/leaflet.css";
 
-
-// Fix Leaflet icon issue
 const markerIcon = new Icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   shadowSize: [41, 41],
   shadowAnchor: [12, 41],
 });
 
-//type LatLngExpression = LatLng | LatLngLiteral | LatLngTuple;
 export type LatLngTuple = [number, number];
 
-
 interface InteractiveMapProps {
-  onLocationSelect: (location: LatLngTuple) => void;
-  selectedLocation: any;
+  onLocationSelect: (
+    location: LatLngTuple,
+    address?: string,
+    postalCode?: string
+  ) => void;
 }
 
-// Interactive map component
-const InteractiveMap = ({ onLocationSelect, selectedLocation }: InteractiveMapProps) => {
-  const map = useMapEvents({
-    click: (e) => {
+// Clean and shorten address
+const cleanAddress = (fullAddress: string): string => {
+  if (!fullAddress) return "";
+
+  const parts = fullAddress.split(",").map((part) => part.trim());
+
+  // Filter out unwanted parts (e.g. Rajshahi Division)
+  const filtered = parts.filter((part) => {
+    const lower = part.toLowerCase();
+    return ![
+      "rajshahi division",
+      "dhaka division",
+      "chittagong division",
+    ].includes(lower);
+  });
+
+  // Optionally remove the 3rd part (index 2) if present
+  if (filtered.length >= 3) {
+    filtered.splice(2, 1); // remove index 2
+  }
+
+  return filtered.slice(0, 4).join(", ");
+};
+
+const InteractiveMap = ({ onLocationSelect }: InteractiveMapProps) => {
+  useMapEvents({
+    click: async (e) => {
       const { lat, lng } = e.latlng;
-      onLocationSelect([lat, lng]);
+      const location: LatLngTuple = [lat, lng];
+      const data = await reverseGeocode(lat, lng);
+      const shortAddress = cleanAddress(data?.address || "");
+      onLocationSelect(location, shortAddress, data?.postalCode);
     },
   });
 
-  // Center map on the selected location when it changes
-  useEffect(() => {
-    if (selectedLocation) {
-      map.setView(selectedLocation, map.getZoom());
-    }
-  }, [selectedLocation, map]);
-
-  return selectedLocation ? <Marker position={selectedLocation} icon={markerIcon} /> : null;
+  return null;
 };
 
-
+const reverseGeocode = async (lat: number, lon: number) => {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+    );
+    const data = await res.json();
+    const address = data?.display_name || "";
+    const postalCode = data?.address?.postcode || "";
+    return { address, postalCode };
+  } catch (error) {
+    console.error("Reverse geocoding error:", error);
+    return { address: "", postalCode: "" };
+  }
+};
 
 interface LocationMapProps {
-  onLocationSelect: (location: LatLngTuple) => void;
-  selectedLocation:  any;
+  onLocationSelect: (
+    location: LatLngTuple,
+    address?: string,
+    postalCode?: string
+  ) => void;
+  selectedLocation: LatLngTuple | null;
 }
 
-
-const LocationMap = ({ onLocationSelect, selectedLocation }: LocationMapProps) => {
+const LocationMap = ({
+  onLocationSelect,
+  selectedLocation,
+}: LocationMapProps) => {
   const [mapLoaded, setMapLoaded] = useState(false);
+  const defaultCenter: LatLngTuple = [37.7749, -122.4194];
+  const mapRef = useRef<LeafletMap>(null);
 
-  // Default center coordinates (San Francisco)
-  const defaultCenter = [37.7749, -122.4194];
-  
-  // Set initial map center based on user's selection or default
-  const center = selectedLocation || defaultCenter;
-
-  // Simulate map loading delay
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setMapLoaded(true);
-    }, 500);
+    const timer = setTimeout(() => setMapLoaded(true), 300);
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (selectedLocation && mapRef.current) {
+      mapRef.current.setView(selectedLocation, 13);
+    }
+  }, [selectedLocation]);
+
   return (
-    <div className="relative h-full rounded-lg overflow-hidden shadow-md border border-gray-200">
+    <div className="relative h-[400px] rounded-lg overflow-hidden shadow-md border border-gray-200">
       {!mapLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
           <div className="text-center">
@@ -81,27 +116,31 @@ const LocationMap = ({ onLocationSelect, selectedLocation }: LocationMapProps) =
           </div>
         </div>
       )}
-      
-      <div className={`h-full transition-opacity duration-500 ${mapLoaded ? 'opacity-100' : 'opacity-0'}`}>
+
+      <div
+        className={`h-full transition-opacity duration-500 ${
+          mapLoaded ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <MapContainer
-          center={center}
+          center={selectedLocation || defaultCenter}
           zoom={13}
           scrollWheelZoom={true}
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: "100%", width: "100%" }}
+          // whenCreated={(mapInstance: any) => (mapRef.current = mapInstance)}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <InteractiveMap 
-            onLocationSelect={onLocationSelect} 
-            selectedLocation={selectedLocation}
-          />
+          <InteractiveMap onLocationSelect={onLocationSelect} />
+          {selectedLocation && (
+            <Marker position={selectedLocation} icon={markerIcon} />
+          )}
         </MapContainer>
       </div>
-      
       <div className="absolute bottom-3 left-3 right-3 bg-white bg-opacity-90 py-2 px-3 rounded-md text-xs text-gray-600 shadow-sm">
-        Click anywhere on the map to select a location and get coordinates
+        Click on the map to select a location
       </div>
     </div>
   );

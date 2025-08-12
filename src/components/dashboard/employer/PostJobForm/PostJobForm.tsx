@@ -1,412 +1,291 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import LocationMap from "@/components/Location/LocationMap";
-import { Map } from "lucide-react";
-import dynamic from "next/dynamic";
-import { useState } from "react";
+import CustomDatePicker from "@/components/form/CustomDatePicker";
+import CustomInput from "@/components/form/CustomInput";
+import CustomSelect from "@/components/form/CustomSelect";
+import CustomTextArea from "@/components/form/CustomTextArea";
+import CustomQuilEditor from "@/components/form/CustomQuilEditor";
+import {
+  educationOptions,
+  experienceOptions,
+  patternOptions,
+  rateOptions,
+  typeOptions,
+} from "@/data/job.options";
+import { useGetCategoriesQuery } from "@/redux/features/category/categoryApi";
+import { useCreateJobMutation } from "@/redux/features/job/jobApi";
+import { useAppSelector } from "@/redux/hooks/hooks";
+import { createJobSchema } from "@/schemas/job.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { CgSpinnerTwo } from "react-icons/cg";
+import { z } from "zod";
+// import { ErrorToast } from "@/helper/ValidationHelper";
+
+type TFormValues = z.infer<typeof createJobSchema>;
 
 const PostJobForm = () => {
-  const [jobTitle, setJobTitle] = useState("");
-  const [tags, setTags] = useState("");
-  const [category, setCategory] = useState("");
-  const [salary, setSalary] = useState("");
-  const [currency, setCurrency] = useState("USD");
-  const [education, setEducation] = useState("");
-  const [experience, setExperience] = useState("");
-  const [skill, setSkill] = useState("");
-  const [vacancies, setVacancies] = useState("");
-  const [expirationDate, setExpirationDate] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
-  const [responsibilities, setResponsibilities] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState();
-  
-   const MapComponent = dynamic(() => import('@/components/Location/LocationMap'), {
-    ssr: false, // This is critical - it prevents the component from loading during SSR
-    loading: () => (
-      <div className="h-full flex items-center justify-center bg-gray-100 rounded-lg">
-        <div className="text-center">
-          <Map size={32} className="mx-auto text-blue-500 animate-pulse" />
-          <p className="mt-2 text-gray-600 text-sm">Loading map...</p>
-        </div>
-      </div>
-    ),
+  useGetCategoriesQuery(undefined);
+  const [selectedLocation, setSelectedLocation] = useState<[number, number]>([
+    51.5072, 0.1276,
+  ]);
+
+  const { categoryOptions } = useAppSelector((state) => state.category);
+  // const { subscription_status } = useAppSelector((state) => state.subscription);
+  const [createJob, { isLoading, isSuccess }] = useCreateJobMutation();
+
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    clearErrors,
+    setError,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(createJobSchema),
+    defaultValues: {
+      latitude: "51.5072",
+      longitude: "0.1276",
+    },
   });
 
+  const salary = watch("salary");
+  const rate = watch("rate");
 
-  const typeOptions = [
-    "Short Term Job",
-    "Contract Based",
-    "Hourly"
-  ];
+  useEffect(() => {
+    if (salary && !rate) {
+      setError("rate", {
+        type: "manual",
+        message: "Rate is required when salary is provided",
+      });
+    } else {
+      clearErrors("rate");
+    }
+  }, [salary, rate, setError, clearErrors]);
 
-  const educationOptions = [
-    "GCSE or equivalent",
-    "Apprenticeship",
-    "HNC/HND",
-    "Degree",
-    "Other",
-  ];
+  useEffect(() => {
+    if (!salary || salary === "") {
+      setValue("rate", "");
+    }
+  }, [salary, setValue]);
 
-  const experienceOptions = [
-    "Entry Level",
-    "1-2 years",
-    "2-4 years",
-    "5-6 years",
-    "10+ years",
-  ];
+  const isRateDisabled = !salary || salary === "" || Boolean(errors?.salary);
 
-  const patternOptions = [
-    "Day Shift",
-    "Evening Shift",
-    "Days",
-    "Hours",
-    "Flexibility",
-  ];
+  const latitude = watch("latitude");
+  const longitude = watch("longitude");
 
-  const rateOptions = [
-    "Per Hour",
-    "Per Day",
-    "Per Year"
-  ];
+  useEffect(() => {
+    if (latitude && longitude) {
+      const lat = parseFloat(latitude);
+      const lng = parseFloat(longitude);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        setSelectedLocation([lat, lng]);
+      }
+    }
+  }, [latitude, longitude]);
 
+  const handleLocationSelect = (
+    location: [number, number],
+    address?: string,
+    postalCode?: string
+  ) => {
+    setSelectedLocation(location);
+    setValue("latitude", location[0].toFixed(6));
+    setValue("longitude", location[1].toFixed(6));
+    if (address) setValue("address", address);
+    if (postalCode) setValue("postalCode", postalCode);
+  };
 
-    // Handle location selection from map
-    const handleLocationSelect = (location: any) => {
-      setSelectedLocation(location);
-      // setValue('latitude', location[0].toFixed(6));
-      // setValue('longitude', location[1].toFixed(6));
+  useEffect(() => {
+    if (!isLoading && isSuccess) {
+      reset();
+    }
+  }, [isLoading, isSuccess, reset]);
+
+  const onSubmit: SubmitHandler<TFormValues> = (data) => {
+    const { skill, salary, rate, longitude, latitude, ...rest } = data;
+    const finalValues: any = {
+      ...rest,
+      skill: skill.split(",").map((s) => s.trim()),
+      location: {
+        longitude,
+        latitude,
+      },
     };
 
+    if (salary && rate) {
+      finalValues.salary = salary;
+      finalValues.rate = rate;
+    }
+
+    // if (subscription_status?.subscription_status === "None") {
+    //   ErrorToast("You have no subscription");
+    // } else {
+    createJob(finalValues);
+    // }
+  };
+
   return (
-    <>
-      <div className="flex-1 overflow-auto">
-        <div className="max-6xl mx-auto p-4 sm:p-6 rounded-lg">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Post a job</h1>
-          <form
-            // onSubmit={handleSubmit}
-            className="bg-white px-4 py-6 rounded-md"
-          >
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Job Title
-              </label>
-              <input
-                type="text"
-                value={expirationDate}
-                onChange={(e) => setExpirationDate(e.target.value)}
-                placeholder="e.g. CNC Machinist, Maintenance Engineer"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500"
+    <div className="flex-1 overflow-auto">
+      <div className="max-6xl mx-auto p-4 sm:p-6 rounded-lg">
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">Post a job</h1>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="bg-white px-4 py-6 rounded-md space-y-4"
+        >
+          <CustomInput
+            label="Job Title"
+            name="title"
+            type="text"
+            control={control}
+            placeholder="e.g. CNC Machinist, Maintenance Engineer"
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CustomSelect
+              label="Type"
+              name="types"
+              control={control}
+              options={typeOptions}
+            />
+            <CustomSelect
+              label="Category"
+              name="category"
+              control={control}
+              options={categoryOptions}
+            />
+          </div>
+
+          <div className="mt-8 mb-4">
+            <h2 className="text-lg font-medium text-gray-800 mb-4">
+              Advance Information
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+              <CustomSelect
+                label="Education"
+                name="education"
+                control={control}
+                options={educationOptions}
               />
+              <CustomSelect
+                label="Experience"
+                name="experience"
+                control={control}
+                options={experienceOptions}
+              />
+              <div className="col-span-2">
+                <CustomTextArea
+                  label="Skills (technical or soft skills, Comma Separated)"
+                  name="skill"
+                  control={control}
+                  placeholder="e.g. CNC Programming, TIG Welding"
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Type
-                </label>
-                <div className="relative">
-                  <select className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md appearance-none focus:outline-none focus:border-blue-500 focus:ring-blue-500">
-                    <option value="">Select type</option>
-                    {typeOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    <svg
-                      className="h-4 w-4 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Category
-                </label>
-                <div className="relative">
-                  <select className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md appearance-none focus:outline-none focus:border-blue-500 focus:ring-blue-500">
-                    <option value="">Select Category</option>
-                    {/* {categoryOptions?.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))} */}
-                    <option>Electrician</option>
-                    <option value="">Carpentar</option>
-                    <option value="">Plumber</option>
-                    <option value="">Welder</option>
-                    <option value="">Painter</option>
-                    <option value="">Mason</option>
-                    <option value="">Roofer</option>
-                    <option value="">Tile Setter</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    <svg
-                      className="h-4 w-4 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 mb-4">
-              <h2 className="text-lg font-medium text-gray-800 mb-4">
-                Advance Information
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="col-span-3 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Education
-                    </label>
-                    <div className="relative">
-                      <select className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md appearance-none focus:outline-none focus:border-blue-500 focus:ring-blue-500">
-                        <option value="">Select Category</option>
-                        {educationOptions?.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                        <svg
-                          className="h-4 w-4 text-gray-400"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Exprience
-                    </label>
-                    <div className="relative">
-                      <select className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md appearance-none focus:outline-none focus:border-blue-500 focus:ring-blue-500">
-                        <option value="">Select experience</option>
-                        {experienceOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                        <svg
-                          className="h-4 w-4 text-gray-400"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-4 col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Skills (technical or soft skills, Comma Separated)
-                  </label>
-                  <textarea
-                    placeholder="e.g. CNC Programming, TIG Welding"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-                  ></textarea>
-                </div>
-              </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Salary(Optional)
-                    </label>
-                    <input
-                      type="number"
-                      value={salary}
-                      onChange={(e) => setSalary(e.target.value)}
-                      placeholder="e.g. 400"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Rate
-                    </label>
-                    <div className="relative">
-                      <select disabled={!salary} className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md disabled:bg-gray-400 appearance-none focus:outline-none focus:border-blue-500 focus:ring-blue-500">
-                        <option value="">Select rate</option>
-                        {rateOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                        <svg
-                          className="h-4 w-4 text-gray-400"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                 
-                </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Vacancies
-                  </label>
-                  <input
-                    type="number"
-                    value={expirationDate}
-                    onChange={(e) => setExpirationDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Expiration Date
-                  </label>
-                  <input
-                    type="date"
-                    value={expirationDate}
-                    onChange={(e) => setExpirationDate(e.target.value)}
-                    placeholder="DD/MM/YYYY"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Job Pattern
-                    </label>
-                    <div className="relative">
-                      <select className="w-full px-3 py-2 border border-gray-300 text-gray-700 rounded-md appearance-none focus:outline-none focus:border-blue-500 focus:ring-blue-500">
-                        <option value="">Select pattern</option>
-                        {patternOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                        <svg
-                          className="h-4 w-4 text-gray-400"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Address
-                    </label>
-                    <input
-                      type="text"
-                      value={expirationDate}
-                      onChange={(e) => setExpirationDate(e.target.value)}
-                      placeholder="enter address"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2 h-[350px] lg:h-[500px] mb-6">
-              {/* <LocationMap
-                onLocationSelect={handleLocationSelect}
-                selectedLocation={selectedLocation}
-              /> */}
-               <MapComponent
-                onLocationSelect={handleLocationSelect}
-                selectedLocation={selectedLocation}
+              <CustomInput
+                label="Salary(Optional)"
+                name="salary"
+                type="text"
+                control={control}
+                placeholder="e.g. 400"
+                onInput={(e: any) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                }}
+              />
+              <CustomSelect
+                label="Rate"
+                name="rate"
+                control={control}
+                options={rateOptions}
+                disabled={isRateDisabled}
               />
             </div>
 
-            <div className="mb-6">
-              <label
-                htmlFor="company-details"
-                className="block text-sm font-medium mb-2"
-              >
-                Description
-              </label>
-              <div className="">
-                <textarea
-                  id="company-details"
-                  rows={3}
-                  placeholder="write a description about the job..."
-                  className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-                ></textarea>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <CustomInput
+                label="Vacancy"
+                name="vacancies"
+                type="text"
+                control={control}
+                placeholder="Enter vacancy"
+                onInput={(e: any) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                }}
+              />
+              <CustomDatePicker
+                label="Expiration Date"
+                name="application_dateline"
+                control={control}
+                placeholder="DD/MM/YYYY"
+              />
             </div>
 
-            <div className="mt-6">
-              <button
-                type="submit"
-                className="inline-flex items-center px-4 py-2 bg-primary hover:bg-[#2b4773] text-white font-medium rounded-md cursor-pointer"
-              >
-                Post Job
-              </button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <CustomSelect
+                label="Job Pattern"
+                name="job_pattern"
+                control={control}
+                options={patternOptions}
+              />
+              <CustomInput
+                label="Address"
+                name="address"
+                type="text"
+                control={control}
+                placeholder="Enter address"
+              />
+              <CustomInput
+                label="Postal Code"
+                name="postalCode"
+                type="text"
+                control={control}
+                placeholder="Enter postal code"
+              />
             </div>
-          </form>
-        </div>
+          </div>
+
+          <div className="order-1 lg:order-2 h-[350px] lg:h-[400px] mb-6">
+            <LocationMap
+              onLocationSelect={handleLocationSelect}
+              selectedLocation={selectedLocation}
+            />
+          </div>
+
+          <div className="mb-6">
+            <CustomQuilEditor
+              label="Description"
+              name="descriptions"
+              control={control}
+              height={300}
+            />
+          </div>
+
+          <div className="mt-6">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full flex items-center cursor-pointer justify-center gap-2 bg-primary text-white py-2 rounded-md hover:bg-dis transition disabled:bg-gray-800 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <>
+                  <CgSpinnerTwo className="animate-spin" fontSize={16} />
+                  Processing...
+                </>
+              ) : (
+                "Post Job"
+              )}
+            </button>
+          </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 
