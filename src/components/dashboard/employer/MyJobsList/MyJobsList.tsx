@@ -234,7 +234,7 @@ const MyJobsList = () => {
               {/* Card Footer */}
               <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
                 <div className="flex items-center justify-between">
-                  <button className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1">
+                  <button className="text-blue-600 cursor-pointer hover:text-blue-700 text-sm font-medium flex items-center gap-1">
                     <Eye className="w-4 h-4" />
                     View Details
                   </button>
