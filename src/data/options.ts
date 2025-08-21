@@ -1,5 +1,20 @@
 
 
+export const tradeOptions = [
+  { "label": "Constructions & Groundworks", "value": "Constructions & Groundworks" },
+  { "label": "Electrical & Renewable Energy", "value": "Electrical & Renewable Energy" },
+  { "label": "Plumbing, Heating, Gas", "value": "Plumbing, Heating, Gas" },
+  { "label": "HVAC, Ventilation & Refrigeration", "value": "HVAC, Ventilation & Refrigeration" },
+  { "label": "Carpentry & Wood Trades", "value": "Carpentry & Wood Trades" },
+  { "label": "Decoration & Finishing", "value": "Decoration & Finishing" },
+  { "label": "Metalwork & Fabrication", "value": "Metalwork & Fabrication" },
+  { "label": "Windows, Doors & Cladding", "value": "Windows, Doors & Cladding" },
+  { "label": "Property Maintenance & Multi-trade", "value": "Property Maintenance & Multi-trade" },
+  { "label": "Outdoor & Landscaping", "value": "Outdoor & Landscaping" },
+  { "label": "Specialist & Heritage Trades", "value": "Specialist & Heritage Trades" }
+]
+
+
 export const tradeTypeOptions = [
     "Constructions & Groundworks",
     "Electrical & Renewable Energy",
