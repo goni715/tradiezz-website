@@ -1,5 +1,6 @@
 "use client"
-import EmployerTabs from "@/components/dashboard/employer/settings/EmployerTabs";
+
+import EmployerTabs from "@/components/EmployerSettings/EmployerTabs";
 
 const EmployerSettingsPage = () => {
   return (
@@ -8,7 +9,7 @@ const EmployerSettingsPage = () => {
       <main className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-semibold text-gray-900 mb-6">
-            Settings
+            Profile
           </h1>
           <EmployerTabs/>
         </div>
