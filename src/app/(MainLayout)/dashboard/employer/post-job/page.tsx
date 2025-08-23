@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 
 const PostJobPage = () => {
-  const PostJobForm = dynamic(() => import('@/components/dashboard/employer/PostJobForm/PostJobForm'), {
+  const PostJobForm = dynamic(() => import('@/components/PostJobForm/PostJobForm'), {
     ssr: false,
     loading: () => <PostJobLoading />
   });

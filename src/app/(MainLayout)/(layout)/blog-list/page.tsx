@@ -35,11 +35,11 @@ const BlogListPage = () => {
     <>
       <main className="flex-grow">
         {/* Featured Post */}
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <section className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           <FeaturedPost post={posts[0]} />
         </section>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Sidebar */}
             <div className="lg:w-1/4 space-y-6">

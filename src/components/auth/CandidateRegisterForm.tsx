@@ -9,7 +9,7 @@ const CandidateRegisterForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const [trade, setTrade] = useState("");
-  const [subOptions, setSuboptions] = useState([]);
+  //const [subOptions, setSuboptions] = useState([]);
 
 
 

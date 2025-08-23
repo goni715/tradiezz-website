@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import jobSliceReducer from '../features/job/jobSlice'
+import categorySliceReducer from '../features/category/categorySlice'
 
 
 export const store = configureStore({
   reducer: {
-    job: jobSliceReducer
+    job: jobSliceReducer,
+    category: categorySliceReducer
   },
 })
 
