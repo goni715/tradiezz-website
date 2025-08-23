@@ -53,7 +53,6 @@ const CompanyInformation = () => {
           <EditCompanyPic setFile={setFile} />
         </div>
       </div>
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <CustomInput
           label="Company Name"
@@ -62,7 +61,6 @@ const CompanyInformation = () => {
           control={control}
           placeholder="Enter company name"
         />
-
         <CustomInput
           label="Employer Position"
           name="employer_position"
@@ -70,15 +68,12 @@ const CompanyInformation = () => {
           control={control}
           placeholder="Enter your position"
         />
-
         <CustomQuilEditor
           label="Company Details"
           name="details"
           control={control}
           height={300}
         />
-
-        {/* Save Button */}
         <div>
           <FormButton isLoading={isLoading}>Save Changes</FormButton>
         </div>
