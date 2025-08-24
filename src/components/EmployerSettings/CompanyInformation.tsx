@@ -6,13 +6,13 @@ import { useUpdateEmployerProfileMutation } from "@/redux/features/user/userApi"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import { companySchema } from "@/schemas/employer.schema";
 import { z } from "zod";
 import Error from "@/components/validation/Error";
 import EditCompanyPic from "./EditCompanyPic";
 import { SetProfileError } from "@/redux/features/auth/authSlice";
 import CustomQuilEditor from "@/components/form/CustomQuilEditor";
 import FormButton from "../form/FormButton";
+import { companySchema } from "@/schema/employer.schema";
 
 type TFormValues = z.infer<typeof companySchema>;
 
