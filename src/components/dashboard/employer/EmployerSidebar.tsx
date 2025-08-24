@@ -49,7 +49,7 @@ const EmployerSidebar = () => {
           <SidebarLink
             href="/dashboard/employer/settings"
             icon={<SettingsIcon className="h-5 w-5" />}
-            label="Settings"
+            label="Profile"
           />
         </nav>
       </aside>

@@ -13,6 +13,8 @@ const CandidateRegisterForm = () => {
   const [subOptions, setSuboptions] = useState<{label: string; value: string;}[]>([]);
 
 
+
+
   return (
     <>
       <form className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-2">

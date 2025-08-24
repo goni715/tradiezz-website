@@ -11,6 +11,7 @@ type TProps = {
   type?: "text" | "password";
   placeholder?: string;
   onInput?: React.FormEventHandler<HTMLInputElement>;
+  disabled?: boolean;
 };
 
 const CustomInput = ({
@@ -20,6 +21,7 @@ const CustomInput = ({
   control,
   placeholder= "",
   onInput,
+  disabled=false
 }: TProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -45,6 +47,7 @@ const CustomInput = ({
                       value={field.value ?? ""}
                       type={showPassword ? "text" : "password"}
                       placeholder={placeholder}
+                      disabled={disabled}
                       className={`w-full mt-1 border focus:outline-none rounded-md px-4 py-2 pr-10 ${
                         error
                           ? "border-red-500 focus:border-red-500"
@@ -68,9 +71,10 @@ const CustomInput = ({
                     type={type}
                     {...field}
                     value={field.value ?? ""}
+                    disabled={disabled}
                     placeholder={placeholder}
-                     onInput={onInput}
-                    className={`w-full mt-1 border focus:outline-none rounded-md px-4 py-2 pr-10 ${
+                    onInput={onInput}
+                    className={`w-full mt-1 border focus:outline-none rounded-md px-4 py-2 pr-10 disabled:bg-gray-200 ${
                       error
                         ? "border-red-500 focus:border-red-500"
                         : "border-gray-300 focus:border-blue-500"
