@@ -1,6 +1,6 @@
 "use client";
 
-import { tradeOptions } from "@/data/options";
+import { carpentarTradeTypeOptions, constructionTradeTypeOptions, decorationTradeTypeOptions, electricalTradeTypeOptions, hvacTradeTypeOptions, metalWorkTradeTypeOptions, outdoorTradeTypeOptions, plumbingTradeTypeOptions, propertyTradeTypeOptions, specialistTradeTypeOptions, tradeOptions, windowTradeTypeOptions } from "@/data/options";
 import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
@@ -9,7 +9,8 @@ const CandidateRegisterForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const [trade, setTrade] = useState("");
-  //const [subOptions, setSuboptions] = useState([]);
+  const [subType, setSubType] = useState("");
+  const [subOptions, setSuboptions] = useState<{label: string; value: string;}[]>([]);
 
 
 
@@ -66,7 +67,59 @@ const CandidateRegisterForm = () => {
           <div className="relative">
             <select
               value={trade}
-              onChange={(e)=>setTrade(e.target.value)}
+              onChange={(e)=>{
+                const value = e.target.value;
+                setTrade(e.target.value)
+                setSubType("")
+                if(!value){
+                  setSuboptions([]);
+                  return;
+                }
+                if(value === "Constructions & Groundworks"){
+                  setSuboptions(constructionTradeTypeOptions);
+                  return;
+                }
+                if(value === "Electrical & Renewable Energy"){
+                  setSuboptions(electricalTradeTypeOptions);
+                  return;
+                }
+                if(value === "Plumbing, Heating, Gas"){
+                  setSuboptions(plumbingTradeTypeOptions);
+                  return;
+                }
+                if(value === "HVAC, Ventilation & Refrigeration"){
+                  setSuboptions(hvacTradeTypeOptions);
+                  return;
+                }
+                if(value === "Carpentry & Wood Trades"){
+                  setSuboptions(carpentarTradeTypeOptions);
+                  return;
+                }
+                if(value === "Decoration & Finishing"){
+                  setSuboptions(decorationTradeTypeOptions);
+                  return;
+                }
+                if(value === "Metalwork & Fabrication"){
+                  setSuboptions(metalWorkTradeTypeOptions);
+                  return;
+                }
+                if(value === "Windows, Doors & Cladding"){
+                  setSuboptions(windowTradeTypeOptions);
+                  return;
+                }
+                if(value === "Property Maintenance & Multi-trade"){
+                  setSuboptions(propertyTradeTypeOptions);
+                  return;
+                }
+                if(value === "Outdoor & Landscaping"){
+                  setSuboptions(outdoorTradeTypeOptions);
+                  return;
+                }
+                if(value === "Specialist & Heritage Trades"){
+                  setSuboptions(specialistTradeTypeOptions);
+                  return;
+                }
+              }}
               className={`w-full px-3 py-2 border text-gray-700 disabled:bg-gray-200 rounded-md appearance-none focus:outline-none ${"border-gray-300 focus:border-blue-500"}`}
             >
               <option value="">Select</option>
@@ -99,11 +152,13 @@ const CandidateRegisterForm = () => {
           </label>
           <div className="relative">
             <select
-              value={trade}
+              value={subType}
+              onChange={(e)=> setSubType(e.target.value)}
+              disabled={subOptions?.length===0}
               className={`w-full px-3 py-2 border text-gray-700 disabled:bg-gray-200 rounded-md appearance-none focus:outline-none ${"border-gray-300 focus:border-blue-500"}`}
             >
               <option value="">Select</option>
-              {tradeOptions?.map((option, index) => (
+              {subOptions?.map((option, index) => (
                 <option key={index} value={option.value}>
                   {option.label}
                 </option>
