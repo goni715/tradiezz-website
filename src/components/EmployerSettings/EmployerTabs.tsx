@@ -1,16 +1,15 @@
 "use client"
 import { useState } from "react"
-import { User, UserCircle, Cog } from "lucide-react";
+import { UserCircle, Cog } from "lucide-react";
 import SocialLinkForm from "./SocialLinkForm";
-import CompanyInformation from "./CompanyInformation";
 import EmployerAccountSettings from "./AccountSettings/EmployerAccountSettings";
 
 const tabItems =  [
-  {
-    title: "Company Info",
-    key: "company",
-    icon: User
-  },
+  // {
+  //   title: "Company Info",
+  //   key: "company",
+  //   icon: User
+  // },
   {
     title: "Social Media",
     key: "social",
@@ -50,7 +49,7 @@ const EmployerTabs = () =>{
 
       {/* Tab Content */}
       <div className="w-full">
-        {activeTab === "company" && <CompanyInformation/>}
+        {/* {activeTab === "company" && <CompanyInformation/>} */}
         {activeTab === "social" && <SocialLinkForm />}
         {activeTab === "account" && <EmployerAccountSettings />}
       </div>

@@ -1,11 +1,11 @@
 "use client"
-import CandidateRegisterForm from "@/components/auth/CandidateRegisterForm";
 import EmplyerRegisterForm from "@/components/auth/EmplyerRegisterForm";
+import StepperForm from "@/components/auth/StepperForm";
 import Link from "next/link";
 import { useState } from "react";
 
 const RegisterPage = () => {
-  const [userType, setUserType] = useState("Candidate");
+  const [userType, setUserType] = useState("Job Seeker");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-3 sm:p-6">
@@ -17,7 +17,7 @@ const RegisterPage = () => {
 
         {/* Toggle Buttons */}
         <div className="flex gap-4 mb-6 justify-center">
-          {["Candidate", "Employer"].map((type) => (
+          {["Job Seeker", "Employer"].map((type) => (
             <button
               key={type}
               onClick={() => setUserType(type)}
@@ -33,8 +33,8 @@ const RegisterPage = () => {
         </div>
 
         {/* Register Form */}
-        {userType === "Candidate" ? (
-          <CandidateRegisterForm />
+        {userType === "Job Seeker" ? (
+          <StepperForm />
         ) : (
           <EmplyerRegisterForm />
         )}
