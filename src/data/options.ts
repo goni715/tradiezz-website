@@ -15,142 +15,114 @@ export const tradeOptions = [
 ]
 
 
-export const tradeTypeOptions = [
-    "Constructions & Groundworks",
-    "Electrical & Renewable Energy",
-    "Plumbing, Heating, Gas",
-    "HVAC, Ventilation & Refrigeration",
-    "Carpentry & Wood Trades",
-    "Decoration & Finishing",
-    "Metalwork & Fabrication",
-    "Windows, Doors & Cladding",
-    "Property Maintenance & Multi-trade",
-    "Outdoor & Landscaping",
-    "Specialist & Heritage Trades"
+export const constructionTradeTypeOptions =[
+  { "label": "General Builder", "value": "General Builder" },
+  { "label": "Bricklayer", "value": "Bricklayer" },
+  { "label": "Groundworker", "value": "Groundworker" },
+  { "label": "Demolition Operative", "value": "Demolition Operative" },
+  { "label": "Scaffolder", "value": "Scaffolder" },
+  { "label": "Civil Engineer", "value": "Civil Engineer" },
+  { "label": "Site Labourer", "value": "Site Labourer" },
+  { "label": "Forklift Driver", "value": "Forklift Driver" },
+  { "label": "Machine Operator (e.g., Dumper, Digger)", "value": "Machine Operator (e.g., Dumper, Digger)" }
 ]
 
 
-//"Constructions & Groundworks",
-export const constructionTradeTypeOptions = [
-  "General Builder",
-  "Bricklayer",
-  "Groundworker",
-  "Demolition Operative",
-  "Scaffolder",
-  "Civil Engineer",
-  "Site Labourer",
-  "Forklift Driver",
-  "Machine Operator (e.g., Dumper, Digger)"
-];
 
-
-//"Electrical & Renewable Energy",
 export const electricalTradeTypeOptions = [
-  "Electrician",
-  "Electrical Mate",
-  "Solar Panel Installer",
-  "EV Charger Installer",
-  "Data Cabling / Network Installer",
-  "Smart Home Technician",
-  "Alarm & Security System Installer",
-  "CCTV Installer"
-];
+  { "label": "Electrician", "value": "Electrician" },
+  { "label": "Electrical Mate", "value": "Electrical Mate" },
+  { "label": "Solar Panel Installer", "value": "Solar Panel Installer" },
+  { "label": "EV Charger Installer", "value": "EV Charger Installer" },
+  { "label": "Data Cabling / Network Installer", "value": "Data Cabling / Network Installer" },
+  { "label": "Smart Home Technician", "value": "Smart Home Technician" },
+  { "label": "Alarm & Security System Installer", "value": "Alarm & Security System Installer" },
+  { "label": "CCTV Installer", "value": "CCTV Installer" }
+]
 
 
-//"Plumbing, Heating, Gas",
 export const plumbingTradeTypeOptions = [
-  "Plumber",
-  "Heating Engineer",
-  "Gas Engineer (Gas Safe Registered)",
-  "Bathroom Fitter",
-  "Drainage Specialist",
-  "Heat Pump Installer",
-  "Renewable Heating Specialist"
-];
+  { "label": "Plumber", "value": "Plumber" },
+  { "label": "Heating Engineer", "value": "Heating Engineer" },
+  { "label": "Gas Engineer (Gas Safe Registered)", "value": "Gas Engineer (Gas Safe Registered)" },
+  { "label": "Bathroom Fitter", "value": "Bathroom Fitter" },
+  { "label": "Drainage Specialist", "value": "Drainage Specialist" },
+  { "label": "Heat Pump Installer", "value": "Heat Pump Installer" },
+  { "label": "Renewable Heating Specialist", "value": "Renewable Heating Specialist" }
+]
 
 
-// "HVAC, Ventilation & Refrigeration",
 export const hvacTradeTypeOptions = [
-  "HVAC, Ventilation & Refrigeration",
-  "Air Conditioning Engineer",
-  "Ventilation Installer",
-  "Ductwork Installer",
-  "Refrigeration Technician",
-  "Insulation Installer"
-];
+  { "label": "HVAC, Ventilation & Refrigeration", "value": "HVAC, Ventilation & Refrigeration" },
+  { "label": "Air Conditioning Engineer", "value": "Air Conditioning Engineer" },
+  { "label": "Ventilation Installer", "value": "Ventilation Installer" },
+  { "label": "Ductwork Installer", "value": "Ductwork Installer" },
+  { "label": "Refrigeration Technician", "value": "Refrigeration Technician" },
+  { "label": "Insulation Installer", "value": "Insulation Installer" }
+]
 
 
-// "Carpentry & Wood Trades",
 export const carpentarTradeTypeOptions = [
-  "Carpenter",
-  "Joiner",
-  "Kitchen Fitter",
-  "Cabinet Maker",
-  "Shopfitter",
-  "Timber Framer"
-];
+  { "label": "Carpenter", "value": "Carpenter" },
+  { "label": "Joiner", "value": "Joiner" },
+  { "label": "Kitchen Fitter", "value": "Kitchen Fitter" },
+  { "label": "Cabinet Maker", "value": "Cabinet Maker" },
+  { "label": "Shopfitter", "value": "Shopfitter" },
+  { "label": "Timber Framer", "value": "Timber Framer" }
+]
 
 
-// "Decoration & Finishing",
 export const decorationTradeTypeOptions = [
-  "Painter & Decorator",
-  "Tiler (Wall/Floor)",
-  "Floor Layer (Wood, Vinyl, Carpet)",
-  "Plasterer",
-  "Renderer",
-  "Dryliner / Tape & Jointer"
-];
+  { "label": "Painter & Decorator", "value": "Painter & Decorator" },
+  { "label": "Tiler (Wall/Floor)", "value": "Tiler (Wall/Floor)" },
+  { "label": "Floor Layer (Wood, Vinyl, Carpet)", "value": "Floor Layer (Wood, Vinyl, Carpet)" },
+  { "label": "Plasterer", "value": "Plasterer" },
+  { "label": "Renderer", "value": "Renderer" },
+  { "label": "Dryliner / Tape & Jointer", "value": "Dryliner / Tape & Jointer" }
+]
 
 
-// "Metalwork & Fabrication",
 export const metalWorkTradeTypeOptions = [
-  "Welder",
-  "Steel Fixer",
-  "Metal Fabricator",
-  "Blacksmith"
-];
+  { "label": "Welder", "value": "Welder" },
+  { "label": "Steel Fixer", "value": "Steel Fixer" },
+  { "label": "Metal Fabricator", "value": "Metal Fabricator" },
+  { "label": "Blacksmith", "value": "Blacksmith" }
+]
 
 
-//"Windows, Doors & Cladding",
-export const windowTradeTypeOptions = [
-  "Window Fitter",
-  "Glazier",
-  "Cladding Installer",
-  "Fascia & Soffit Installer",
-  "Gutter Specialist",
-  "Door Installer",
-  "Roller Shutter Fitter"
-];
+export const windowTradeTypeOptions =[
+  { "label": "Window Fitter", "value": "Window Fitter" },
+  { "label": "Glazier", "value": "Glazier" },
+  { "label": "Cladding Installer", "value": "Cladding Installer" },
+  { "label": "Fascia & Soffit Installer", "value": "Fascia & Soffit Installer" },
+  { "label": "Gutter Specialist", "value": "Gutter Specialist" },
+  { "label": "Door Installer", "value": "Door Installer" },
+  { "label": "Roller Shutter Fitter", "value": "Roller Shutter Fitter" }
+]
 
-
-// "Property Maintenance & Multi-trade",
 export const propertyTradeTypeOptions = [
-  "Handyman / Multi-trade Operative",
-  "Property Maintenance Operative",
-  "Facilities Maintenance Technician",
-  "Locksmith",
-  "Repairs Specialist"
+  { label: "Handyman / Multi-trade Operative", value: "Handyman / Multi-trade Operative" },
+  { label: "Property Maintenance Operative", value: "Property Maintenance Operative" },
+  { label: "Facilities Maintenance Technician", value: "Facilities Maintenance Technician" },
+  { label: "Locksmith", value: "Locksmith" },
+  { label: "Repairs Specialist", value: "Repairs Specialist" }
 ];
 
-
-//"Outdoor & Landscaping",
 export const outdoorTradeTypeOptions = [
-  "Landscaper",
-  "Fencer",
-  "Paving / Driveway Installer",
-  "Ground Maintenance Operative",
-  "Garden Structures Installer (e.g., sheds, decking)"
-];
+  { "label": "Landscaper", "value": "Landscaper" },
+  { "label": "Fencer", "value": "Fencer" },
+  { "label": "Paving / Driveway Installer", "value": "Paving / Driveway Installer" },
+  { "label": "Ground Maintenance Operative", "value": "Ground Maintenance Operative" },
+  { "label": "Garden Structures Installer (e.g., sheds, decking)", "value": "Garden Structures Installer (e.g., sheds, decking)" }
+]
 
-
-// "Specialist & Heritage Trades"
 export const specialistTradeTypeOptions = [
-  "Stonemason",
-  "Restoration Specialist",
-  "Heritage Conservation Specialist",
-  "Thatched Roofer",
-  "Eco Retrofit Specialist",
-  "Green Roof Installer"
+  { label: "Stonemason", value: "Stonemason" },
+  { label: "Restoration Specialist", value: "Restoration Specialist" },
+  { label: "Heritage Conservation Specialist", value: "Heritage Conservation Specialist" },
+  { label: "Thatched Roofer", value: "Thatched Roofer" },
+  { label: "Eco Retrofit Specialist", value: "Eco Retrofit Specialist" },
+  { label: "Green Roof Installer", value: "Green Roof Installer" }
 ];
 
 
