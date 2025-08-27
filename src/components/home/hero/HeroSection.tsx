@@ -17,13 +17,14 @@ const HeroSection = () => {
       {/* Content */}
       <div className="relative z-20 text-white max-w-4xl w-full text-center md:text-left">
         <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
-          Hire the Best, get Hired by the Best
+          Get On Site. Get the Site Covered.
         </h1>
         <p className="text-base md:text-lg font-medium mb-8">
-          Each month, more than 3 million job seekers turn to{" "}
+          {/* Each month, more than 3 million job seekers turn to{" "}
           <span className="font-bold">website</span> in their search for work,
           making over <span className="font-bold">140.00 applications</span>{" "}
-          every single day.
+          every single day. */}
+          Whether you&apos;re picking up tools or picking a team, Tradieez connects skilled workers with the jobs that need them, fast.
         </p>
         <HeroForm />
       </div>

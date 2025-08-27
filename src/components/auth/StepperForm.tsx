@@ -17,6 +17,10 @@ interface FormData {
   confirmPassword: string
   category: string
   subCategory: string
+  rate: string;
+  availability: string;
+  type: string;
+  employmentType: string;
   location: { lat: number; lng: number; address: string } | null
   skills: string[]
   experience: string
@@ -26,18 +30,33 @@ interface FormData {
 
 const StepperForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [subOptions, setSuboptions] = useState<{label: string; value: string;}[]>([]);
+  const [subOptions, setSuboptions] = useState<{ label: string; value: string; }[]>([
+    { "label": "General Builder", "value": "General Builder" },
+    { "label": "Bricklayer", "value": "Bricklayer" },
+    { "label": "Groundworker", "value": "Groundworker" },
+    { "label": "Demolition Operative", "value": "Demolition Operative" },
+    { "label": "Scaffolder", "value": "Scaffolder" },
+    { "label": "Civil Engineer", "value": "Civil Engineer" },
+    { "label": "Site Labourer", "value": "Site Labourer" },
+    { "label": "Forklift Driver", "value": "Forklift Driver" },
+    { "label": "Machine Operator (e.g., Dumper, Digger)", "value": "Machine Operator (e.g., Dumper, Digger)" }
+  ]);
+
   const router = useRouter();
 
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    category: "",
-    subCategory: "",
+    name: "Osman Goni",
+    email: "goni@gmail.com",
+    password: "123456",
+    confirmPassword: "123456",
+    category: "Constructions & Groundworks",
+    subCategory: "General Builder",
+    rate: "",
+    availability: "",
+    type: "",
+    employmentType: "",
     location: null,
-    skills: [],
+    skills: ["react", "next", "good"],
     experience: "",
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -53,12 +72,16 @@ const StepperForm = () => {
         if (!formData.email.trim()) newErrors.email = "Email is required"
         else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid"
         if (!formData.password) newErrors.password = "Password is required"
-        else if (formData.password.length < 8) newErrors.password = "Password must be at least 8 characters"
+        else if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters"
         if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match"
         break
       case 2:
         if (!formData.category) newErrors.category = "Category is required"
         if (!formData.subCategory) newErrors.subCategory = "Sub-category is required"
+        if (!formData.rate) newErrors.rate = "Rate is required"
+        if (!formData.availability) newErrors.availability = "Availibility is required"
+        if (!formData.type) newErrors.type = "Type is required"
+        if (!formData.employmentType) newErrors.employmentType = "Employment Type is required"
         break
       case 3:
         if (!formData.location) newErrors.location = "Location is required"
@@ -107,6 +130,61 @@ const StepperForm = () => {
       skills: prev.skills.filter((skill) => skill !== skillToRemove),
     }))
   }
+
+
+  const rateOptions = [
+  {
+    label: "Hourly",
+    value: "par_hour",
+  },
+  {
+    label: "Per Day",
+    value: "par_day",
+  },
+  {
+    label: "Per Job/Project",
+    value: "par_job",
+  }
+];
+
+
+const typeOptions = [
+  {
+    label: "Full Time",
+    value: "full_time", 
+  },
+  {
+    label: "Part Time",
+    value: "part_time", 
+  },
+  {
+    label: "Gig",
+    value: "gig", 
+  },
+  {
+    label: "Evenings / Weekends",
+    value: "evenings_weekneds",
+  }
+];
+
+const employmentTypeOptions = [
+  {
+    label: "Self-employed",
+    value: "Self-employed", 
+  },
+  {
+    label: "Seeking Employment",
+    value: "Seeking Employment", 
+  },
+  {
+    label: "Both",
+    value: "both", 
+  }
+];
+
+
+
+
 
   return (
     <>
@@ -197,7 +275,7 @@ const StepperForm = () => {
               {/* <h2 className="text-xl font-semibold text-card-foreground mb-4">Professional Category</h2> */}
 
               <div>
-                <label className="block text-sm font-medium text-card-foreground mb-2">Trade Type</label>
+                <label className="block text-sm font-medium text-card-foreground mb-2">Category</label>
                               <select
                                   value={formData.category}
                                   onChange={(e) => {
@@ -254,7 +332,7 @@ const StepperForm = () => {
                                   }}
                   className="w-full px-4 py-3 bg-input border border-gray-300 focus:border-blue-500 rounded-lg focus:outline-none transition-colors"
                 >
-                  <option value="">Select a trade type</option>
+                  <option value="">Select Category</option>
                     {tradeOptions?.map((option, index) => (
                         <option key={index} value={option.value}>
                             {option.label}
@@ -266,14 +344,14 @@ const StepperForm = () => {
 
               {/* {formData.category && ( */}
                 <div>
-                  <label className="block text-sm font-medium text-card-foreground mb-2">Sub-Trade Type</label>
+                  <label className="block text-sm font-medium text-card-foreground mb-2">Sub Category</label>
                   <select
                     value={formData.subCategory}
                     onChange={(e) => setFormData((prev) => ({ ...prev, subCategory: e.target.value }))}
                     disabled={subOptions.length===0}
                     className="w-full px-4 py-3 bg-input border border-gray-300 focus:border-blue-500 rounded-lg focus:outline-none disabled:bg-gray-300 transition-colors"
                   >
-                    <option value="">Select a sub-trade type</option>
+                    <option value="">Select sub-category</option>
                     {subOptions?.map((option, index) => (
                        <option key={index} value={option.value}>
                         {option.label}
@@ -281,6 +359,64 @@ const StepperForm = () => {
                     ))}
                   </select>
                   {errors.subCategory && <p className="text-red-500 text-sm mt-1">{errors.subCategory}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-card-foreground mb-2">Rate</label>
+                  <select
+                    value={formData.rate}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, rate: e.target.value }))}
+                    className="w-full px-4 py-3 bg-input border border-gray-300 focus:border-blue-500 rounded-lg focus:outline-none disabled:bg-gray-300 transition-colors"
+                  >
+                    <option value="">Select Rate</option>
+                    {rateOptions?.map((option, index) => (
+                       <option key={index} value={option.value}>
+                        {option.label}
+                       </option>
+                    ))}
+                  </select>
+                  {errors.rate && <p className="text-red-500 text-sm mt-1">{errors.rate}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-card-foreground mb-2">Availability</label>
+                  <input
+                    value={formData.availability}
+                    type="date"
+                    onChange={(e) => setFormData((prev) => ({ ...prev, availability: e.target.value }))}
+                    className="w-full px-4 py-3 bg-input border border-gray-300 focus:border-blue-500 rounded-lg focus:outline-none disabled:bg-gray-300 transition-colors"
+                  /> 
+                  {errors.availability && <p className="text-red-500 text-sm mt-1">{errors.availability}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-card-foreground mb-2">Work Type</label>
+                  <select
+                    value={formData.type}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, type: e.target.value }))}
+                    className="w-full px-4 py-3 bg-input border border-gray-300 focus:border-blue-500 rounded-lg focus:outline-none disabled:bg-gray-300 transition-colors"
+                  >
+                    <option value="">Select Select</option>
+                    {typeOptions?.map((option, index) => (
+                       <option key={index} value={option.value}>
+                        {option.label}
+                       </option>
+                    ))}
+                  </select>
+                  {errors.type && <p className="text-red-500 text-sm mt-1">{errors.type}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-card-foreground mb-2">Employment Type</label>
+                  <select
+                    value={formData.employmentType}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, employmentType: e.target.value }))}
+                    className="w-full px-4 py-3 bg-input border border-gray-300 focus:border-blue-500 rounded-lg focus:outline-none disabled:bg-gray-300 transition-colors"
+                  >
+                    <option value="">Select Select</option>
+                    {employmentTypeOptions?.map((option, index) => (
+                       <option key={index} value={option.value}>
+                        {option.label}
+                       </option>
+                    ))}
+                  </select>
+                  {errors.employmentType && <p className="text-red-500 text-sm mt-1">{errors.employmentType}</p>}
                 </div>
               {/* )} */}
             </div>
@@ -404,17 +540,25 @@ const StepperForm = () => {
                 </div>
 
                 <div className="p-4 bg-muted rounded-lg">
-                  <h3 className="font-medium text-card-foreground mb-2">Professional Category</h3>
                   <p>
-                    <strong>Trade Type:</strong> {formData.category}
+                    <strong>Category:</strong> {formData.category}
                   </p>
                   <p>
-                    <strong>Sub-Trade-Type:</strong> {formData.subCategory}
+                    <strong>Sub-Category:</strong> {formData.subCategory}
+                  </p>
+                  <p>
+                    <strong>Rate:</strong> {formData.rate}
+                  </p>
+                  <p>
+                    <strong>Work Type:</strong> {formData.type}
+                  </p>
+                  <p>
+                    <strong>Employment Type:</strong> {formData.employmentType}
                   </p>
                 </div>
 
                 <div className="p-4 bg-muted rounded-lg">
-                  <h3 className="font-medium text-card-foreground mb-2">Location</h3>
+                  <h3 className="font-medium text-black mb-2">Location</h3>
                   <p>{formData.location?.address}</p>
                 </div>
 

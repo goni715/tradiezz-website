@@ -44,7 +44,7 @@ export default function Navbar() {
               pathname === "/find-candidates" ? "text-secondary" : "text-white"
             }`}
           >
-            Find-Candidates
+            Find-Skilled-People
           </Link>
           {/* <Link href="/employers" className="hover:text-gray-300">
             Employers
