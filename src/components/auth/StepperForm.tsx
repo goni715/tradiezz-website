@@ -45,18 +45,18 @@ const StepperForm = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState<FormData>({
-    name: "Osman Goni",
-    email: "goni@gmail.com",
-    password: "123456",
-    confirmPassword: "123456",
-    category: "Constructions & Groundworks",
-    subCategory: "General Builder",
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    category: "",
+    subCategory: "",
     rate: "",
     availability: "",
     type: "",
     employmentType: "",
     location: null,
-    skills: ["react", "next", "good"],
+    skills: [],
     experience: "",
   })
   const [errors, setErrors] = useState<Record<string, string>>({})

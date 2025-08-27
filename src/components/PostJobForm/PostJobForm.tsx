@@ -15,6 +15,7 @@ import FormButton from "../form/FormButton";
 import CustomSelect from "../form/CustomSelect";
 import { experienceOptions, rateOptions, typeOptions } from "@/data/job.options";
 import CustomDatePicker from "../form/CustomDatePicker";
+import SalaryRange from "./SalaryRange";
 
 type TFormValues = z.infer<typeof createJobSchema>;
 
@@ -137,7 +138,7 @@ const PostJobForm = () => {
             name="title"
             type="text"
             control={control}
-            placeholder="e.g. CNC Machinist, Maintenance Engineer"
+            placeholder="e.g.Plumber – Domestic Installations"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -227,32 +228,42 @@ const PostJobForm = () => {
               placeholder="DD/MM/YYYY"
             />
             <CustomDatePicker
-              label="End Date"
+              label="End Date (Optional)"
               name="end_date"
               control={control}
               placeholder="DD/MM/YYYY"
             />
-            <div className="col-span-2">
+            <div className="col-span-2 space-y-3">
               <CustomTextArea
                 label="Skills (technical or soft skills, Comma Separated)"
                 name="skill"
                 control={control}
-                placeholder="e.g. CNC Programming, TIG Welding"
+                placeholder="e.g. Pipefitting, Boiler Servicing"
+              />
+              <CustomInput
+                label="Benefits (Optional)"
+                name="benefits"
+                type="text"
+                control={control}
+                placeholder="Enter benfits"
               />
             </div>
-            <CustomSelect
-              label="Rate Type"
-              name="rate"
-              control={control}
-              options={rateOptions}
-            />
-            <CustomInput
+            {/* <CustomInput
               label="Remuneration"
               name="salary"
               type="text"
               control={control}
               placeholder="e.g. 20$ - 40$"
-            />
+            /> */}
+            <div className="col-span-2 space-y-3">
+              <CustomSelect
+                label="Rate Type"
+                name="rate"
+                control={control}
+                options={rateOptions}
+              />
+              <SalaryRange />
+            </div>
             <CustomInput
               label="Address"
               name="address"

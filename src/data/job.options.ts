@@ -42,16 +42,24 @@ export const educationOptions = [
 
 export const experienceOptions = [
   {
-    label: "Beginner",
-    value: "beginner",
+    label: "Apprentice",
+    value: "Apprentice",
   },
   {
-    label: "Intermediate",
-    value: "intermediate",
+    label: "Newly Qualified",
+    value: "Newly Qualified",
   },
   {
-    label: "Expert",
-    value: "expert",
+    label: "1–3 Years",
+    value: "1–3 Years",
+  },
+  {
+    label: "3–5 Years",
+    value: "3–5 Years",
+  },
+  {
+    label: "5+ Years",
+    value: "5+ Years",
   },
   {
     label: "N/A",
@@ -63,12 +71,24 @@ export const experienceOptions = [
 
 export const rateOptions = [
   {
-    label: "Per Hour",
-    value: "par_hour",
+    label: "Hourly",
+    value: "hourly",
   },
   {
-    label: "Per Day",
-    value: "par_day",
+    label: "Daily",
+    value: "daily",
+  },
+  {
+    label: "Weekly",
+    value: "weekly",
+  },
+  {
+    label: "Monthly",
+    value: "monthly",
+  },
+  {
+    label: "Annual",
+    value: "annual",
   }
 ];
 
