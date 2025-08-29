@@ -18,8 +18,8 @@ const Footer = () => {
         <div>
           <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
           <ul className="space-y-2">
-            <li><a href="/contact" className="hover:text-blue-400">Contact</a></li>
-            <li><a href="/blog" className="hover:text-blue-400">Blog</a></li>
+            <li><a href="/contact" className="hover:text-brand-color">Contact</a></li>
+            <li><a href="/blog" className="hover:text-brand-color">Blog</a></li>
           </ul>
         </div>
 
@@ -27,24 +27,11 @@ const Footer = () => {
         <div>
           <h4 className="text-lg font-semibold mb-3">Support</h4>
           <ul className="space-y-2">
-            <li><a href="/privacy" className="hover:text-blue-400">Privacy Policy</a></li>
-            <li><a href="/terms" className="hover:text-blue-400">Terms & Conditions</a></li>
+            <li><a href="/privacy" className="hover:text-brand-color">Privacy Policy</a></li>
+            <li><a href="/terms" className="hover:text-brand-color">Terms & Conditions</a></li>
           </ul>
         </div>
-
-        {/* Social Icons */}
-        {/* <div>
-          <h4 className="text-lg font-semibold mb-3">Follow Us</h4>
-          <div className="flex space-x-4 text-gray-400">
-            <a href="#"><i className="fab fa-facebook-f hover:text-white"></i></a>
-            <FaFacebook className="hover:text-white"/>
-            <a href="#"><i className="fab fa-youtube hover:text-white"></i></a>
-            <a href="#"><i className="fab fa-instagram hover:text-white"></i></a>
-            <a href="#"><i className="fab fa-twitter hover:text-white"></i></a>
-          </div>
-        </div> */}
       </div>
-
       <div className="border-t border-gray-700 mt-8">
         <div className="max-w-7xl mx-auto px-6 py-4 text-center text-sm text-gray-400">
           &copy; 2024 Tradieez - Job Portal. All rights reserved.

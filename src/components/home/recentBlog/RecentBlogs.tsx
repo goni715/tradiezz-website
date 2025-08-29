@@ -129,18 +129,6 @@ const RecentBlogs = () => {
   },
 }
 
-//   const cardHoverVariants = {
-//     rest: { scale: 1, y: 0 },
-//     hover: {
-//       scale: 1.02,
-//       y: -5,
-//       transition: {
-//         type: "spring",
-//         stiffness: 400,
-//         damping: 10,
-//       },
-//     },
-//   }
 
   return (
     <section className="py-12 px-4 bg-gray-50">
@@ -313,7 +301,7 @@ function BlogCard({ blog }: { blog: (typeof blogs)[0] }) {
           </div>
           <Link
             href={blog.slug}
-            className="text-sm font-medium text-emerald-600 hover:text-emerald-700 flex items-center group"
+            className="text-sm font-medium text-brand-color flex items-center group"
           >
             Read more
             <svg

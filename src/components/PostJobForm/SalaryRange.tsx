@@ -97,7 +97,7 @@ const SalaryRange = () => {
           <div className="flex-1">
             <input
               type="text"
-              value={`$${minPrice}`}
+              value={`£${minPrice}`}
               onChange={handleMinInputChange}
               className="w-full px-4 py-3 text-lg font-medium text-gray-700 bg-white border-2 border-gray-300 rounded-lg focus:outline-none focus:border-sky-400"
             />
@@ -105,7 +105,7 @@ const SalaryRange = () => {
           <div className="flex-1">
             <input
               type="text"
-              value={`$${maxPrice}`}
+              value={`£${maxPrice}`}
               onChange={handleMaxInputChange}
               className="w-full px-4 py-3 text-lg font-medium text-gray-700 bg-white border-2 border-gray-300 rounded-lg focus:outline-none focus:border-sky-400"
             />

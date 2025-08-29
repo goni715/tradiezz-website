@@ -24,24 +24,24 @@ export default function Navbar() {
         <div className="hidden space-x-6 md:flex">
           <Link
             href="/"
-            className={`hover:text-secondary ${
-              pathname === "/" ? "text-secondary" : "text-white"
+            className={`hover:text-brand-color ${
+              pathname === "/" ? "text-brand-color" : "text-white"
             }`}
           >
             Home
           </Link>
           <Link
             href="/find-work"
-            className={`hover:text-secondary ${
-              pathname === "/find-work" ? "text-secondary" : "text-white"
+            className={`hover:text-brand-color ${
+              pathname === "/find-work" ? "text-brand-color" : "text-white"
             }`}
           >
             Find Work
           </Link>
           <Link
             href="/find-candidates"
-            className={`hover:text-secondary ${
-              pathname === "/find-candidates" ? "text-secondary" : "text-white"
+            className={`hover:text-brand-color ${
+              pathname === "/find-candidates" ? "text-brand-color" : "text-white"
             }`}
           >
             Find-Skilled-People
@@ -54,9 +54,9 @@ export default function Navbar() {
           </Link> */}
           <Link
             href="/dashboard/candidate/overview"
-            className={`hover:text-secondary ${
+            className={`hover:text-brand-color ${
               pathname === "/dashboard/candidate/overview"
-                ? "text-secondary"
+                ? "text-brand-color"
                 : "text-white"
             }`}
           >
@@ -64,9 +64,9 @@ export default function Navbar() {
           </Link>
           <Link
             href="/dashboard/employer/overview"
-            className={`hover:text-secondary ${
+            className={`hover:text-brand-color ${
               pathname === "/dashboard/employer/overview"
-                ? "text-secondary"
+                ? "text-brand-color"
                 : "text-white"
             }`}
           >
@@ -74,24 +74,24 @@ export default function Navbar() {
           </Link>
            {/* <Link
             href="/dashboard/employer/subscription"
-            className={`hover:text-secondary ${
-              pathname === "/dashboard/employer/subscription" ? "text-secondary" : "text-white"
+            className={`hover:text-brand-color ${
+              pathname === "/dashboard/employer/subscription" ? "text-brand-color" : "text-white"
             }`}
           >
             Subscription
           </Link> */}
           <Link
             href="/blog-list"
-            className={`hover:text-secondary ${
-              pathname === "/blog-list" ? "text-secondary" : "text-white"
+            className={`hover:text-brand-color ${
+              pathname === "/blog-list" ? "text-brand-color" : "text-white"
             }`}
           >
             Blogs
           </Link>
           <Link
             href="/contact"
-            className={`hover:text-secondary ${
-              pathname === "/contact" ? "text-secondary" : "text-white"
+            className={`hover:text-brand-color ${
+              pathname === "/contact" ? "text-brand-color" : "text-white"
             }`}
           >
             Contact

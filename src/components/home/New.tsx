@@ -21,7 +21,7 @@ function New() {
                 Start your job search today! Create a profile, explore job opportunities, and connect with
                 top employers. Let us help you find the right fit for your skills and goals.
               </p>
-              <button className="inline-flex items-center cursor-pointer px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200">
+              <button className="inline-flex items-center cursor-pointer px-6 py-3 bg-brand-color text-white font-medium rounded-lg transition-colors duration-200">
                 Register Now
                 <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
