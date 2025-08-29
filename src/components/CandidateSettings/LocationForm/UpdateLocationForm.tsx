@@ -1,9 +1,9 @@
 "use client";
 
-import LocationMap, { LatLngTuple } from "@/components/Location/LocationMap";
-import { useUpdateCandidateLocationMutation } from "@/redux/features/user/userApi";
+import { LatLngTuple } from "@/components/Location/LocationMap";
 import { useAppSelector } from "@/redux/hooks/hooks";
-import { locationSchema } from "@/schemas/candidate.schema";
+import { locationSchema } from "@/schema/candidate.schema";
+import dynamic from "next/dynamic";
 // import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -13,10 +13,16 @@ import { z } from "zod";
 type TFormValues = z.infer<typeof locationSchema>;
 
 const UpdateLocationForm = () => {
+  const isLoading = false;
   const { user } = useAppSelector((state) => state.user);
   const coordinates = user?.locations?.coordinates ?? [0, 0];
   const initialLongitude = coordinates[0];
   const initialLatitude = coordinates[1];
+
+  
+  const LocationMap = dynamic(() => import("@/components/Location/LocationMap"), {
+    ssr: false, // only render on client
+  });
 
   const [selectedLocation, setSelectedLocation] = useState<LatLngTuple>([
     initialLatitude,
@@ -25,7 +31,7 @@ const UpdateLocationForm = () => {
   // const [address, setAddress] = useState<string>("");
   // const [postalCode, setPostalCode] = useState<string>("");
 
-  const [updateLocation, { isLoading }] = useUpdateCandidateLocationMutation();
+  // const [updateLocation, { isLoading }] = useUpdateCandidateLocationMutation();
 
   const { handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -68,7 +74,8 @@ const UpdateLocationForm = () => {
   };
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
-    updateLocation(data);
+    console.log(data)
+    // updateLocation(data);
   };
 
   return (

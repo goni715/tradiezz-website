@@ -29,7 +29,6 @@ const PostJobForm = () => {
   //const [createJob, { isLoading, isSuccess }] = useCreateJobMutation();
   const isLoading = false;
   const [trade, setTrade] = useState("");
-  const [subTrade, setSubTrade] = useState("");
   //const [subOptions, setSuboptions] = useState([]);
 
 

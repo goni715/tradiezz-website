@@ -7,7 +7,7 @@ import PersonalForm from "../CandidateSettings/Personal/PersonalForm";
 import ProfessionalForm from "../CandidateSettings/Professional/ProfessionalForm";
 import OverviewHeader from "./OverviewHeader";
 import OverviewStats from "./OverviewStats";
-import ProfileCompletion from "./ProfileCompletion";
+// import ProfileCompletion from "./ProfileCompletion";
 // import RecentlyApplied from "./RecentlyApplied";
 
 const CandidateOverview = () => {
@@ -17,7 +17,7 @@ const CandidateOverview = () => {
         <div className="mx-auto max-w-5xl p-4 md:p-6 lg:p-8">
           <OverviewHeader />
           <OverviewStats />
-          <ProfileCompletion />
+          {/* <ProfileCompletion /> */}
           <PersonalForm/>
           <ProfessionalForm/>
           <PrivacySettings/>

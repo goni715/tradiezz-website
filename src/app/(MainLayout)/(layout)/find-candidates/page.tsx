@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useMemo } from 'react';
-import { nannies as nannyData } from '@/data/candidate.data';
-import { EducationLevel, ExperienceRange, Nanny, ViewMode } from '@/types/candidate.type';
+import React, { useState } from 'react';
+import { EducationLevel, ExperienceRange, ViewMode } from '@/types/candidate.type';
 import CandidateList from '@/components/candidates/CandidateList';
 import Pagination from '@/components/ui/Pagination';
 import ViewControls from '@/components/ui/ViewControls';
 import FilterSidebar from '@/components/ui/FilterSidebar';
+import { nannies } from '@/data/candidate.data';
 
 const FindCandidatePage = () =>{
   // Filters
@@ -21,34 +21,12 @@ const FindCandidatePage = () =>{
   const [currentPage, setCurrentPage] = useState<number>(1);
   
   // Nannies data
-  const [nannies, setNannies] = useState<Nanny[]>(nannyData);
+//  const [nannies, setNannies] = useState<Nanny[]>(nannyData);
   
-  // Filter nannies based on selected filters
-  const filteredNannies = useMemo(() => {
-    return nannies.filter(nanny => {
-      // Filter by experience
-      if (selectedExperience) {
-        const [min, max] = selectedExperience.includes('-') 
-          ? selectedExperience.split('-').map(Number) 
-          : [parseInt(selectedExperience), 100];
-          
-        if (!(nanny.experience >= min && (max ? nanny.experience <= max : true))) {
-          return false;
-        }
-      }
-      
-      return true;
-    });
-  }, [nannies, selectedExperience]);
-  
-  // Paginate nannies
-  const paginatedNannies = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredNannies.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredNannies, currentPage, itemsPerPage]);
+
   
   // Calculate total pages
-  const totalPages = Math.ceil(filteredNannies.length / itemsPerPage);
+  const totalPages = 3;
   
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -57,12 +35,12 @@ const FindCandidatePage = () =>{
   };
   
   // Toggle save/bookmark
-  const handleToggleSave = (id: number) => {
-    setNannies(prevNannies => 
-      prevNannies.map(nanny => 
-        nanny.id === id ? { ...nanny, isSaved: !nanny.isSaved } : nanny
-      )
-    );
+  const handleToggleSave = () => {
+    // setNannies(prevNannies => 
+    //   prevNannies.map(nanny => 
+    //     nanny.id === id ? { ...nanny, isSaved: !nanny.isSaved } : nanny
+    //   )
+    // );
   };
 
 
@@ -104,7 +82,7 @@ const FindCandidatePage = () =>{
             />
             
             <CandidateList
-              nannies={paginatedNannies} 
+              nannies={nannies} 
               viewMode={viewMode}
               onToggleSave={handleToggleSave}
             />

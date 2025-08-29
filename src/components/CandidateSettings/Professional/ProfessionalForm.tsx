@@ -5,11 +5,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomInput from "@/components/form/CustomInput";
 import { z } from "zod";
-import { useUpdateCandidateProfileMutation } from "@/redux/features/user/userApi";
 import { SetProfileError } from "@/redux/features/auth/authSlice";
 import { CgSpinnerTwo } from "react-icons/cg";
 import Error from "@/components/validation/Error";
-import { candidateProfessionalSchema } from "@/schemas/candidate.schema";
 import CustomSelect from "@/components/form/CustomSelect";
 import {
   educationOptions,
@@ -21,17 +19,17 @@ import WorkExperienceList from "./WorkExperienceList";
 import CVForm from "./CVForm";
 import CustomDatePicker from "@/components/form/CustomDatePicker";
 import CustomTextArea from "@/components/form/CustomTextArea";
+import { candidateProfessionalSchema } from "@/schema/candidate.schema";
 
 type TFormValues = z.infer<typeof candidateProfessionalSchema>;
 
 const ProfessionalForm = () => {
   const { user } = useAppSelector((state) => state.user);
-  console.log(user);
-
+  const isLoading = false;
   const dispatch = useAppDispatch();
   const { ProfileError } = useAppSelector((state) => state.auth);
-  const [updateCandidateProfile, { isLoading }] =
-    useUpdateCandidateProfileMutation();
+  // const [updateCandidateProfile, { isLoading }] =
+  //   useUpdateCandidateProfileMutation();
   const { handleSubmit, control } = useForm({
     resolver: zodResolver(candidateProfessionalSchema),
     defaultValues: {
@@ -72,7 +70,7 @@ const ProfessionalForm = () => {
       }
     });
 
-    updateCandidateProfile(formData);
+    //updateCandidateProfile(formData);
   };
 
   return (

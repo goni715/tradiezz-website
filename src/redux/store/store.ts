@@ -3,6 +3,7 @@ import jobSliceReducer from '../features/job/jobSlice'
 import categorySliceReducer from '../features/category/categorySlice'
 import authSliceReducer from '../features/auth/authSlice'
 import userSliceReducer from '../features/user/userSllice'
+import candidateSliceReducer from '../features/candidate/candidateSlice'
 
 
 export const store = configureStore({
@@ -10,7 +11,8 @@ export const store = configureStore({
     job: jobSliceReducer,
     category: categorySliceReducer,
     auth: authSliceReducer,
-    user: userSliceReducer
+    user: userSliceReducer,
+    candidate: candidateSliceReducer
   },
 })
 

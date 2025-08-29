@@ -1,10 +1,28 @@
 "use client";
 import { Modal } from "antd";
-import { useState } from "react";
-import { Trash2} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Trash2 } from "lucide-react";
+import { useRemoveWorkExperienceMutation } from "@/redux/features/user/userApi";
+import { CgSpinnerTwo } from "react-icons/cg";
 
-const DeleteWorkExperienceModal = () => {
+type TProps = {
+  experienceId: string;
+};
+
+const DeleteWorkExperienceModal = ({ experienceId }: TProps) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [removeWorkExperience, { isLoading, isSuccess }] =
+    useRemoveWorkExperienceMutation();
+
+  useEffect(() => {
+    if (!isLoading && isSuccess) {
+      setModalOpen(false);
+    }
+  }, [isLoading, isSuccess]);
+
+  const handleDelete = () => {
+    removeWorkExperience(experienceId);
+  };
 
   return (
     <>
@@ -42,10 +60,17 @@ const DeleteWorkExperienceModal = () => {
                 No
               </button>
               <button
-                onClick={() => setModalOpen(false)}
-                className="px-4 cursor-pointer py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none"
+                onClick={handleDelete}
+                disabled={isLoading}
+                className="bg-red-500 cursor-pointer hover:bg-red-600 duration-500 text-white px-4 py-1 rounded-md disabled:cursor-not-allowed"
               >
-                Yes
+                {isLoading ? (
+                  <>
+                    <CgSpinnerTwo className="animate-spin" fontSize={16} />
+                  </>
+                ) : (
+                  "Yes"
+                )}
               </button>
             </div>
           </div>

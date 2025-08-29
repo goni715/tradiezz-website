@@ -5,27 +5,26 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomInput from "@/components/form/CustomInput";
 import { z } from "zod";
-import { useUpdateCandidateProfileMutation } from "@/redux/features/user/userApi";
 import { SetProfileError } from "@/redux/features/auth/authSlice";
 import { CgSpinnerTwo } from "react-icons/cg";
 import Error from "@/components/validation/Error";
 import { useState } from "react";
-import { candidatePersonalSchema } from "@/schemas/candidate.schema";
-import CustomQuilEditor from "@/components/form/CustomQuilEditor";
 import EditProfilePic from "./EditProfilePic";
+import { candidatePersonalSchema } from "@/schema/candidate.schema";
 import UpdateLocationForm from "../LocationForm/UpdateLocationForm";
 import SetLocationForm from "../LocationForm/SetLocationForm";
 
 type TFormValues = z.infer<typeof candidatePersonalSchema>;
 
 const PersonalForm = () => {
+  const isLoading = false;
   const [file, setFile] = useState<File | null>(null)
   const { user } = useAppSelector((state) => state.user);
 
   const dispatch = useAppDispatch();
   const { ProfileError } = useAppSelector((state) => state.auth);
-  const [updateCandidateProfile, { isLoading }] =
-    useUpdateCandidateProfileMutation();
+  // const [updateCandidateProfile, { isLoading }] =
+  //   useUpdateCandidateProfileMutation();
   const { handleSubmit, control } = useForm({
     resolver: zodResolver(candidatePersonalSchema),
     defaultValues: {
@@ -47,7 +46,7 @@ const PersonalForm = () => {
     formData.append("phone_number", data.phone_number)
     formData.append("address", data.address)
     formData.append("details", data.details)
-    updateCandidateProfile(formData)
+   // updateCandidateProfile(formData)
   };
 
   return (
@@ -108,8 +107,7 @@ const PersonalForm = () => {
                 placeholder="Enter address"
               />
 
-              <CustomQuilEditor label="Description" name="details" control={control} placeholder="Write a description about yourself..."/>
-
+              {/* <CustomQuilEditor label="Description" name="details" control={control} placeholder="Write a description about yourself..."/> */}
               <button
                 type="submit"
                 className="px-4 w-full md:w-64 md:justify-center py-2 flex gap-2 items-center bg-primary hover:bg-[#2b4773] text-white font-medium rounded-md focus:outline-none transition-colors cursor-pointer"

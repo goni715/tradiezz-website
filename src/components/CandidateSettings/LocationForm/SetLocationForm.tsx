@@ -1,7 +1,7 @@
 "use client";
 
-import LocationMap, { LatLngTuple } from "@/components/Location/LocationMap";
-import { useUpdateCandidateLocationMutation } from "@/redux/features/user/userApi";
+import { LatLngTuple } from "@/components/Location/LocationMap";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CgSpinnerTwo } from "react-icons/cg";
@@ -14,13 +14,18 @@ interface LocationFormData {
 }
 
 const SetLocationForm = () => {
+  const isLoading = false;
   const [selectedLocation, setSelectedLocation] = useState<LatLngTuple>([
     51.5072, 0.1276,
   ]);
+
+  const LocationMap = dynamic(() => import("@/components/Location/LocationMap"), {
+    ssr: false, // only render on client
+  });
   // const [address, setAddress] = useState<string>("");
   // const [postalCode, setPostalCode] = useState<string>("");
 
-  const [updateLocation, { isLoading }] = useUpdateCandidateLocationMutation();
+  // const [updateLocation, { isLoading }] = useUpdateCandidateLocationMutation();
 
   const { handleSubmit, setValue, watch } = useForm<LocationFormData>({
     defaultValues: {
@@ -60,7 +65,8 @@ const SetLocationForm = () => {
   };
 
   const onSubmit = (data: LocationFormData) => {
-    updateLocation(data);
+    console.log(data)
+    //updateLocation(data);
   };
 
   return (
