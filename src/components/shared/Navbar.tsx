@@ -102,7 +102,7 @@ export default function Navbar() {
         <div className="hidden items-center space-x-4 md:flex">
           <Link
             href="/login"
-            className="rounded-md border border-white px-4 py-1.5 text-sm hover:bg-white/10"
+            className="rounded-md border border-white px-4 py-1.5 text-primary hover:text-brand-color"
           >
             Sign In
           </Link>

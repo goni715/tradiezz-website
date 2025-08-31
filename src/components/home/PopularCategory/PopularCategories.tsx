@@ -2,47 +2,47 @@ import React from 'react';
 import CategoryCard from './CategoryCard';
 
 const categories = [
-    {
-      name: 'Water Supply',
-      positions: 357,
-      icon: '/images/icons/water.png',
-    },
-    {
-      name: 'Kitchen Setup',
-      positions: 312,
-      icon: '/images/icons/kitchen.png',
-    },
-    {
-      name: 'Gas Connection',
-      positions: 297,
-      icon: '/images/icons/fire.png',
-    },
-    {
-      name: 'Masonry',
-      positions: 247,
-      icon: '/images/icons/fire.png',
-    },
-    {
-        name: 'Water Supply',
-        positions: 357,
-        icon: '/images/icons/water.png',
-      },
-      {
-        name: 'Kitchen Setup',
-        positions: 312,
-        icon: '/images/icons/kitchen.png',
-      },
-      {
-        name: 'Gas Connection',
-        positions: 297,
-        icon: '/images/icons/fire.png',
-      },
-      {
-        name: 'Masonry',
-        positions: 247,
-        icon: '/images/icons/fire.png',
-      },
-  ];
+  {
+    name: 'Water Supply',
+    positions: 357,
+    icon: '/images/icons/water.png',
+  },
+  {
+    name: 'Kitchen Setup',
+    positions: 312,
+    icon: '/images/icons/kitchen.png',
+  },
+  {
+    name: 'Gas Connection',
+    positions: 297,
+    icon: '/images/icons/fire.png',
+  },
+  {
+    name: 'Masonry',
+    positions: 247,
+    icon: '/images/icons/fire.png',
+  },
+  {
+    name: 'Water Supply',
+    positions: 357,
+    icon: '/images/icons/water.png',
+  },
+  {
+    name: 'Kitchen Setup',
+    positions: 312,
+    icon: '/images/icons/kitchen.png',
+  },
+  {
+    name: 'Gas Connection',
+    positions: 297,
+    icon: '/images/icons/fire.png',
+  },
+  {
+    name: 'Masonry',
+    positions: 247,
+    icon: '/images/icons/fire.png',
+  },
+];
   
  
 

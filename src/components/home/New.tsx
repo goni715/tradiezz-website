@@ -68,7 +68,6 @@ function New() {
                   <span className="text-2xl">{category.icon}</span>
                   <div>
                     <h3 className="font-semibold text-gray-900">{category.title}</h3>
-                    <p className="text-sm text-blue-600">{category.positions} Open positions</p>
                   </div>
                 </div>
               </motion.div>
@@ -80,15 +79,19 @@ function New() {
   );
 }
 
-const categories = [
-  { title: 'Water Supply', positions: '357', icon: '🚰' },
-  { title: 'Kitchen Setup', positions: '313', icon: '🔍' },
-  { title: 'Gas Connection', positions: '297', icon: '🔥' },
-  { title: 'Masonry', positions: '247', icon: '🏗️' },
-  { title: 'Water Supply', positions: '356', icon: '🚰' },
-  { title: 'Kitchen Setup', positions: '312', icon: '🔍' },
-  { title: 'Gas Connection', positions: '298', icon: '🔥' },
-  { title: 'Masonry', positions: '248', icon: '🏗️' },
+export const categories = [
+  { "title": "Constructions & Groundworks", "icon": "🚰" },
+  { "title": "Electrical & Renewable Energy", "icon": "🚰" },
+  { "title": "Plumbing, Heating, Gas", "icon": "🚰" },
+  { "title": "HVAC, Ventilation & Refrigeration", "icon": "🚰" },
+  { "title": "Carpentry & Wood Trades", "icon": "🚰" },
+  { "title": "Decoration & Finishing", "icon": "🚰" },
+  { "title": "Metalwork & Fabrication", "icon": "🚰" },
+  { "title": "Windows, Doors & Cladding", "icon": "🚰" },
+  { "title": "Property Maintenance & Multi-trade", "icon": "🚰" },
+  { "title": "Outdoor & Landscaping", "icon": "🚰" },
+  { "title": "Specialist & Heritage Trades", "icon": "🚰" }
 ];
+
 
 export default New;

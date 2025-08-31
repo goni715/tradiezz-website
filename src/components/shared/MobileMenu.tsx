@@ -95,8 +95,8 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
                 Post A Job
               </div> */}
             <div
-              onClick={() => handleNavigate("/dashboard/employer/post-job")}
-              className="mt-2 cursor-pointer block rounded-md bg-white px-3 py-2 text-center text-[#1a2c4e]"
+              onClick={() => handleNavigate("/login")}
+              className="mt-2 cursor-pointer block rounded-md bg-primary px-3 py-2 text-center text-white"
             >
               Sign In
             </div>
@@ -121,7 +121,7 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
                  onClick={() => handleNavigate("/dashboard/candidate/messages")}
               >
                 <MessageCircleMore size={20} />
-                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-primary">
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
                   2
                 </span>
               </div>
@@ -130,7 +130,7 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
                 onClick={() => handleNavigate("/notifications")}
               >
                 <Bell size={20} />
-                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-primary">
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
                   2
                 </span>
               </div>
