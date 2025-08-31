@@ -581,7 +581,7 @@ const employmentTypeOptions = [
               type="button"
               onClick={prevStep}
               disabled={currentStep === 1}
-              className="px-6 py-3 bg-secondary text-secondary-foreground rounded-lg cursor-pointer hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-3 bg-brand-color text-secondary-foreground rounded-lg cursor-pointer hover:bg-brand-color/90 text-white disabled:opacity-90 disabled:cursor-not-allowed transition-colors"
             >
               Back
             </button>
@@ -598,7 +598,7 @@ const employmentTypeOptions = [
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="px-6 py-3 bg-blue-500 text-white hover:bg-blue-600 cursor-pointer rounded-lg hover:bg-accent/90 transition-colors"
+                className="px-6 py-3 bg-primary text-white hover:bg-primary/90 cursor-pointer rounded-lg transition-colors"
               >
                 Submit
               </button>

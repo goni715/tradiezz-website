@@ -14,18 +14,18 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className="sticky top-0 h-[88px] z-50 w-full bg-gray-900 text-white shadow-md">
+    <nav className="sticky top-0 h-[88px] z-50 w-full bg-white text-primary shadow-md">
       <div className="mx-auto h-full flex max-w-7xl items-center justify-between px-4 py-3">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <Image src="/images/logo.png" alt="logo" width={80} height={80} className="w-20 h-12"/>
+          <Image src="/images/logo.png" alt="logo" width={80} height={80} className="w-20 h-20"/>
         </Link>
         {/* Desktop Navigation */}
         <div className="hidden space-x-6 md:flex">
           <Link
             href="/"
             className={`hover:text-brand-color ${
-              pathname === "/" ? "text-brand-color" : "text-white"
+              pathname === "/" ? "text-brand-color" : "text-primary"
             }`}
           >
             Home
@@ -33,7 +33,7 @@ export default function Navbar() {
           <Link
             href="/find-work"
             className={`hover:text-brand-color ${
-              pathname === "/find-work" ? "text-brand-color" : "text-white"
+              pathname === "/find-work" ? "text-brand-color" : "text-primary"
             }`}
           >
             Find Work
@@ -41,7 +41,7 @@ export default function Navbar() {
           <Link
             href="/find-candidates"
             className={`hover:text-brand-color ${
-              pathname === "/find-candidates" ? "text-brand-color" : "text-white"
+              pathname === "/find-candidates" ? "text-brand-color" : "text-primary"
             }`}
           >
             Find-Skilled-People
@@ -57,7 +57,7 @@ export default function Navbar() {
             className={`hover:text-brand-color ${
               pathname === "/dashboard/candidate/overview"
                 ? "text-brand-color"
-                : "text-white"
+                : "text-primary"
             }`}
           >
             Candidate-Dashboard
@@ -67,7 +67,7 @@ export default function Navbar() {
             className={`hover:text-brand-color ${
               pathname === "/dashboard/employer/overview"
                 ? "text-brand-color"
-                : "text-white"
+                : "text-primary"
             }`}
           >
             Employer-Dashboard
@@ -75,7 +75,7 @@ export default function Navbar() {
            {/* <Link
             href="/dashboard/employer/subscription"
             className={`hover:text-brand-color ${
-              pathname === "/dashboard/employer/subscription" ? "text-brand-color" : "text-white"
+              pathname === "/dashboard/employer/subscription" ? "text-brand-color" : "text-primary"
             }`}
           >
             Subscription
@@ -83,7 +83,7 @@ export default function Navbar() {
           <Link
             href="/blog-list"
             className={`hover:text-brand-color ${
-              pathname === "/blog-list" ? "text-brand-color" : "text-white"
+              pathname === "/blog-list" ? "text-brand-color" : "text-primary"
             }`}
           >
             Blogs
@@ -91,7 +91,7 @@ export default function Navbar() {
           <Link
             href="/contact"
             className={`hover:text-brand-color ${
-              pathname === "/contact" ? "text-brand-color" : "text-white"
+              pathname === "/contact" ? "text-brand-color" : "text-primary"
             }`}
           >
             Contact

@@ -69,7 +69,7 @@ const BlogPagination : React.FC<PaginationProps> = ({
                   onClick={() => typeof page === 'number' && onPageChange(page)}
                   className={`mx-1 px-4 py-2 text-sm font-medium rounded-md cursor-pointer ${
                     currentPage === page
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary text-white'
                       : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
                   }`}
                 >

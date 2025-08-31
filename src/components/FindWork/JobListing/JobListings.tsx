@@ -18,7 +18,7 @@ const JobListings = () => {
             {/* <h2 className="text-xl font-semibold text-gray-800">
               {selectedCategory === 'All' ? 'All Jobs' : `${selectedCategory} Jobs`}
             </h2> */}
-            <p className="text-blue-500 font-semibold mt-1">
+            <p className="text-primary font-semibold mt-1">
               {/* {filteredJobs.length} {filteredJobs.length === 1 ? 'job' : 'jobs'} available */}
               12 jobs available
             </p>

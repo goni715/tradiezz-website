@@ -62,7 +62,7 @@ const HeroForm = () => {
         <div className="w-full sm:w-auto">
           <button
             type="submit"
-            className="w-full sm:w-auto h-12 px-6 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-md shadow-sm transition-colors"
+            className="w-full sm:w-auto h-12 px-6 bg-brand-color hover:bg-brand-color/90 cursor-pointer text-white font-semibold rounded-md shadow-sm transition-colors"
           >
             Search
           </button>

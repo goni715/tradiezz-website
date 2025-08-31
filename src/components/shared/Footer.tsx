@@ -2,12 +2,12 @@ import Image from "next/image";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-primary text-white">
       <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Logo & Contact */}
         <div className="space-y-4">
           <div className="flex items-center space-x-2">
-            <Image src="/images/logo.png" alt="Tradieez Logo" className="h-10 w-16" width={600} height={600}/>
+            <Image src="/images/logo_footer.png" alt="Tradieez Logo" className="h-10 w-16" width={600} height={600}/>
             {/* <span className="text-xl font-bold">Tradieez</span> */}
           </div>
           <p>Call now: <a href="tel:3195550115" className="text-blue-400 font-medium">(319) 555-0115</a></p>

@@ -19,12 +19,12 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
 
   return (
     <>
-      <div className="md:hidden bg-primary">
+      <div className="md:hidden bg-white shadow">
         <div className="space-y-1 px-4 pb-3 pt-2">
           <div
             onClick={() => handleNavigate("/")}
             className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
-              pathname === "/" ? "text-secondary" : "text-white"
+              pathname === "/" ? "text-brand-color" : "text-primary"
             }`}
           >
             Home
@@ -32,7 +32,7 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
           <div
             onClick={() => handleNavigate("/find-work")}
             className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
-              pathname === "/find-work" ? "text-secondary" : "text-white"
+              pathname === "/find-work" ? "text-brand-color" : "text-primary"
             }`}
           >
             Find Work
@@ -40,7 +40,7 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
           <div
             onClick={() => handleNavigate("/find-candidates")}
             className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
-              pathname === "/find-candidates" ? "text-secondary" : "text-white"
+              pathname === "/find-candidates" ? "text-brand-color" : "text-primary"
             }`}
           >
             Find-Candidates
@@ -49,8 +49,8 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
             onClick={() => handleNavigate("/dashboard/candidate/overview")}
             className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
               pathname === "/dashboard/candidate/overview"
-                ? "text-secondary"
-                : "text-white"
+                ? "text-brand-color"
+                : "text-primary"
             }`}
           >
             Candidate-Dashboard
@@ -59,8 +59,8 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
             onClick={() => handleNavigate("/dashboard/employer/overview")}
             className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
               pathname === "/dashboard/employer/overview"
-                ? "text-secondary"
-                : "text-white"
+                ? "text-brand-color"
+                : "text-primary"
             }`}
           >
             Employer-Dashboard
@@ -77,7 +77,7 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
           <div
             onClick={() => handleNavigate("/blog-list")}
             className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
-              pathname === "/blog-list" ? "text-secondary" : "text-white"
+              pathname === "/blog-list" ? "text-brand-color" : "text-primary"
             }`}
           >
             Blogs
@@ -85,7 +85,7 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
           <div
             onClick={() => handleNavigate("/contact")}
             className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
-              pathname === "/contact" ? "text-secondary" : "text-white"
+              pathname === "/contact" ? "text-brand-color" : "text-primary"
             }`}
           >
             Contact
@@ -121,7 +121,7 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
                  onClick={() => handleNavigate("/dashboard/candidate/messages")}
               >
                 <MessageCircleMore size={20} />
-                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-primary">
                   2
                 </span>
               </div>
@@ -130,7 +130,7 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
                 onClick={() => handleNavigate("/notifications")}
               >
                 <Bell size={20} />
-                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-primary">
                   2
                 </span>
               </div>
