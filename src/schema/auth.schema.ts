@@ -16,6 +16,8 @@ export const loginSchema = z.object({
     .trim(),
 });
 
+export type TLoginFormValues = z.infer<typeof loginSchema>
+
 export const forgotPasswordSendOtpSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })

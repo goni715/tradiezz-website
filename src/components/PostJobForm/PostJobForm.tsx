@@ -11,7 +11,7 @@ import { z } from "zod";
 import { createJobSchema } from "@/schema/job.schema";
 import { tradeOptions } from "@/data/options";
 import CustomTextArea from "../form/CustomTextArea";
-import FormButton from "../form/FormButton";
+import FormButton from "../form/SubmitButton";
 import CustomSelect from "../form/CustomSelect";
 import { experienceOptions, rateOptions, typeOptions } from "@/data/job.options";
 import CustomDatePicker from "../form/CustomDatePicker";

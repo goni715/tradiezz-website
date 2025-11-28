@@ -8,7 +8,7 @@ type TProps = {
     className?: string;
 }
 
-const FormButton = ({ isLoading, loadingTitle = "Processing...", children, className="" }: TProps) => {
+const SubmitButton = ({ isLoading, loadingTitle = "Processing...", children, className="" }: TProps) => {
     return (
         <>
             <button
@@ -30,4 +30,4 @@ const FormButton = ({ isLoading, loadingTitle = "Processing...", children, class
     )
 }
 
-export default FormButton;
+export default SubmitButton;

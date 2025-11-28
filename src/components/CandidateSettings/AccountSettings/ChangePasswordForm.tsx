@@ -1,7 +1,7 @@
 "use client";
 
 import CustomInput from "@/components/form/CustomInput";
-import Error from "@/components/validation/Error";
+import Error from "@/components/validation/FormError";
 import PasswordStrength from "@/components/validation/PasswordStrength";
 import { SetChangePasswordError } from "@/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";

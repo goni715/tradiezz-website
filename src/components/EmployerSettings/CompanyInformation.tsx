@@ -7,11 +7,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { z } from "zod";
-import Error from "@/components/validation/Error";
+import Error from "@/components/validation/FormError";
 import EditCompanyPic from "./EditCompanyPic";
 import { SetProfileError } from "@/redux/features/auth/authSlice";
 import CustomQuilEditor from "@/components/form/CustomQuilEditor";
-import FormButton from "../form/FormButton";
+import FormButton from "../form/SubmitButton";
 import { companySchema } from "@/schema/employer.schema";
 
 type TFormValues = z.infer<typeof companySchema>;

@@ -1,58 +1,38 @@
 "use client";
-
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import CustomInput from "../form/CustomInput";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, TLoginFormValues } from "@/schema/auth.schema";
+import SubmitButton from "../form/SubmitButton";
+import { SetLoginError } from "@/redux/features/auth/authSlice";
+import FormError from "../validation/FormError";
+
+
+
 
 const LoginForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { LoginError } = useAppSelector((state) => state.auth);
+  const [login, { isLoading }] = useLoginMutation();
+  const {handleSubmit, control } = useForm({
+        resolver: zodResolver(loginSchema)
+  })
 
-  const togglePassword = () => {
-    setShowPassword((prev) => !prev);
+  const onSubmit: SubmitHandler<TLoginFormValues> = (data) => {
+    dispatch(SetLoginError(""))
+    login(data)
   };
+
 
   return (
     <>
-      <div className="space-y-4">
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="mt-1 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-            placeholder="enter your email here"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Password
-          </label>
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              className="mt-1 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500 px-4 py-2 pr-10"
-              placeholder="********"
-            />
-            <span
-              className="absolute inset-y-0 right-3 flex items-center text-xl text-gray-500 cursor-pointer"
-              onClick={togglePassword}
-            >
-              {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-            </span>
-          </div>
-        </div>
+      {LoginError && <FormError message={LoginError} />}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <CustomInput label="Email" name="email" type="text" control={control} placeholder="Enter email address"/>
+        <CustomInput label="Password" name="password" type="password" control={control} placeholder="Enter your password"/>
 
         <div className="flex justify-between items-center">
           <label className="flex items-center text-sm">
@@ -66,11 +46,8 @@ const LoginForm = () => {
             Forgot password?
           </Link>
         </div>
-
-        <button onClick={()=>router.push('/')} className="w-full bg-primary cursor-pointer text-white py-2 rounded-md font-semibold transition-colors duration-100">
-          Sign in
-        </button>
-      </div>
+        <SubmitButton isLoading={isLoading}> Sign In </SubmitButton>
+      </form>
     </>
   );
 };

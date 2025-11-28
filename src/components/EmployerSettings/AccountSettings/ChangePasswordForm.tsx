@@ -1,8 +1,8 @@
 "use client";
 
 import CustomInput from "@/components/form/CustomInput";
-import FormButton from "@/components/form/FormButton";
-import Error from "@/components/validation/Error";
+import FormButton from "@/components/form/SubmitButton";
+import Error from "@/components/validation/FormError";
 import PasswordStrength from "@/components/validation/PasswordStrength";
 import { useChangePasswordMutation } from "@/redux/features/auth/authApi";
 import { SetChangePasswordError } from "@/redux/features/auth/authSlice";

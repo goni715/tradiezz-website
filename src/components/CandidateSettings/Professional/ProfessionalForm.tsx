@@ -7,7 +7,7 @@ import CustomInput from "@/components/form/CustomInput";
 import { z } from "zod";
 import { SetProfileError } from "@/redux/features/auth/authSlice";
 import { CgSpinnerTwo } from "react-icons/cg";
-import Error from "@/components/validation/Error";
+import Error from "@/components/validation/FormError";
 import CustomSelect from "@/components/form/CustomSelect";
 import {
   educationOptions,

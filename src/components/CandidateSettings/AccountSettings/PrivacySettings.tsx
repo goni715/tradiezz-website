@@ -1,5 +1,5 @@
 "use client";
-import Error from "@/components/validation/Error";
+import Error from "@/components/validation/FormError";
 import { useUpdateCandidateProfileMutation } from "@/redux/features/user/userApi";
 import { useAppSelector } from "@/redux/hooks/hooks";
 import { useState } from "react";
