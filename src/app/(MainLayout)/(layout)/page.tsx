@@ -1,17 +1,17 @@
 import About from "@/components/home/about/About"
 import HeroSection from "@/components/home/hero/HeroSection"
-import New from "@/components/home/New"
+import PopularCategories from "@/components/home/PopularCategory/PopularCategories"
 import RecentBlogs from "@/components/home/recentBlog/RecentBlogs"
+import RegisterSection from "@/components/home/register/RegisterSection"
 
 const HomePage = () => {
   return (
     <>
-       <HeroSection/>
-       <New/>
-       {/* <RegisterSection/>
-       <PopularCategories/> */}
-       <RecentBlogs/>
-        <About/>
+      <HeroSection />
+      <RegisterSection />
+      <PopularCategories />
+      <RecentBlogs />
+      <About />
     </>
   )
 }

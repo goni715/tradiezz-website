@@ -8,7 +8,7 @@ type TProps = {
     positions: number;
 }
 
-const CategoryCard = ({ icon, name, positions }: TProps) => {
+const CategoryCard = ({ icon, name }: TProps) => {
   return (
     <div className="flex items-center gap-4 bg-blue-50 p-4 rounded-xl shadow-sm hover:shadow-md transition">
       <div className="bg-white p-3 rounded-lg">
@@ -22,7 +22,6 @@ const CategoryCard = ({ icon, name, positions }: TProps) => {
       </div>
       <div>
         <h3 className="font-semibold text-gray-800">{name}</h3>
-        <p className="text-sm text-gray-500">{positions} Open positions</p>
       </div>
     </div>
   );

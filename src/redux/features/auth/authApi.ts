@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 
-import { getAuthId, getEmail, setAuthId, setEmail, setToken, setVerifyEmail } from "@/helper/SessionHelper";
+import { getAuthId, getEmail, setEmail, setToken, setVerifyEmail } from "@/helper/SessionHelper";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
 import { SetChangePasswordError, SetForgotError, SetLoginError, SetRegisterError, SetResetPasswordError, SetVerifyAccountError, SetVerifyAccountOtpError, SetVerifyOtpError } from "./authSlice";
 import { apiSlice } from "../api/apiSlice";
@@ -34,25 +34,19 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
         try {
           const res = await queryFulfilled;
-          const authId = res?.data?.data?.id;
           const token = res?.data?.data?.accessToken;
-          const role = res?.data?.data?.user?.authId?.role;
-          if (role === "USER" || role === "EMPLOYER") {
-            SuccessToast("Login Success");
-            setToken(token);
-            setAuthId(authId)
-            setTimeout(() => {
-             window.location.href = "/";
-            }, 300);
-          } else {
-            dispatch(SetLoginError("You are admin"));
-          }
+          setToken(token);
+          SuccessToast("Login Success");
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 300);
         } catch (err: any) {
-          const message = err?.error?.data?.message;
-          if(message === "User does not exist"){
-            dispatch(SetLoginError("Couldn't find this email address"));
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            dispatch(SetLoginError("Something Went Wrong"));
           }
-          else{
+          else {
             dispatch(SetLoginError(message));
           }
         }

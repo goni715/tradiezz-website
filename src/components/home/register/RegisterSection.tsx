@@ -1,56 +1,63 @@
-"use client"
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { FaArrowRight } from 'react-icons/fa';
 
 const RegisterSection = () => {
-    const router = useRouter()
-  const options = [
-    {
-      title: 'Become a Candidate',
-      description:
-       " Start your job search today! Create a profile, explore job opportunities, and connect with top employers. Let us help you find the right fit for your skills and goals.",
-      bg: 'bg-gray-200',
-      text: 'text-gray-900',
-      buttonBg: 'bg-white',
-      buttonText: 'text-blue-900',
-    },
-    {
-      title: 'Become a Employer',
-      description:
-        'Find the perfect candidates for your team. Post job listings, review applications, and connect with skilled professionals ready to contribute to your business success.',
-      bg: 'bg-primary',
-      text: 'text-white',
-      buttonBg: 'bg-white',
-      buttonText: 'text-blue-900',
-    },
-  ];
-
+  const router = useRouter();
   return (
-    <section className="w-full py-10 px-4 bg-white my-5">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px:2 sm:px-4">
-        {options.map((opt, idx) => (
-          <div
-            key={idx}
-            className={`rounded-xl p-8 ${opt.bg} ${opt.text} flex flex-col justify-between`}
+    <>
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto px-4 py-12">
+        <div className="grid md:grid-cols-2 gap-8 max-w-7xl mx-auto">
+          {/* Candidate Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300"
           >
-            <div>
-              <h2 className="text-[22px] sm:text-2xl font-semibold mb-4">{opt.title}</h2>
-              <p className="text-sm">{opt.description}</p>
-            </div>
-            <div className="mt-6">
-              <button
-                onClick={() => router.push('/register')}
-                className={`flex items-center cursor-pointer space-x-2 px-4 py-2 rounded-md font-semibold ${opt.buttonBg} ${opt.buttonText} shadow-sm hover:shadow-md transition`}
-              >
-                <span>Register Now</span>
-                <FaArrowRight className="text-sm" />
+            <div className="p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">I Need Work</h2>
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                Looking for your next opportunity? Build your profile in minutes, explore job listings, and connect directly with employers who value your skills. Whether it’s short-term gigs or long-term positions, Tradieez helps you take control of your career.
+              </p>
+              <button onClick={()=> router.push('/register')} className="inline-flex items-center cursor-pointer px-6 py-3 bg-brand-color text-white font-medium rounded-lg transition-colors duration-200">
+                Register Now
+                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </button>
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
+          </motion.div>
+
+          {/* Employer Card */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-brand-color rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300"
+          >
+            <div className="p-8">
+              <h2 className="text-2xl font-bold text-black mb-4">I&apos;m Hiring</h2>
+              <p className="text-black mb-6 leading-relaxed">
+                Find the perfect candidates for your team. Post job listings, review applications, and
+                connect with skilled professionals ready to contribute to your business success.
+              </p>
+              <button onClick={()=> router.push('/register')} className="inline-flex cursor-pointer items-center px-6 py-3 bg-white text-teal-800 font-medium rounded-lg hover:bg-teal-50 transition-colors duration-200">
+                Register Now
+                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </>
   );
-};
+}
+
+
 
 export default RegisterSection;
