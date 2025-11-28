@@ -25,7 +25,7 @@ const Footer = () => {
 
         {/* Support */}
         <div>
-          <h4 className="text-lg font-semibold mb-3">Support</h4>
+          <h4 className="text-lg font-semibold mb-3">Help & Support</h4>
           <ul className="space-y-2">
             <li><a href="/privacy" className="hover:text-brand-color">Privacy Policy</a></li>
             <li><a href="/terms" className="hover:text-brand-color">Terms & Conditions</a></li>
