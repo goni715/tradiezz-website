@@ -3,8 +3,6 @@ import HeroSection from "@/components/home/hero/HeroSection"
 import PopularCategories from "@/components/home/PopularCategory/PopularCategories"
 import RecentBlogs from "@/components/home/recentBlog/RecentBlogs"
 import RegisterSection from "@/components/home/register/RegisterSection"
-import { IBlog } from "@/types/blog.type"
-import cleanHTML from "@/utils/cleanHTML"
 
 
 async function getCategories() {
@@ -22,10 +20,11 @@ async function getRecentBlogs() {
   });
   const data = await res.json();
   const blogs = data?.data || [];
-  return blogs.map((blog: IBlog) => ({
-    ...blog,
-    description: cleanHTML(blog.description)
-  }));
+  // return blogs.map((blog: IBlog) => ({
+  //   ...blog,
+  //   description: cleanHTML(blog.description)
+  // }));
+  return blogs;
 }
 
 const HomePage = async () => {
