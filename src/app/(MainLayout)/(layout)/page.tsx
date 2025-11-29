@@ -6,6 +6,7 @@ import RegisterSection from "@/components/home/register/RegisterSection"
 import { IBlog } from "@/types/blog.type"
 import cleanHTML from "@/utils/cleanHTML"
 
+
 async function getCategories() {
   const res = await fetch(`https://tradiezz-backend.vercel.app/api/v1/category/get-category-drop-down`, {
     cache: 'no-store'
