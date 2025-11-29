@@ -1,6 +1,19 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  webpack: (config, { isServer }) => {
+    // Only apply this configuration to the Server-Side bundle
+    if (isServer) {
+      config.externals = [
+        // Exclude these problematic modules from the Vercel (server) bundle
+        ...config.externals,
+        'jsdom',
+        'parse5',
+      ];
+    }
+
+    return config;
+  },
   /* config options here */
   images: {
     remotePatterns: [
