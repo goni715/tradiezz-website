@@ -3,7 +3,6 @@
 
 import LocationMap from "@/components/Location/LocationMap";
 import CustomInput from "@/components/form/CustomInput";
-import CustomQuilEditor from "@/components/form/CustomQuilEditor";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -16,6 +15,7 @@ import CustomSelect from "../form/CustomSelect";
 import { experienceOptions, rateOptions, typeOptions } from "@/data/job.options";
 import CustomDatePicker from "../form/CustomDatePicker";
 import SalaryRange from "./SalaryRange";
+import dynamic from "next/dynamic";
 
 type TFormValues = z.infer<typeof createJobSchema>;
 
@@ -24,6 +24,15 @@ const PostJobForm = () => {
   const [selectedLocation, setSelectedLocation] = useState<[number, number]>([
     51.5072, 0.1276,
   ]);
+
+  // ✅ Use the dynamic import instead:
+const CustomQuilEditor = dynamic(
+  () => import("@/components/form/CustomQuilEditor"), // Path to your editor file
+  {
+    ssr: false, // 🔑 Prevents jsdom/parse5 from running on Vercel Node.js
+    loading: () => <p>Loading editor...</p>,
+  }
+);
 
   // const { subscription_status } = useAppSelector((state) => state.subscription);
   //const [createJob, { isLoading, isSuccess }] = useCreateJobMutation();
