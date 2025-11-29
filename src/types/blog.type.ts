@@ -1,10 +1,16 @@
 export type IBlog = {
-  id: number;
+  _id: string;
   title: string;
+  categoryId: string;
+  category: string;
+  image: string;
+  view: number;
   date: string; // You can use Date if you parse it from string
   comments: number;
-  image: string;
   excerpt: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export interface Post {

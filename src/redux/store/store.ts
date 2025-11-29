@@ -5,6 +5,7 @@ import authSliceReducer from '../features/auth/authSlice'
 import userSliceReducer from '../features/user/userSllice'
 import candidateSliceReducer from '../features/candidate/candidateSlice'
 import { apiSlice } from '../features/api/apiSlice'
+import subCategorySliceReducer from '../features/subCategory/subCategorySlice'
 
 
 export const store = configureStore({
@@ -12,6 +13,7 @@ export const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     job: jobSliceReducer,
     category: categorySliceReducer,
+    subCategory: subCategorySliceReducer,
     auth: authSliceReducer,
     user: userSliceReducer,
     candidate: candidateSliceReducer
@@ -20,7 +22,5 @@ export const store = configureStore({
     getDefaultMiddleware().concat(apiSlice.middleware)
 })
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch

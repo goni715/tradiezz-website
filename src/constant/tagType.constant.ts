@@ -26,7 +26,9 @@ const TagTypes = {
    privacyPolicy: "PrivacyPolicy",
    aboutUs: "AboutUs",
    payments: "Payments",
-   subscription_status: "Subscription_Status"
+   subscription_status: "Subscription_Status",
+   categoryDropDown: "CategoryDropDown",
+   subCategoryDropDown: "CategoryDropDown"
 }
 
 export default TagTypes;

@@ -161,6 +161,7 @@ const startDateSchema = z
 //     },
 //   )
 
+
 export const workExperienceSchema = z
   .object({
     job_title: z
@@ -243,3 +244,42 @@ export const workExperienceSchema = z
       }
     }
   });
+
+
+
+  
+  const candidateLocationSchema = z.object({
+    lat: z.number(),
+    lng: z.number(),
+    address: z.string().min(1, "Address is required"),
+  })
+  
+  export const candidateRegisterSchema = z.object({
+    // Step 1: Basic Information
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Email is invalid").min(1, "Email is required"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(1, "Confirm Password is required"),
+  
+    // Step 2: Category Selection
+    categoryId: z.string().min(1, "Category is required"),
+    subCategoryId: z.string().min(1, "Sub-category is required"),
+    rate: z.string().min(1, "Rate is required"),
+    availability: z.string().min(1, "Availability date is required"),
+    type: z.string().min(1, "Type is required"),
+    employmentType: z.string().min(1, "Employment Type is required"),
+  
+    // Step 3: Location
+   location: candidateLocationSchema.refine((val) => val !== null, {
+      message: "Location is required",
+    }),
+  
+    // Step 4: Skills & Experience
+    skills: z.array(z.string()).min(1, "At least one skill is required"),
+    experience: z.string().min(1, "Experience is required"),
+  }).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
+  
+  export type TCandidateFormValues = z.infer<typeof candidateRegisterSchema>

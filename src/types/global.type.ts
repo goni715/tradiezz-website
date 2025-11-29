@@ -27,3 +27,7 @@ export interface IMeta {
   totalPage: number;
 }
   
+export type TOption = {
+  value: string;
+  label: string;
+}

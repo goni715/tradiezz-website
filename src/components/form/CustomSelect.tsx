@@ -12,6 +12,7 @@ type TProps = {
     value: string;
   }[];
   disabled?:boolean
+  placeholder?: string
 };
 
 const CustomSelect = ({ label, name, control, options, disabled=false }: TProps) => {

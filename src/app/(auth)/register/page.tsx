@@ -1,8 +1,8 @@
 "use client"
 import EmplyerRegisterForm from "@/components/auth/EmplyerRegisterForm";
-import StepperForm from "@/components/auth/StepperForm";
 import Link from "next/link";
 import { useState } from "react";
+import CandidateRegisterForm from "@/components/auth/CandidateRegisterForm";
 
 const RegisterPage = () => {
   const [userType, setUserType] = useState("Job Seeker");
@@ -34,7 +34,7 @@ const RegisterPage = () => {
 
         {/* Register Form */}
         {userType === "Job Seeker" ? (
-          <StepperForm />
+          <CandidateRegisterForm />
         ) : (
           <EmplyerRegisterForm />
         )}

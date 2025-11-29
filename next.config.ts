@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         hostname: 'images.pexels.com',
         pathname: '/photos/**', // allow all images under /photos/
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
     ],
   },
 };

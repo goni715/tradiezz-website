@@ -81,9 +81,9 @@ export default function Navbar() {
             Subscription
           </Link> */}
           <Link
-            href="/blog-list"
+            href="/blogs"
             className={`hover:text-brand-color ${
-              pathname === "/blog-list" ? "text-brand-color" : "text-primary"
+              pathname === "/blogs" ? "text-brand-color" : "text-primary"
             }`}
           >
             Blogs
