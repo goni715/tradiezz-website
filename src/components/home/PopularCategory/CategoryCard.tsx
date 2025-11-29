@@ -1,6 +1,7 @@
 "use client"
 import { ICategory } from "@/types/category.type";
 import Image from "next/image";
+import Link from "next/link";
 
 
 type TProps = {
@@ -9,7 +10,7 @@ type TProps = {
 
 const CategoryCard = ({ category }: TProps) => {
   return (
-    <div className="flex items-center gap-4 bg-blue-50 p-4 rounded-xl shadow-sm hover:shadow-md transition">
+    <Link href={`/jobs-by-category/${category._id}`} className="flex items-center gap-4 bg-blue-50 p-4 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer">
       <div className="bg-white p-3 rounded-lg">
         <Image
           src={category.image}
@@ -22,7 +23,7 @@ const CategoryCard = ({ category }: TProps) => {
       <div>
         <h3 className="font-semibold text-gray-800">{category.name}</h3>
       </div>
-    </div>
+    </Link>
   );
 };
 export default CategoryCard;

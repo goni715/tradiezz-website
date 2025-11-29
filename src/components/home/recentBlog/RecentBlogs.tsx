@@ -63,7 +63,7 @@ const RecentBlogs = ({ blogs }: TProps) => {
 
 
   return (
-    <section className="py-12 px-4 bg-gray-50">
+    <section className="max-w-7xl mx-auto py-12 px-4 bg-gray-50">
       <motion.div
         className="max-w-7xl mx-auto"
         initial="hidden"
@@ -72,7 +72,7 @@ const RecentBlogs = ({ blogs }: TProps) => {
         variants={containerVariants}
       >
         <motion.div className="flex justify-between items-center mb-12" variants={itemVariants}>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 relative">
+          <h2 className="text-3xl md:text-3xl font-bold text-gray-900 relative">
             Recent Blogs
             <span className="absolute -bottom-2 left-0 w-20 h-1 bg-gradient-to-r from-emerald-500 to-sky-500"></span>
           </h2>
