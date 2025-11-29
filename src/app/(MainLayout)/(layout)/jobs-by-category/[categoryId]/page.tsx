@@ -1,8 +1,9 @@
 import JobsByCategory from "@/components/jobsBycategory/JobsByCategory";
+import { BASE_URL } from "@/constant/global.constant";
 
 
 async function getJobsByCategoryId(categoryId: string) {
-  const res = await fetch(`https://tradiezz-backend.vercel.app/api/v1/job/get-candidate-jobs?categoryId=${categoryId}`, {
+  const res = await fetch(`${BASE_URL}/job/get-candidate-jobs?categoryId=${categoryId}`, {
     cache: 'no-store'
   });
   const data = await res.json();
@@ -13,13 +14,11 @@ async function getJobsByCategoryId(categoryId: string) {
 const JobsByCategoryPage = async ( { params }: {params: Promise<{ categoryId : string }>}) => {
   const { categoryId } = await params;
   const jobs = await getJobsByCategoryId(categoryId);
-  console.log(jobs);
 
   
   return (
     <>
-      <h1>{categoryId}</h1>
-      <JobsByCategory/>
+      <JobsByCategory jobs={jobs}/>
     </>
   )
 }

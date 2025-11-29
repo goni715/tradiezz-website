@@ -3,13 +3,14 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getToken } from "@/helper/SessionHelper";
 import TagTypes from "@/constant/tagType.constant";
 import { ApiError } from "@/types/global.type";
+import { BASE_URL } from "@/constant/global.constant";
 
 export const baseUrl = "http://localhost:8080/api/v1";
 // export const baseUrl = "http://10.0.60.118:5004"
 
 const baseQuery = fetchBaseQuery({
   //baseUrl: "http://24.199.120.27:5004", //http://10.0.60.118
-  baseUrl: baseUrl,
+  baseUrl: BASE_URL,
   prepareHeaders: async (headers) => {
     if (getToken()) {
       headers.set("Authorization", `Bearer ${getToken() as string}`);

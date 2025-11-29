@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapPin, Clock, Bookmark } from 'lucide-react';
-import CategoryBadge from './CategoryBadge';
+import CategoryBadge from '../../badge/CategoryBadge';
 import { useRouter } from 'next/navigation';
 
 type JobCardProps = {

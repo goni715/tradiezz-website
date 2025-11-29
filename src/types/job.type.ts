@@ -35,3 +35,23 @@ export type ISubscription = {
   features: string[];
   recommended?: boolean;
 };
+
+
+export interface TCandidateJob {
+  _id: string;
+  title: string;
+  jobType: "freelance" | "full_time" | "part_time" | string;
+  experience: "entry_level" | "1_2_years" | "3_5_years" | "5_plus_years" | string;
+  rateType: "hourly" | "daily" | "monthly" | string;
+  startDate: string;  // ISO date string
+  endDate: string;    // ISO date string
+  deadline: string;   // ISO date string
+  minRange: number;
+  maxRange: number;
+  address: string;
+  postalCode: string;
+  categoryId: string;
+  category: string;
+  createdAt: string;
+  updatedAt: string;
+}

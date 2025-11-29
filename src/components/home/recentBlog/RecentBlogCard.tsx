@@ -20,6 +20,7 @@ const RecentBlogCard = ({ blog }: { blog: IBlog }) => {
           alt={blog.title}
           fill
           className="object-cover transition-transform duration-700 hover:scale-110"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
         <div className="absolute bottom-0 w-full p-4 flex justify-between items-center">
