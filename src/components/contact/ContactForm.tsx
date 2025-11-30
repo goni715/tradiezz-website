@@ -1,46 +1,73 @@
 "use client";
+import CustomInput from "../form/CustomInput";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCreateContactMutation } from "@/redux/features/contact/contactApi";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { contactSchema } from "@/schema/contact.schema";
+import { z } from "zod";
+import { SetContactError } from "@/redux/features/contact/contactSlice";
+import CustomTextArea from "../form/CustomTextArea";
+import { useEffect } from "react";
+import FormError from "../validation/FormError";
+import SubmitButton from "../form/SubmitButton";
+
+type TFormValues = z.infer<typeof contactSchema>;
 
 const ContactForm = () => {
+  const dispatch = useAppDispatch();
+  const { ContactError } = useAppSelector((state) => state.contact);
+  const [sendMessage, { isLoading, isSuccess }] = useCreateContactMutation();
+  const { handleSubmit, control, reset } = useForm({
+    resolver: zodResolver(contactSchema),
+  });
+
+  //if send success
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
+
+  const onSubmit: SubmitHandler<TFormValues> = (data) => {
+    dispatch(SetContactError(""));
+    sendMessage(data);
+  };
+
   return (
     <>
-      <div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <input
-              type="text"
-              placeholder="Name"
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-            />
-          </div>
-        </div>
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Subject"
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
-        <div className="mb-6">
-          <textarea
-            placeholder="Message"
-            rows={5}
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 focus:ring-blue-500"
-          ></textarea>
-        </div>
-        <button
-          type="submit"
-          className="w-full cursor-pointer bg-primary hover:bg-primary/90 text-white py-3 px-4 rounded flex items-center justify-center transition duration-300"
-        >
-          <span>Send Message</span>
-        </button>
-      </div>
+      {ContactError && <FormError message={ContactError} />}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <CustomInput
+          label="Name"
+          name="name"
+          type="text"
+          control={control}
+          placeholder="Enter full name"
+        />
+        <CustomInput
+          label="Email"
+          name="email"
+          type="text"
+          control={control}
+          placeholder="Enter email address"
+        />
+        <CustomInput
+          label="Subject"
+          name="subject"
+          type="text"
+          control={control}
+          placeholder="Enter subject"
+        />
+        <CustomTextArea
+          label="Message"
+          name="message"
+          control={control}
+          placeholder="write here..."
+          rows={3}
+        />
+        <SubmitButton isLoading={isLoading} loadingTitle="Sending...">Send Message</SubmitButton>
+      </form>
     </>
   );
 };

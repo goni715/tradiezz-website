@@ -1,15 +1,10 @@
-"use client"
 import ContactForm from "@/components/contact/ContactForm"
-import MapLoading from "@/components/loader/MapLoading";
-import dynamic from "next/dynamic";
+import ContactMapWrapper from "@/components/contact/ContactMapWrapper";
 
 
 
 const ContactPage = () => {
-  const ContactMap = dynamic(() => import('@/components/contact/ContactMap'), {
-    ssr: false,
-    loading: () => <MapLoading />
-  });
+  
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -78,7 +73,7 @@ const ContactPage = () => {
 
         {/* Dynamic Map Section */}
         <div className="w-full h-80 md:h-96 relative rounded-lg overflow-hidden shadow-md">
-          <ContactMap />
+          <ContactMapWrapper />
         </div>
       </main>
     </div>
