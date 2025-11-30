@@ -8,9 +8,9 @@ import { apiSlice } from "../api/apiSlice";
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    register: builder.mutation({
+    registerCandidate: builder.mutation({
       query: (data) => ({
-        url: "/auth/register",
+        url: "/auth/register-candidate",
         method: "POST",
         body: data,
       }),
@@ -20,8 +20,14 @@ export const authApi = apiSlice.injectEndpoints({
           setVerifyEmail(email);
           SuccessToast("Please check you email");
         } catch (err: any) {
-          const message = err?.error?.data?.message;
-          dispatch(SetRegisterError(message));
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            dispatch(SetRegisterError("Something Went Wrong"));
+          }
+          else {
+            dispatch(SetRegisterError(message));
+          }
         }
       },
     }),
@@ -243,7 +249,7 @@ export const authApi = apiSlice.injectEndpoints({
 });
 
 export const {
-  useRegisterMutation,
+  useRegisterCandidateMutation,
   useLoginMutation,
   useForgotPasswordSendOtpMutation,
   useForgotPasswordResendOtpMutation,

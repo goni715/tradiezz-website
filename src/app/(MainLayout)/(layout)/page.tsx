@@ -8,7 +8,10 @@ import { BASE_URL } from "@/constant/global.constant"
 
 async function getCategories() {
   const res = await fetch(`${BASE_URL}/category/get-category-drop-down`, {
-    cache: 'no-store'
+    next: {
+      revalidate: 30, // cache 30 seconds
+      tags: ['category'], // optional, invalidate with tag
+    },
   });
   const data = await res.json();
   return data?.data || [];

@@ -4,7 +4,6 @@ import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { SuccessToast } from "@/helper/ValidationHelper" 
 import CustomInput from "../form/CustomInput"
 import CustomSelect from "../form/CustomSelect"
 import CustomDatePicker from "../form/CustomDatePicker"
@@ -14,25 +13,28 @@ import { useGetSubCategoryDropDownByCategoryIdQuery } from "@/redux/features/sub
 import { ICategory } from "@/types/category.type"
 import { candidateExperienceOptions, employmentTypeOptions, workRateOptions, workTypeOptions } from "@/data/candidate.options"
 import { candidateRegisterSchema, TCandidateFormValues } from "@/schema/candidate.schema"
+import findLabel from "@/utils/findLabel"
+import { useRegisterCandidateMutation } from "@/redux/features/auth/authApi"
+import CustomButton from "../form/CustomButton"
 // Dynamically import the map component to avoid SSR issues
 const MapSelector = dynamic(() => import("@/components/Location/MapSelector"), { ssr: false })
 
 
 // Define the steps and the fields within each step for validation purposes
 const stepFields: Record<number, (keyof TCandidateFormValues)[]> = {
-  1: ["name", "email", "password", "confirmPassword"],
-  2: ["categoryId", "subCategoryId", "rate", "availability", "type", "employmentType"],
+  1: ["fullName", "email", "phone", "password", "confirmPassword"],
+  2: ["categoryId", "subCategoryId", "workRate", "availableDate", "workType", "employmentType"],
   3: ["location"],
   4: ["skills", "experience"],
   5: [], // Review step, no new fields to validate
 }
 
 const CandidateRegisterForm = () => {
-  const [currentStep, setCurrentStep] = useState(2)
+  const [currentStep, setCurrentStep] = useState(1)
   const [subCategoryOptions, setSubCategoryOptions] = useState<{ label: string; value: string }[]>([]);
   const { categoryOptions } = useAppSelector((state)=> state.category);
   useGetCategoryDropDownQuery(undefined);
-
+  const [ registerCandidate, { isLoading, isSuccess }] = useRegisterCandidateMutation();
   const router = useRouter()
 
   const {
@@ -46,15 +48,15 @@ const CandidateRegisterForm = () => {
   } = useForm<TCandidateFormValues>({
     resolver: zodResolver(candidateRegisterSchema),
     defaultValues: {
-      name: "",
+      fullName: "",
       email: "",
       password: "",
       confirmPassword: "",
       categoryId: "",
       subCategoryId: "",
-      rate: "",
-      availability: "",
-      type: "",
+      workRate: "",
+      availableDate: "",
+      workType: "",
       employmentType: "",
       location: undefined,
       skills: [],
@@ -67,7 +69,6 @@ const CandidateRegisterForm = () => {
   const categoryId = watch("categoryId")
   const watchedSkills = watch("skills")
   const watchedLocation = watch("location");
-
   const { data: subCategoryData } = useGetSubCategoryDropDownByCategoryIdQuery(categoryId, {skip: !categoryId});
 
   useEffect(() => {
@@ -92,7 +93,6 @@ const CandidateRegisterForm = () => {
 
 
 
-
   const totalSteps = 5
 
   const nextStep = useCallback(async () => {
@@ -109,17 +109,32 @@ const CandidateRegisterForm = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 1))
   }, [])
 
+
+  //if success
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/verify-account-otp");
+    }
+  }, [isSuccess, router]);
+
+
+
   const onSubmit: SubmitHandler<TCandidateFormValues> = (data) => {
-    console.log("Form submitted:", data)
-    SuccessToast("Sign Up Success")
-    router.push("/")
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { location, categoryId, ...rest } = data;
+    const finalValues = {
+      ...rest,
+      longitude: location.lng,
+      latitude: location.lat,
+      address: location.address
+    }
+    registerCandidate(finalValues);
   }
 
 
   const handleSubmitFinal = async () => {
     // Manually trigger validation for all fields on the final step/submit attempt
     const isValid = await trigger()
-
     if (isValid) {
         handleSubmit(onSubmit)()
     } else {
@@ -180,8 +195,15 @@ const CandidateRegisterForm = () => {
           {currentStep === 1 && (
             <div className="space-y-6">
               <h2 className="text-xl font-semibold text-card-foreground mb-4">Basic Information</h2>
-              <CustomInput label="Full Name" name="name" type="text" control={control} placeholder="Enter your full name" />
+              <CustomInput label="Full Name" name="fullName" type="text" control={control} placeholder="Enter your full name" />
               <CustomInput label="Email Address" name="email" type="text" control={control} placeholder="Enter your email address" />
+              <CustomInput
+                label="Phone Number(only UK)"
+                name="phone"
+                type="text"
+                control={control}
+                placeholder="e.g., +44 20 1234 5678 or 020 1234 5678"
+              />
               <CustomInput label="Password" name="password" type="password" control={control} placeholder="Create a password" />
               <CustomInput label="Confirm Password" name="confirmPassword" type="password" control={control} placeholder="Confirm your password" />
             </div>
@@ -210,18 +232,22 @@ const CandidateRegisterForm = () => {
                 
                 <CustomSelect
                   label="Rate"
-                  name="rate"
+                  name="workRate"
                   control={control}
                   options={workRateOptions}
                   placeholder="Select Rate"
                 />
                 
                 {/* Availability uses a text input with type="date" */}
-                <CustomDatePicker label="Availability" name="availability" control={control} />
+                <CustomDatePicker 
+                  label="Available Date" 
+                  name="availableDate" 
+                  control={control} 
+                />
                 
                 <CustomSelect
                   label="Work Type"
-                  name="type"
+                  name="workType"
                   control={control}
                   options={workTypeOptions}
                   placeholder="Select Work Type"
@@ -279,7 +305,7 @@ const CandidateRegisterForm = () => {
                     placeholder="Add a skill and press Enter"
                     id="skillInput"
                     className="flex-1 px-4 py-3 bg-input border border-gray-300 focus:border-blue-500 rounded-lg focus:outline-none transition-colors"
-                    onKeyPress={(e) => {
+                    onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault()
                         addSkill(e.currentTarget.value)
@@ -342,7 +368,7 @@ const CandidateRegisterForm = () => {
                 <div className="p-4 bg-muted rounded-lg">
                   <h3 className="font-medium text-card-foreground mb-2">Basic Information</h3>
                   <p>
-                    <strong>Name:</strong> {getValues("name")}
+                    <strong>Name:</strong> {getValues("fullName")}
                   </p>
                   <p>
                     <strong>Email:</strong> {getValues("email")}
@@ -352,19 +378,19 @@ const CandidateRegisterForm = () => {
                 <div className="p-4 bg-muted rounded-lg">
                   <h3 className="font-medium text-card-foreground mb-2">Professional Details</h3>
                   <p>
-                    <strong>Category:</strong> {getValues("categoryId")}
+                    <strong>Category:</strong> {findLabel(categoryOptions, getValues("categoryId"))}
                   </p>
                   <p>
-                    <strong>Sub-Category:</strong> {getValues("subCategoryId")}
+                    <strong>Sub-Category:</strong> {findLabel(subCategoryOptions, getValues("subCategoryId"))}
                   </p>
                   <p>
-                    <strong>Rate:</strong> {getValues("rate")}
+                    <strong>Rate:</strong> {findLabel(workRateOptions, getValues("workRate"))}
                   </p>
                   <p>
-                    <strong>Work Type:</strong> {getValues("type")}
+                    <strong>Work Type:</strong> {findLabel(workTypeOptions, getValues("workType"))}
                   </p>
                   <p>
-                    <strong>Employment Type:</strong> {getValues("employmentType")}
+                    <strong>Employment Type:</strong> {findLabel(employmentTypeOptions, getValues("employmentType"))}
                   </p>
                 </div>
 
@@ -379,7 +405,7 @@ const CandidateRegisterForm = () => {
                     <strong>Skills:</strong> {watchedSkills.join(", ")}
                   </p>
                   <p>
-                    <strong>Experience:</strong> {getValues("experience")}
+                    <strong>Experience:</strong> {findLabel(candidateExperienceOptions, getValues("experience"))}
                   </p>
                 </div>
               </div>
@@ -392,7 +418,7 @@ const CandidateRegisterForm = () => {
               type="button"
               onClick={prevStep}
               disabled={currentStep === 1}
-              className="px-6 py-3 bg-brand-color text-secondary-foreground rounded-lg cursor-pointer hover:bg-brand-color/90 text-white disabled:opacity-90 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2 bg-brand-color text-secondary-foreground rounded-lg cursor-pointer hover:bg-brand-color/90 text-white disabled:opacity-90 disabled:cursor-not-allowed transition-colors"
             >
               Back
             </button>
@@ -401,18 +427,12 @@ const CandidateRegisterForm = () => {
               <button
                 type="button"
                 onClick={nextStep}
-                className="px-6 py-3 bg-primary text-white rounded-lg cursor-pointer hover:bg-primary/90 transition-colors"
+                className="px-6 py-2 bg-primary text-white rounded-lg cursor-pointer hover:bg-primary/90 transition-colors"
               >
                 Next
               </button>
             ) : (
-              <button
-                type="button"
-                onClick={handleSubmitFinal}
-                className="px-6 py-3 bg-primary text-white hover:bg-primary/90 cursor-pointer rounded-lg transition-colors"
-              >
-                Submit
-              </button>
+              <CustomButton onClick={handleSubmitFinal} isLoading={isLoading} className="w-auto">Submit</CustomButton>
             )}
           </div>
         </div>

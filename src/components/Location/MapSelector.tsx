@@ -33,7 +33,9 @@ export default function MapSelector({ onLocationSelect, selectedLocation }: MapS
     if (!mapRef.current || mapInstanceRef.current) return
 
     // Initialize map
-    const map = L.map(mapRef.current).setView([40.7128, -74.006], 10) // Default to NYC
+   // const map = L.map(mapRef.current).setView([40.7128, -74.006], 10) // Default to NYC
+   const map = L.map(mapRef.current).setView([51.52055, 0.10814], 13)
+
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap contributors",

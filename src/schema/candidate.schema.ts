@@ -256,17 +256,58 @@ export const workExperienceSchema = z
   
   export const candidateRegisterSchema = z.object({
     // Step 1: Basic Information
-    name: z.string().min(1, "Name is required"),
+    fullName: z.string().min(1, "Name is required"),
     email: z.string().email("Email is invalid").min(1, "Email is required"),
+    phone: z
+      .string({
+        invalid_type_error: "Phone Number must be string",
+        required_error: "Phone number is required",
+      })
+      .min(1, "Phone number is required")
+      .trim()
+      .regex(ukPhoneRegex, {
+        message: "Enter a valid UK phone number",
+      }),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(1, "Confirm Password is required"),
   
     // Step 2: Category Selection
     categoryId: z.string().min(1, "Category is required"),
     subCategoryId: z.string().min(1, "Sub-category is required"),
-    rate: z.string().min(1, "Rate is required"),
-    availability: z.string().min(1, "Availability date is required"),
-    type: z.string().min(1, "Type is required"),
+    workRate: z.string().min(1, "Rate is required"),
+    availableDate: z
+      .string({
+        required_error: "Please, select available date",
+        invalid_type_error: "availableDate must be string value",
+      })
+      .trim()
+      .min(1, { message: "Please, select available date"})
+      .superRefine((date, ctx) => {
+        const formatRegex = /^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
+        // 1️⃣ Validate format first
+        if (!formatRegex.test(date)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Invalid Date format, expected 'YYYY-MM-DD'",
+          });
+          return; // stop further checks
+        }
+
+        // 2️⃣ Parse date and check future
+        const inputDate = new Date(date + "T00:00:00"); // consistent local date
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        inputDate.setHours(0, 0, 0, 0);
+
+        if (inputDate < today) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Available date must be today or a future date",
+          });
+        }
+      }),
+    workType: z.string().min(1, "Type is required"),
     employmentType: z.string().min(1, "Employment Type is required"),
   
     // Step 3: Location
