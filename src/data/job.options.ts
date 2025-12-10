@@ -13,7 +13,7 @@ export const typeOptions = [
   },
   {
     label: "Contract",
-    value: "contract",
+    value: "contact",
   }
 ];
 
