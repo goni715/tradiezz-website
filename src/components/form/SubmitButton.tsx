@@ -13,7 +13,7 @@ const SubmitButton = ({ isLoading, loadingTitle = "Processing...", children, cla
         <>
             <button
                 type="submit"
-                className={`w-full ${className} flex justify-center items-center gap-x-2 bg-primary hover:bg-primary/80 cursor-pointer text-white py-2 rounded-md font-semibold transition-colors duration-100`}
+                className={`w-full ${className} flex justify-center items-center gap-x-2 bg-primary hover:bg-primary/80 cursor-pointer text-white py-2 disabled:cursor-not-allowed rounded-md font-semibold transition-colors duration-100`}
             >
                 {isLoading ? (
                     <>

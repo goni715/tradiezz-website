@@ -81,11 +81,11 @@ export const changePasswordSchema = z
     }
   });
 
-export const registerSchema = z
+export const employerRegisterSchema = z
   .object({
-    name: z
+    fullName: z
       .string({
-        invalid_type_error: "Name must be string",
+        invalid_type_error: "Full name must be string",
         required_error: "Name is required",
       })
       .min(1, "Name is required")
@@ -98,7 +98,7 @@ export const registerSchema = z
       .string({ required_error: "Email is required" })
       .min(1, "Email is required")
       .email("Invalid email address"),
-    phone_number: z
+    phone: z
       .string({
         invalid_type_error: "Phone Number must be string",
         required_error: "Phone number is required",
@@ -132,3 +132,5 @@ export const registerSchema = z
       });
     }
   });
+
+  export type TEmployerFormValues = z.infer<typeof employerRegisterSchema>

@@ -1,34 +1,68 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import CustomInput from "../form/CustomInput";
+import { z } from "zod";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { useForgotPasswordSendOtpMutation } from "@/redux/features/auth/authApi";
+import { SetForgotError } from "@/redux/features/auth/authSlice";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import FormError from "../validation/FormError";
+import { forgotPasswordSendOtpSchema } from "@/schema/auth.schema";
+import SubmitButton from "../form/SubmitButton";
 
-import { MdEmail } from "react-icons/md";
+type TFormValues = z.infer<typeof forgotPasswordSendOtpSchema>;
 
 const ForgotPasswordForm = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { ForgotError } = useAppSelector((state) => state.auth);
+  const [forgotPasswordSendOtp, { isLoading, isSuccess }] =
+    useForgotPasswordSendOtpMutation();
+  const { handleSubmit, control } = useForm({
+    resolver: zodResolver(forgotPasswordSendOtpSchema),
+  });
+
+
+   useEffect(()=>{
+      if(isSuccess){
+        router.push("/verify-otp");
+      }
+    }, [isSuccess, router]);
+
+  const onSubmit: SubmitHandler<TFormValues> = (data) => {
+    dispatch(SetForgotError(""));
+    forgotPasswordSendOtp(data);
+  };
+
   return (
     <>
-      <form className="space-y-4">
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email
-          </label>
-          <div className="relative mt-1">
-            <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-lg">
-              <MdEmail />
-            </span>
-            <input
-              type="email"
-              id="email"
-              className="block w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500 pl-10 pr-4 py-2"
-              placeholder="enter your email here"
-            />
-          </div>
-        </div>
+      {ForgotError && <FormError message={ForgotError} />}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <CustomInput
+          label="Email"
+          name="email"
+          type="text"
+          control={control}
+          placeholder="Enter email address"
+        />
 
-        <button className="w-full bg-primary cursor-pointer text-white py-2 rounded-md font-semibold transition-colors duration-100">
-          Continue
-        </button>
+        {/* <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full flex items-center cursor-pointer justify-center gap-2 bg-primary text-white py-2 rounded-md hover:bg-dis transition disabled:bg-gray-800 disabled:cursor-not-allowed"
+        >
+          {isLoading ? (
+            <>
+              <CgSpinnerTwo className="animate-spin" fontSize={16} />
+              Processing...
+            </>
+          ) : (
+            "Continue"
+          )}
+        </button> */}
+        <SubmitButton isLoading={isLoading}> Continue </SubmitButton>
       </form>
     </>
   );

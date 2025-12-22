@@ -31,6 +31,29 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    registerEmployer: builder.mutation({
+      query: (data) => ({
+        url: "/auth/register-employer",
+        method: "POST",
+        body: data,
+      }),
+      async onQueryStarted({email}, { queryFulfilled, dispatch }) {
+        try {
+          await queryFulfilled;
+          setVerifyEmail(email);
+          SuccessToast("Please check you email");
+        } catch (err: any) {
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            dispatch(SetRegisterError("Something Went Wrong"));
+          }
+          else {
+            dispatch(SetRegisterError(message));
+          }
+        }
+      },
+    }),
     login: builder.mutation({
       query: (data) => ({
         url: "/auth/login-user",
@@ -60,7 +83,7 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     forgotPasswordSendOtp: builder.mutation({
       query: (data) => ({
-        url: "/auth/forgot-password",
+        url: "/auth/forgot-password-send-otp",
         method: "POST",
         body: data,
       }),
@@ -250,6 +273,7 @@ export const authApi = apiSlice.injectEndpoints({
 
 export const {
   useRegisterCandidateMutation,
+  useRegisterEmployerMutation,
   useLoginMutation,
   useForgotPasswordSendOtpMutation,
   useForgotPasswordResendOtpMutation,
