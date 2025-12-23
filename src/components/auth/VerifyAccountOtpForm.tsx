@@ -1,5 +1,4 @@
 "use client";
-
 import { getVerifyEmail } from "@/helper/SessionHelper";
 import {
   useVerifyAccountResendOtpMutation,
@@ -74,8 +73,8 @@ const VerifyAccountOtpForm = () => {
     e.preventDefault();
     dispatch(SetVerifyAccountOtpError(""));
     verifyAccountVerifyOtp({
-      activation_code: verificationCode,
-      userEmail: getVerifyEmail(),
+      otp: verificationCode,
+      email: getVerifyEmail(),
     });
   };
 

@@ -47,21 +47,6 @@ const ForgotPasswordForm = () => {
           control={control}
           placeholder="Enter email address"
         />
-
-        {/* <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full flex items-center cursor-pointer justify-center gap-2 bg-primary text-white py-2 rounded-md hover:bg-dis transition disabled:bg-gray-800 disabled:cursor-not-allowed"
-        >
-          {isLoading ? (
-            <>
-              <CgSpinnerTwo className="animate-spin" fontSize={16} />
-              Processing...
-            </>
-          ) : (
-            "Continue"
-          )}
-        </button> */}
         <SubmitButton isLoading={isLoading}> Continue </SubmitButton>
       </form>
     </>

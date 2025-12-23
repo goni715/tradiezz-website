@@ -22,7 +22,7 @@ const VerifyAccountPage = () => {
           <div className="pt-4 border-t border-gray-200">
             <button
               onClick={handleBackToLogin}
-              className="w-full text-gray-600 hover:text-gray-800 font-medium text-sm transition-colors flex items-center justify-center space-x-2"
+              className="w-full text-gray-600 hover:text-gray-800 font-medium cursor-pointer text-sm transition-colors flex items-center justify-center space-x-2"
             >
               <svg
                 className="w-4 h-4"

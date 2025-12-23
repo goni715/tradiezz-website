@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-import { getAuthId, getEmail, setEmail, setToken, setVerifyEmail } from "@/helper/SessionHelper";
+import { getAuthId, setEmail, setOtp, setToken, setVerifyEmail } from "@/helper/SessionHelper";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
 import { SetChangePasswordError, SetForgotError, SetLoginError, SetRegisterError, SetResetPasswordError, SetVerifyAccountError, SetVerifyAccountOtpError, SetVerifyOtpError } from "./authSlice";
 import { apiSlice } from "../api/apiSlice";
@@ -93,19 +91,20 @@ export const authApi = apiSlice.injectEndpoints({
           setEmail(email);
           SuccessToast("OTP is sent successfully");
         } catch (err: any) {
-          const message = err?.error?.data?.message;
-          if(message === "Cannot read properties of null (reading 'email')"){
-            dispatch(SetForgotError("Couldn't find this email address"))
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            dispatch(SetForgotError("Something Went Wrong"));
           }
-          else{
-            dispatch(SetForgotError(message))
+          else {
+            dispatch(SetForgotError(message));
           }
         }
       },
     }),
     forgotPasswordResendOtp: builder.mutation({
       query: (data) => ({
-        url: "/auth/forgot-resend",
+        url: "/auth/forgot-password-send-otp",
         method: "POST",
         body: data,
       }),
@@ -115,11 +114,12 @@ export const authApi = apiSlice.injectEndpoints({
           setEmail(email);
           SuccessToast("OTP is sent successfully");
         } catch (err: any) {
-          const message = err?.error?.data?.message;
-          if(message === "Cannot read properties of null (reading 'email')"){
-            ErrorToast("Couldn't find this email address");
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            ErrorToast("Something Went Wrong");
           }
-          else{
+          else {
             ErrorToast(message);
           }
         }
@@ -127,23 +127,30 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     forgotPasswordVerifyOtp: builder.mutation({
       query: (data) => ({
-        url: "/auth/verify-otp",
+        url: "/auth/forgot-password-verify-otp",
         method: "POST",
         body: data,
       }),
-      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
+      async onQueryStarted({ otp }, { queryFulfilled, dispatch }) {
         try {
           await queryFulfilled;
+          setOtp(otp)
           SuccessToast("Otp is verified successfully");
         } catch (err: any) {
-          const message = err?.error?.data?.message;
-          dispatch(SetVerifyOtpError(message));
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            dispatch(SetVerifyOtpError("Something Went Wrong"));
+          }
+          else {
+            dispatch(SetVerifyOtpError(message));
+          }
         }
       },
     }),
     forgotPasswordReset: builder.mutation({
       query: (data) => ({
-        url: `/auth/reset-password?email=${getEmail()}`,
+        url: `/auth/forgot-password-set-new-password`,
         method: "POST",
         body: data,
       }),
@@ -156,8 +163,14 @@ export const authApi = apiSlice.injectEndpoints({
             window.location.href = "/login";
           }, 300);
         } catch (err: any) {
-          const message = err?.error?.data?.message;
-          dispatch(SetResetPasswordError(message));
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            dispatch(SetResetPasswordError("Something Went Wrong"));
+          }
+          else {
+            dispatch(SetResetPasswordError(message));
+          }
         }
       },
     }),
@@ -187,7 +200,7 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     verifyAccountSendOtp: builder.mutation({
       query: (data) => ({
-        url: "/auth/active-resend",
+        url: "/auth/resend-verification-email",
         method: "POST",
         body: data,
       }),
@@ -195,13 +208,14 @@ export const authApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
           setVerifyEmail(email);
-          SuccessToast("OTP is sent successfully");
+          SuccessToast("Please check your email");
         } catch (err: any) {
-          const message = err?.error?.data?.message;
-          if(message === "Cannot read properties of null (reading 'email')"){
-            dispatch(SetVerifyAccountError("Couldn't find this email address"))
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            dispatch(SetVerifyAccountError("Something Went Wrong"));
           }
-          else{
+          else {
             dispatch(SetVerifyAccountError(message));
           }
         }
@@ -209,7 +223,7 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     verifyAccountResendOtp: builder.mutation({
       query: (data) => ({
-        url: "/auth/active-resend",
+        url: "/auth/resend-verification-email",
         method: "POST",
         body: data,
       }),
@@ -219,9 +233,10 @@ export const authApi = apiSlice.injectEndpoints({
           setVerifyEmail(email);
           SuccessToast("OTP is sent successfully");
         } catch (err: any) {
+          const status = err?.error?.status;
           const message = err?.error?.data?.message;
-          if(message === "Cannot read properties of null (reading 'email')"){
-            ErrorToast("Couldn't find this email address");
+           if (status === 500) {
+            ErrorToast("Something Went Wrong");
           }
           else{
             ErrorToast(message);
@@ -231,7 +246,7 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     verifyAccountVerifyOtp: builder.mutation({
       query: (data) => ({
-        url: "/auth/activate-user",
+        url: "/auth/verify-email",
         method: "POST",
         body: data,
       }),
@@ -239,7 +254,7 @@ export const authApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
           SuccessToast("Account is verified successfully");
-           localStorage.clear();
+          localStorage.clear();
           setTimeout(() => {
             window.location.href = "/login";
           }, 300);
