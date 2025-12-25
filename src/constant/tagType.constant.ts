@@ -28,7 +28,8 @@ const TagTypes = {
    payments: "Payments",
    subscription_status: "Subscription_Status",
    categoryDropDown: "CategoryDropDown",
-   subCategoryDropDown: "CategoryDropDown"
+   subCategoryDropDown: "CategoryDropDown",
+   blogCategoryDropDown: "BlogCategoryDropDown"
 }
 
 export default TagTypes;

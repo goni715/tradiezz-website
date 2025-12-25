@@ -1,86 +1,84 @@
-"use client";
+import { BlogList } from "@/components/BlogList/BlogList";
+import FeaturedBlog from "@/components/BlogList/FeaturedBlog";
+import { BASE_URL } from "@/constant/global.constant";
 
-import BlogPagination from "@/components/BlogList/BlogPagination";
-import CategoryFilter from "@/components/BlogList/CategoryFilter";
-import FeaturedPost from "@/components/BlogList/FeaturedPost";
-import PostCard from "@/components/BlogList/PostCard";
-import RecentPosts from "@/components/BlogList/RecentPosts";
-import SearchBar from "@/components/BlogList/SearchBar";
-import { posts } from "@/data/blog.data";
-import { Category } from "@/types/blog.type";
-import { useState } from "react";
+async function getFeaturedBlog() {
+  const res = await fetch(`${BASE_URL}/blog/get-user-blogs?page=1&limit=1`, {
+    cache: 'no-store'
+  });
 
-const BlogListPage = () => {
-  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  // const [searchTerm, setSearchTerm] = useState("");
-  const totalPages = 5;
+  const data = await res.json();
+  const blogs = data?.data || [];
+  return blogs[0];
+}
 
-  const handleCategoryChange = (category: Category) => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter((c) => c !== category));
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
-    }
+async function getBlogs(
+  page: number,
+  limit: number,
+  search: string,
+  categoryIds: string[]
+) {
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+
+  if (search) {
+    params.set('searchTerm', search);
+  }
+
+   categoryIds.forEach(id => {
+    params.append('categoryId', id);
+  });
+
+  const res = await fetch(
+    `${BASE_URL}/blog/get-user-blogs?${params.toString()}`,
+    { cache: 'no-store' }
+  );
+
+  const data = await res.json();
+  const blogs = data?.data || [];
+  return blogs;
+}
+
+
+
+
+type BlogListPageProps = {
+  searchParams: {
+    page?: string;
+    limit?: string;
+    search?: string;
+    categoryId: string[]
   };
+};
 
-  const filteredPosts =
-    selectedCategories.length === 0
-      ? posts
-      : posts.filter((post) =>
-          selectedCategories.includes(post.category as Category)
-        );
+const BlogListPage = async ({ searchParams }: BlogListPageProps) => {
+  //const resolvedSearchParams = await searchParams;
+  // const page = Number(resolvedSearchParams.page ?? 1);
+  // const limit = Number(resolvedSearchParams.limit ?? 5);
+  // const search = resolvedSearchParams.search ?? '';
+  //const blogs = await getBlogs(page, limit, search);
+  const { page = '1', limit = '5', search = '', categoryId = [] } =
+    await searchParams;
+
+  const categoryIds = Array.isArray(categoryId)
+    ? categoryId
+    : [categoryId];
+
+  const blog = await getFeaturedBlog();
+  const blogs = await getBlogs(
+    Number(page),
+    Number(limit),
+    search,
+    categoryIds
+  );
 
   return (
     <>
-      <main className="flex-grow">
-        {/* Featured Post */}
-        <section className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-          <FeaturedPost post={posts[0]} />
-        </section>
-
-        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Sidebar */}
-            <div className="lg:w-1/4 space-y-6">
-              <SearchBar />
-              <CategoryFilter
-                selectedCategories={selectedCategories}
-                onCategoryChange={handleCategoryChange}
-              />
-              <RecentPosts posts={posts} />
-            </div>
-
-            {/* Main Content */}
-            <div className="lg:w-3/4">
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">
-                Latest Articles
-              </h1>
-
-              {filteredPosts.length === 0 ? (
-                <div className="bg-white p-8 rounded-lg shadow text-center">
-                  <p className="text-gray-600">
-                    No posts found. Try selecting different categories.
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {filteredPosts.map((post) => (
-                    <PostCard key={post.id} post={post} />
-                  ))}
-                </div>
-              )}
-
-            <div className="mt-10">
-                <BlogPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
-            </div>
-            </div>
-          </div>
-        </div>
+      <main className="grow">
+        <FeaturedBlog blog={blog} />
+        <BlogList blogs={blogs}/>
       </main>
     </>
   );

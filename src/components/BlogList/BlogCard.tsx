@@ -1,26 +1,27 @@
 import React from 'react';
 import { Calendar, MessageCircle, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
-import { Post } from '@/types/blog.type';
+import { IBlog } from '@/types/blog.type';
+import moment from "moment";
 
 interface PostCardProps {
-  post: Post;
+  blog: IBlog;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const BlogCard: React.FC<PostCardProps> = ({ blog }) => {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-200 h-full flex flex-col">
       <div className="relative overflow-hidden aspect-video">
         <Image
-          src={post.image} 
-          alt={post.title} 
+          src={blog.image} 
+          alt="blog_img" 
           width={600}
           height={600}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
         />
         <div className="absolute top-3 left-3">
           <span className="inline-block bg-amber-500 text-white text-xs font-semibold px-2 py-1 rounded">
-            {post.category}
+            {blog.category}
           </span>
         </div>
       </div>
@@ -28,21 +29,21 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <div className="flex items-center text-sm text-gray-500 space-x-4 mb-3">
           <span className="flex items-center">
             <Calendar size={14} className="mr-1" />
-            {post.date}
+            {moment(blog.createdAt).format('ll')}
           </span>
           <span className="flex items-center">
             <MessageCircle size={14} className="mr-1" />
-            {post.comments} Comments
+            {/* {post.comments} Comments */}
           </span>
         </div>
         <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-2 hover:text-amber-600 transition-colors duration-200">
-          <a href={`/post/${post.id}`}>{post.title}</a>
+          <a href={`/blog-details/${blog._id}`}>{blog.title}</a>
         </h3>
-        <p className="text-gray-600 mb-4 line-clamp-3 flex-1">
+        {/* <p className="text-gray-600 mb-4 line-clamp-3 flex-1">
           {post.excerpt}
-        </p>
+        </p> */}
         <a
-          href={`/post/${post.id}`}
+          href={`/blog-details/${blog._id}`}
           className="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium transition-colors duration-200 group mt-auto"
         >
           Read more 
@@ -53,4 +54,4 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   );
 };
 
-export default PostCard;
+export default BlogCard;
