@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, MessageCircle, ArrowRight } from 'lucide-react';
+import { Calendar, ArrowRight, Eye } from 'lucide-react';
 import Image from 'next/image';
 import { IBlog } from '@/types/blog.type';
 import moment from "moment";
@@ -32,8 +32,8 @@ const BlogCard: React.FC<PostCardProps> = ({ blog }) => {
             {moment(blog.createdAt).format('ll')}
           </span>
           <span className="flex items-center">
-            <MessageCircle size={14} className="mr-1" />
-            {/* {post.comments} Comments */}
+            <Eye size={14} className="mr-1" />
+            {blog.view}
           </span>
         </div>
         <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-2 hover:text-amber-600 transition-colors duration-200">

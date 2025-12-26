@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Calendar } from 'lucide-react';
+import { ArrowRight, Calendar, Eye } from 'lucide-react';
 import Image from 'next/image';
 import { IBlog } from '@/types/blog.type';
 import moment from 'moment';
@@ -34,6 +34,10 @@ const FeaturedBlog: React.FC<TProps> = ({ blog }) => {
                 <span className="flex items-center text-gray-300">
                   <Calendar size={16} className="mr-2" />
                   {moment(blog.createdAt).format('ll')}
+                </span>
+                <span className="flex items-center">
+                  <Eye size={14} className="mr-1" />
+                  {blog.view}
                 </span>
               </div> 
               <a

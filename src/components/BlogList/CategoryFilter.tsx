@@ -1,13 +1,12 @@
-import { useGetBlogCategoryDropDownQuery } from '@/redux/features/blogCategory/blogCategoryApi';
 import React from 'react';
-import BlogCategoryLoading from '../loader/BlogCategoryLoading';
 import { ICategory } from '@/types/category.type';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
+type TProps = {
+  categories: ICategory[]
+}
 
-const CategoryFilter = () => {
-  const { data, isLoading, isError } = useGetBlogCategoryDropDownQuery(undefined);
-  const categories = data?.data || [];
+const CategoryFilter = ({ categories }: TProps) => {
 
   const router = useRouter();
   const pathname = usePathname();
@@ -36,14 +35,6 @@ const CategoryFilter = () => {
 
     router.replace(`${pathname}?${params.toString()}`);
   };
-
-  if (isLoading) {
-    return <BlogCategoryLoading />
-  }
-
-  if (!isLoading && isError) {
-    return <h1>Something Went Wrong</h1>
-  }
 
 
   return (

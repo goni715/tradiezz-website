@@ -43,15 +43,26 @@ async function getBlogs(
 
 
 
+async function getBlogCategoryDropDown() {
+  const res = await fetch(`${BASE_URL}/blog-category/get-category-drop-down`, {
+    cache: 'no-store'
+  });
+
+  const data = await res.json();
+  const categories = data?.data || [];
+  return categories;
+}
+
 
 type BlogListPageProps = {
-  searchParams: {
+  searchParams?: Promise<{
     page?: string;
     limit?: string;
     search?: string;
-    categoryId: string[]
-  };
+    categoryId?: string | string[];
+  }>;
 };
+
 
 const BlogListPage = async ({ searchParams }: BlogListPageProps) => {
   //const resolvedSearchParams = await searchParams;
@@ -59,8 +70,12 @@ const BlogListPage = async ({ searchParams }: BlogListPageProps) => {
   // const limit = Number(resolvedSearchParams.limit ?? 5);
   // const search = resolvedSearchParams.search ?? '';
   //const blogs = await getBlogs(page, limit, search);
-  const { page = '1', limit = '5', search = '', categoryId = [] } =
-    await searchParams;
+ const {
+    page = '1',
+    limit = '20',
+    search = '',
+    categoryId = [],
+  } = (await searchParams) ?? {};
 
   const categoryIds = Array.isArray(categoryId)
     ? categoryId
@@ -74,11 +89,13 @@ const BlogListPage = async ({ searchParams }: BlogListPageProps) => {
     categoryIds
   );
 
+  const categories = await getBlogCategoryDropDown();
+
   return (
     <>
       <main className="grow">
         <FeaturedBlog blog={blog} />
-        <BlogList blogs={blogs}/>
+        <BlogList blogs={blogs} categories={categories}/>
       </main>
     </>
   );

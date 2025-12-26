@@ -2,15 +2,17 @@
 import React from 'react'
 import SearchBar from './SearchBar'
 import CategoryFilter from './CategoryFilter'
-import PaginationControls from './PaginationControls';
+// import PaginationControls from './PaginationControls';
 import { IBlog } from '@/types/blog.type'
 import BlogCard from './BlogCard';
+import { ICategory } from '@/types/category.type'
 
 type TProps = {
-    blogs: IBlog[]
+    blogs: IBlog[];
+    categories: ICategory[]
 }
 
-export const BlogList = ( { blogs }: TProps) => {
+export const BlogList = ( { blogs, categories }: TProps) => {
     
     return (
         <>
@@ -19,7 +21,7 @@ export const BlogList = ( { blogs }: TProps) => {
                     {/* Sidebar */}
                     <div className="lg:w-1/4 space-y-6">
                         <SearchBar />
-                        <CategoryFilter/>
+                        <CategoryFilter categories={categories}/>
                     </div>
                     <div className="lg:w-3/4">
                         <h1 className="text-3xl font-bold text-gray-900 mb-6">
@@ -60,7 +62,7 @@ export const BlogList = ( { blogs }: TProps) => {
                                 onPageChange={setCurrentPage}
                             />
                         </div> */}
-                        <PaginationControls/>
+                        {/* <PaginationControls/> */}
                     </div>
                 </div>
             </div>
