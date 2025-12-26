@@ -37,13 +37,14 @@ const BlogCard: React.FC<PostCardProps> = ({ blog }) => {
           </span>
         </div>
         <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-2 hover:text-amber-600 transition-colors duration-200">
-          <a href={`/blog-details/${blog._id}`}>{blog.title}</a>
+          <a href={`/blogs/${blog._id}`}>{blog.title}</a>
         </h3>
+        <div className="text-gray-600 line-clamp-3 mb-2" dangerouslySetInnerHTML={{ __html: blog.description }} />
         {/* <p className="text-gray-600 mb-4 line-clamp-3 flex-1">
           {post.excerpt}
         </p> */}
         <a
-          href={`/blog-details/${blog._id}`}
+          href={`/blogs/${blog._id}`}
           className="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium transition-colors duration-200 group mt-auto"
         >
           Read more 

@@ -1,12 +1,13 @@
 import React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
 const SearchBar: React.FC = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  const handleSearch = (term: string) => {
+  const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
     if (term) {
       params.set('search', term)
@@ -16,7 +17,7 @@ const SearchBar: React.FC = () => {
     }
 
     replace(`${pathname}?${params.toString()}`)
-  };
+  }, 300);
 
   return (
     <div className="w-full bg-white p-4 rounded-lg shadow-sm border border-gray-200">

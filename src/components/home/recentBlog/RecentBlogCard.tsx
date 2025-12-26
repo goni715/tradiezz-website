@@ -22,7 +22,7 @@ const RecentBlogCard = ({ blog }: { blog: IBlog }) => {
           className="object-cover transition-transform duration-700 hover:scale-110"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
         <div className="absolute bottom-0 w-full p-4 flex justify-between items-center">
           <span className={`text-xs font-medium px-3 py-1 rounded-full ${getCategoryColor(blog.categoryId)}`}>
             {blog.category}
@@ -48,7 +48,7 @@ const RecentBlogCard = ({ blog }: { blog: IBlog }) => {
         </div>
       </div>
 
-      <div className="p-5 flex flex-col flex-grow">
+      <div className="p-5 flex flex-col grow">
         <h3 className="text-xl font-bold mb-2 line-clamp-2 text-gray-900">{blog.title}</h3>
         <div className="text-gray-600 line-clamp-3" dangerouslySetInnerHTML={{ __html: blog.description }} />
 
