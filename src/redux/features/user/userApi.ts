@@ -12,7 +12,7 @@ export const userApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getMe: builder.query({
       query: () => ({
-        url: "/auth/profile",
+        url: "/user/get-my-profile",
         method: "GET",
       }),
       keepUnusedDataFor: 600,

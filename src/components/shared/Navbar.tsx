@@ -2,14 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Bell, Menu, MessageCircleMore, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import MobileMenu from "./MobileMenu";
 import { usePathname, useRouter } from "next/navigation";
+import useUserInfo from "@/hooks/useUserInfo";
+import DashboardButton from "./DashboardButton";
+import { logout } from "@/helper/SessionHelper";
 
-export default function Navbar() {
+const Navbar = () => {
+  const userInfo = useUserInfo();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const pathname = usePathname();
   const router = useRouter();
 
@@ -38,48 +41,7 @@ export default function Navbar() {
           >
             Find Work
           </Link>
-          <Link
-            href="/find-candidates"
-            className={`hover:text-brand-color ${
-              pathname === "/find-candidates" ? "text-brand-color" : "text-primary"
-            }`}
-          >
-            Find-Skilled-People
-          </Link>
-          {/* <Link href="/employers" className="hover:text-gray-300">
-            Employers
-          </Link> */}
-          {/* <Link href="/candidates" className="hover:text-gray-300">
-            Candidates
-          </Link> */}
-          <Link
-            href="/dashboard/candidate/overview"
-            className={`hover:text-brand-color ${
-              pathname === "/dashboard/candidate/overview"
-                ? "text-brand-color"
-                : "text-primary"
-            }`}
-          >
-            Candidate-Dashboard
-          </Link>
-          <Link
-            href="/dashboard/employer/overview"
-            className={`hover:text-brand-color ${
-              pathname === "/dashboard/employer/overview"
-                ? "text-brand-color"
-                : "text-primary"
-            }`}
-          >
-            Employer-Dashboard
-          </Link>
-           {/* <Link
-            href="/dashboard/employer/subscription"
-            className={`hover:text-brand-color ${
-              pathname === "/dashboard/employer/subscription" ? "text-brand-color" : "text-primary"
-            }`}
-          >
-            Subscription
-          </Link> */}
+           {userInfo?.userId && <DashboardButton />}
           <Link
             href="/blogs"
             className={`hover:text-brand-color ${
@@ -100,19 +62,32 @@ export default function Navbar() {
 
         {/* Desktop Right Side */}
         <div className="hidden items-center space-x-4 md:flex">
-          <Link
-            href="/login"
-            className="rounded-md border border-white px-4 py-1.5 text-primary hover:text-brand-color"
-          >
-            Sign In
-          </Link>
-          {/* <Link
-            href="/dashboard/employer/post-job"
-            className="rounded-md bg-white px-4 py-1.5 text-sm font-medium text-[#1a2c4e] hover:bg-gray-100"
-          >
-            Post A Job
-          </Link> */}
-          <button
+          {userInfo?.userId ? (
+            <>
+              <button
+                onClick={() => logout()}
+                className="rounded-md border cursor-pointer border-white px-4 py-1.5 text-sm hover:bg-white/10"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="rounded-md border border-white px-4 py-1.5 text-primary hover:text-brand-color"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/register"
+                className="rounded-md border border-white px-4 py-1.5 text-primary hover:text-brand-color"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
+          {/* <button
             onClick={() => router.push("/dashboard/candidate/messages")}
             className="relative rounded-full p-1 cursor-pointer hover:bg-white/10"
           >
@@ -129,7 +104,7 @@ export default function Navbar() {
             <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
               2
             </span>
-          </button>
+          </button> */}
 
           <div onClick={() => router.push("/dashboard/candidate/settings")} className="flex items-center gap-2 cursor-pointer">
             <div className="h-8 w-8 rounded-full">
@@ -160,3 +135,5 @@ export default function Navbar() {
     </nav>
   );
 }
+
+export default Navbar;

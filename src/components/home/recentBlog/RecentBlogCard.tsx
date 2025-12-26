@@ -1,13 +1,21 @@
 "use client";
+
 import Image from "next/image";
 import { motion } from "framer-motion"
 import Link from "next/link";
 import { IBlog } from "@/types/blog.type";
 import getCategoryColor from "@/utils/getCategoryColor";
-import moment from "moment";
-
 
 const RecentBlogCard = ({ blog }: { blog: IBlog }) => {
+  // Use native JS date to avoid heavy libraries and HMR issues
+  const formattedDate = blog.createdAt 
+    ? new Date(blog.createdAt).toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      })
+    : "";
+
   return (
     <motion.div
       className="bg-white rounded-xl overflow-hidden shadow-lg h-full flex flex-col"
@@ -18,11 +26,11 @@ const RecentBlogCard = ({ blog }: { blog: IBlog }) => {
         <Image
           src={blog.image || "/placeholder.svg"}
           alt={blog.title}
-          fill
+          fill // Better for responsive containers
           className="object-cover transition-transform duration-700 hover:scale-110"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
         <div className="absolute bottom-0 w-full p-4 flex justify-between items-center">
           <span className={`text-xs font-medium px-3 py-1 rounded-full ${getCategoryColor(blog.categoryId)}`}>
             {blog.category}
@@ -48,17 +56,20 @@ const RecentBlogCard = ({ blog }: { blog: IBlog }) => {
         </div>
       </div>
 
-      <div className="p-5 flex flex-col grow">
-        <h3 className="text-xl font-bold mb-2 line-clamp-2 text-gray-900">{blog.title}</h3>
-        <div className="text-gray-600 line-clamp-3" dangerouslySetInnerHTML={{ __html: blog.description }} />
+      <div className="p-5 flex flex-col flex-grow">
+        <h3 className="text-xl font-bold mb-2 line-clamp-2 text-gray-900">{blog?.title}</h3>
+        <div 
+          className="text-gray-600 line-clamp-3 text-sm" 
+          dangerouslySetInnerHTML={{ __html: blog.description }} 
+        />
 
         <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
           <div className="text-xs text-gray-500">
-            <span className="font-medium text-gray-700">• {moment(blog.createdAt).format('MMMM Do YYYY')} </span>
+             {formattedDate && `• ${formattedDate}`}
           </div>
           <Link
             href={`/blogs/${blog._id}`}
-            className="text-sm font-medium text-brand-color flex items-center group"
+            className="text-sm font-medium text-emerald-600 flex items-center group"
           >
             Read more
             <svg

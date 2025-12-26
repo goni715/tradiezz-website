@@ -12,7 +12,7 @@ export const authApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      async onQueryStarted({email}, { queryFulfilled, dispatch }) {
+      async onQueryStarted({email}, { queryFulfilled }) {
         try {
           await queryFulfilled;
           setVerifyEmail(email);
@@ -21,10 +21,10 @@ export const authApi = apiSlice.injectEndpoints({
           const status = err?.error?.status;
           const message = err?.error?.data?.message || "Something Went Wrong";
           if (status === 500) {
-            dispatch(SetRegisterError("Something Went Wrong"));
+            ErrorToast("Something Went Wrong");
           }
           else {
-            dispatch(SetRegisterError(message));
+            ErrorToast(message);
           }
         }
       },

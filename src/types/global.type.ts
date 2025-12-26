@@ -9,10 +9,10 @@ export interface ApiError {
 
 
 export type IAuthUser = {
-  authId: string;
+  userId: string;
   iat: number;
   email: string;
-  role: "USER" | "EMPLOYER";
+  role: "candidate" | "employer";
 };
 
 export interface IParam {

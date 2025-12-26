@@ -23,7 +23,7 @@ const MapSelector = dynamic(() => import("@/components/Location/MapSelector"), {
 // Define the steps and the fields within each step for validation purposes
 const stepFields: Record<number, (keyof TCandidateFormValues)[]> = {
   1: ["fullName", "email", "phone", "password", "confirmPassword"],
-  2: ["categoryId", "subCategoryId", "workRate", "availableDate", "workType", "employmentType"],
+  2: ["categoryId", "subCategoryId", "workRate", "dateOfBirth", "availableDate", "workType", "employmentType"],
   3: ["location"],
   4: ["skills", "experience"],
   5: [], // Review step, no new fields to validate
@@ -55,6 +55,7 @@ const CandidateRegisterForm = () => {
       categoryId: "",
       subCategoryId: "",
       workRate: "",
+      dateOfBirth: "",
       availableDate: "",
       workType: "",
       employmentType: "",
@@ -239,6 +240,11 @@ const CandidateRegisterForm = () => {
                 />
                 
                 {/* Availability uses a text input with type="date" */}
+                <CustomDatePicker 
+                  label="Birth Date" 
+                  name="dateOfBirth" 
+                  control={control} 
+                />
                 <CustomDatePicker 
                   label="Available Date" 
                   name="availableDate" 

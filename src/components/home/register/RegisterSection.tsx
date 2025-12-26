@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 const RegisterSection = () => {
   const router = useRouter();
+  
   return (
     <>
       {/* Hero Section */}
