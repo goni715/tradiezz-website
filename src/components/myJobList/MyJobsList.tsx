@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import {
-  Search,
   Edit,
   Trash2,
   Eye,
@@ -10,7 +9,6 @@ import {
   XCircle,
   Clock
 } from "lucide-react";
-import BlogPagination from "@/components/BlogList/BlogPagination";
 
 interface Job {
   id: number;
@@ -92,16 +90,7 @@ const MyJobsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
 
-  const filteredJobs = useMemo(() => {
-    return mockJobs.filter((job) => {
-      const matchesSearch =
-        job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.type.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus =
-        statusFilter === "all" || job.status === statusFilter;
-      return matchesSearch && matchesStatus;
-    });
-  }, [searchTerm, statusFilter]);
+ 
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -144,42 +133,7 @@ const MyJobsList = () => {
 
   return (
     <>
-      <div className="flex-1 overflow-auto p-4 md:p-6">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">My Jobs</h1>
-              <p className="text-gray-600 mt-1">
-                ({filteredJobs.length} of {mockJobs.length} jobs)
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search jobs..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-64"
-                />
-              </div>
 
-              {/* Status Filter */}
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="expired">Expired</option>
-              </select>
-            </div>
-          </div>
-        </div>
 
         {/* Jobs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -254,7 +208,7 @@ const MyJobsList = () => {
         </div>
 
         {/* Empty State */}
-        {filteredJobs.length === 0 && (
+        {/* {filteredJobs.length === 0 && (
           <div className="text-center py-12">
             <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
               <Search className="w-8 h-8 text-gray-400" />
@@ -266,14 +220,8 @@ const MyJobsList = () => {
               Try adjusting your search or filter criteria
             </p>
           </div>
-        )}
+        )} */}
 
-        <BlogPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-      </div>
     </>
   );
 };
