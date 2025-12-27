@@ -22,7 +22,7 @@ export const jobApi = apiSlice.injectEndpoints({
           });
         }
         return {
-          url: "/jobs/all/employer",
+          url: "/job/get-my-jobs",
           method: "GET",
           params: params,
         };
