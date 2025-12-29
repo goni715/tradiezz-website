@@ -4,7 +4,7 @@ const MyJobsLoading = () => {
             <div className="w-full">
                 {/* Skeleton Grid - Responsive: 1 col on mobile, 2 on tablet, 3 on desktop */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {Array.from({ length: 6 }).map((_, index) => (
+                    {Array.from({ length: 9 }).map((_, index) => (
                         <div key={index} className="flex flex-col rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
                             {/* Header with Title and Icon */}
                             <div className="mb-4 flex items-center justify-between">

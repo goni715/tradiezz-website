@@ -41,7 +41,7 @@ const FeaturedBlog: React.FC<TProps> = ({ blog }) => {
                 </span>
               </div> 
               <a
-                href={`/blog-details/${blog._id}`}
+                href={`/blogs/${blog._id}`}
                 className="inline-flex items-center bg-amber-500 hover:bg-amber-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 group"
               >
                 Read Article

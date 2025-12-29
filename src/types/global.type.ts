@@ -12,6 +12,8 @@ export type IAuthUser = {
   userId: string;
   iat: number;
   email: string;
+  fullName: string;
+  profileImg: string;
   role: "candidate" | "employer";
 };
 

@@ -15,7 +15,6 @@ const LocationDropdown: React.FC<LocationDropdownProps> = () => {
   const handleSelect = (value: number) => {
     setSelected(value);
     setIsOpen(false);
-    console.log(value);
   };
 
 

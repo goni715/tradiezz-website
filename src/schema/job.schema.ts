@@ -16,26 +16,13 @@ export const createJobSchema = z
       })
       .trim()
       .min(1, "Title is required"),
-    types: z
-      .string({
-        invalid_type_error: "Type must be string",
-        required_error: "Select a type",
-      })
-      .min(1, "Select a type"),
-    category: z
+    categoryId: z
       .string({
         invalid_type_error: "Category must be string",
         required_error: "Select a category",
       })
       .trim()
       .min(1, "Select a category"),
-    education: z
-      .string({
-        invalid_type_error: "Education must be string",
-        required_error: "Select education",
-      })
-      .trim()
-      .min(1, "Select education"),
     experience: z
       .string({
         invalid_type_error: "Experience must be string",
@@ -43,65 +30,93 @@ export const createJobSchema = z
       })
       .trim()
       .min(1, "Select experience"),
-    skill: z
+    jobType: z
+      .string({
+        invalid_type_error: "type must be string",
+        required_error: "Select job type",
+      })
+      .trim()
+      .min(1, "Select job type"),
+    skills: z
       .string({
         invalid_type_error: "Skill must be string",
-        required_error: "Skills required",
+        required_error: "Provide at least one skill",
       })
       .trim()
       .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
         message: "Please enter valid comma-separated skills",
       }),
-    salary: z
-      .string({
-        invalid_type_error: "Salary must be a string",
-        required_error: "Salary is required",
-      })
-      .trim()
-      .transform((val) => (val === "" ? undefined : val)) // 👈 convert empty to undefined
-      .optional()
-      .refine((val) => val === undefined || /^\d+$/.test(val), {
-        message: "Salary must be a number",
-      })
-      .transform((val) => (val === undefined ? undefined : Number(val)))
-      .refine((val) => val === undefined || val > 0, {
-        message: "Salary must be at least 1",
-      }),
-    rate: z
+    rateType: z
       .string({
         invalid_type_error: "rate must be string",
         required_error: "Select rate",
       })
       .trim()
-      .optional(),
-    vacancies: z
+      .min(1, { message: "Select rate" }),
+    startDate: z
       .string({
-        invalid_type_error: "Vacancy must be a number",
-        required_error: "Vacancy is required",
+        required_error: "Select start date",
       })
       .trim()
-      .min(1, "Vacancy is required")
-      .refine((val) => /^\d+$/.test(val), {
-        message: "Vacancy must be a number",
-      })
-      .transform((val) => Number(val))
-      .refine((val) => val > 0, {
-        message: "Vacancy must be at least 1",
+      .min(1, { message: "Select start date" })
+      .superRefine((date, ctx) => {
+        // 2️⃣ Parse date and check future
+        const inputDate = new Date(date + "T00:00:00"); // consistent local date
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        inputDate.setHours(0, 0, 0, 0);
+
+        if (inputDate < today) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Start Date must be today or a future date",
+          });
+        }
       }),
-    application_dateline: z
+    endDate: z
       .string({
-        invalid_type_error: "Expiration date must be string",
-        required_error: "Select expiration date",
+        required_error: "endDate is required",
       })
       .trim()
-      .min(1, "Select expiration date"),
-    job_pattern: z
+      .superRefine((date, ctx) => {
+        const formatRegex = /^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
+        // Parse date and check future
+        if (formatRegex.test(date)) {
+          const inputDate = new Date(date + "T00:00:00"); // consistent local date
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          inputDate.setHours(0, 0, 0, 0);
+
+          if (inputDate < today) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "End Date must be today or a future date",
+            });
+          }
+        }
+      })
+      .optional(),
+    deadline: z
       .string({
-        invalid_type_error: "Job Pattern must be string",
-        required_error: "Select Job Pattern",
+        required_error: "Select deadline",
       })
       .trim()
-      .min(1, "Select Job Pattern"),
+      .min(1, "Select deadline")
+      .superRefine((date, ctx) => {
+        // Parse date and check future
+        const inputDate = new Date(date + "T00:00:00"); // consistent local date
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        inputDate.setHours(0, 0, 0, 0);
+
+        if (inputDate < today) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Deadline must be today or a future date",
+          });
+        }
+      }),
     address: z
       .string({
         invalid_type_error: "Address must be string",
@@ -109,7 +124,7 @@ export const createJobSchema = z
       })
       .trim()
       .min(1, "Address is required"),
-    descriptions: z.preprocess(
+    description: z.preprocess(
       (val) => {
         if (typeof val === "string" && isEditorContentEmpty(val)) {
           return ""; // force fail if visually empty
@@ -148,18 +163,62 @@ export const createJobSchema = z
       .refine((val) => val <= 90, {
         message: "Latitude must be <= 90",
       }),
+    minRange: z
+      .string({
+        required_error: "Enter minimum range",
+      })
+      .min(1, "Enter minimum range")
+      .transform((val) => Number(val))
+      .refine((val) => !isNaN(val), { message: "Minimum Range must be a valid number" })
+      .refine((val) => val > 0, { message: "Minimum range must be greater than 0" }),
+    maxRange: z
+      .string({
+        required_error: "Enter maximum range",
+      })
+      .min(1, "Enter maximum range")
+      .transform((val) => Number(val))
+      .refine((val) => !isNaN(val), { message: "Maximum Range must be a valid number" })
+      .refine((val) => val > 0, { message: "Maximum range must be greater than 0" }),
   })
-  .superRefine((values, ctx) => {
-    const { salary, rate } = values;
-    // If salary is provided, rate must also be provided
-    if (salary && (!rate || rate.trim() === "")) {
-      ctx.addIssue({
-        message: "Rate is required when salary is provided",
-        path: ["rate"],
-        code: z.ZodIssueCode.custom,
-      });
-    }
-  });
+   .superRefine((values, ctx) => {
+        const { startDate, endDate, minRange, maxRange } = values;
+        if (startDate && endDate) {
+            // Compare dates only if both are valid
+            const StartDate = new Date(startDate);
+            const EndDate = new Date(endDate);
+
+            if (StartDate > EndDate) {
+                ctx.addIssue({
+                    path: ["startDate"],
+                    message: "Start date must be before end date",
+                    code: z.ZodIssueCode.custom,
+                });
+
+                ctx.addIssue({
+                    path: ["endDate"],
+                    message: "End date must be after start date",
+                    code: z.ZodIssueCode.custom,
+                });
+                return;
+            }
+        }
+
+        if (minRange && maxRange) {
+            if (minRange >= maxRange) {
+                ctx.addIssue({
+                    path: ["minRange"],
+                    message: "Minimum range must be less than maximum range",
+                    code: z.ZodIssueCode.custom,
+                });
+
+                ctx.addIssue({
+                    path: ["maxRange"],
+                    message: "Maximum range must be greater than minimum range",
+                    code: z.ZodIssueCode.custom,
+                });
+            }
+        }
+    });
 
 
 export const applyJobSchema = z.object({

@@ -65,8 +65,7 @@ export default function MapSelector({ onLocationSelect, selectedLocation }: MapS
         const address = data.display_name || `${lat.toFixed(6)}, ${lng.toFixed(6)}`
 
         onLocationSelect({ lat, lng, address })
-      } catch (error) {
-        console.error("Error getting address:", error)
+      } catch{
         onLocationSelect({ lat, lng, address: `${lat.toFixed(6)}, ${lng.toFixed(6)}` })
       }
     })

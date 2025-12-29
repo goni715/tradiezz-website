@@ -72,8 +72,7 @@ const reverseGeocode = async (lat: number, lon: number) => {
     const address = data?.display_name || "";
     const postalCode = data?.address?.postcode || "";
     return { address, postalCode };
-  } catch (error) {
-    console.error("Reverse geocoding error:", error);
+  } catch {
     return { address: "", postalCode: "" };
   }
 };

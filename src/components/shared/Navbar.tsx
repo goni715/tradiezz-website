@@ -5,16 +5,17 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import MobileMenu from "./MobileMenu";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import useUserInfo from "@/hooks/useUserInfo";
 import DashboardButton from "./DashboardButton";
 import { logout } from "@/helper/SessionHelper";
+import UserImg from "./UserImg";
 
 const Navbar = () => {
   const userInfo = useUserInfo();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
+
 
   return (
     <nav className="sticky top-0 h-[88px] z-50 w-full bg-white text-primary shadow-md">
@@ -106,7 +107,7 @@ const Navbar = () => {
             </span>
           </button> */}
 
-          <div onClick={() => router.push("/dashboard/candidate/settings")} className="flex items-center gap-2 cursor-pointer">
+          {/* <div onClick={() => router.push("/dashboard/candidate/settings")} className="flex items-center gap-2 cursor-pointer">
             <div className="h-8 w-8 rounded-full">
               <Image
                 src="/images/avatar.png"
@@ -116,7 +117,8 @@ const Navbar = () => {
               />
             </div>
             <span className="text-sm">Andrew Ainsley</span>
-          </div>
+          </div> */}
+          {userInfo && userInfo.userId && <UserImg/>}
         </div>
 
         {/* Mobile Menu Button */}

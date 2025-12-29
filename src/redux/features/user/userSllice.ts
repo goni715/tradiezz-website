@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type TState = {
-  user: any | null
+  user: any | null;
+  isProfileUpdated: boolean;
 }
 
  const initialState: TState = {
-  user: null
+  user: null,
+  isProfileUpdated: false
  }
 
 
@@ -17,10 +19,13 @@ const userSlice = createSlice({
     SetUser: (state, action) => {
       state.user=action.payload
     },
+    SetIsProfileUpdated: (state, action: PayloadAction<boolean>) => {
+      state.isProfileUpdated = action.payload;
+    },
   }
 })
 
-export const { SetUser } = userSlice.actions
+export const { SetUser, SetIsProfileUpdated } = userSlice.actions
 
 const userSliceReducer = userSlice.reducer;
 export default userSliceReducer;

@@ -8,37 +8,28 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { createJobSchema } from "@/schema/job.schema";
-import { tradeOptions } from "@/data/options";
 import CustomTextArea from "../form/CustomTextArea";
 import FormButton from "../form/SubmitButton";
 import CustomSelect from "../form/CustomSelect";
 import { experienceOptions, rateOptions, typeOptions } from "@/data/job.options";
 import CustomDatePicker from "../form/CustomDatePicker";
-import SalaryRange from "./SalaryRange";
-import dynamic from "next/dynamic";
+import { useAppSelector } from "@/redux/hooks/hooks";
+import { useGetCategoryDropDownQuery } from "@/redux/features/category/categoryApi";
+import CustomQuilEditor from "@/components/form/CustomQuilEditor";
+import { useCreateJobMutation } from "@/redux/features/job/jobApi";
+import { useRouter } from "next/navigation";
 
 type TFormValues = z.infer<typeof createJobSchema>;
 
 const PostJobForm = () => {
-  //useGetCategoriesQuery(undefined);
+  const router = useRouter();
   const [selectedLocation, setSelectedLocation] = useState<[number, number]>([
     51.5072, 0.1276,
   ]);
-
-  // ✅ Use the dynamic import instead:
-const CustomQuilEditor = dynamic(
-  () => import("@/components/form/CustomQuilEditor"), // Path to your editor file
-  {
-    ssr: false, // 🔑 Prevents jsdom/parse5 from running on Vercel Node.js
-    loading: () => <p>Loading editor...</p>,
-  }
-);
-
   // const { subscription_status } = useAppSelector((state) => state.subscription);
-  //const [createJob, { isLoading, isSuccess }] = useCreateJobMutation();
-  const isLoading = false;
-  const [trade, setTrade] = useState("");
-  //const [subOptions, setSuboptions] = useState([]);
+  const [createJob, { isLoading, isSuccess }] = useCreateJobMutation();
+  useGetCategoryDropDownQuery(undefined);
+  const { categoryOptions } = useAppSelector((state)=> state.category);
 
 
   const {
@@ -46,8 +37,6 @@ const CustomQuilEditor = dynamic(
     control,
     setValue,
     watch,
-    clearErrors,
-    setError
   } = useForm({
     resolver: zodResolver(createJobSchema),
     defaultValues: {
@@ -57,27 +46,6 @@ const CustomQuilEditor = dynamic(
       postalCode: "SW1A 2DX"
     },
   });
-
-  const salary = watch("salary");
-  const rate = watch("rate");
-
-  useEffect(() => {
-    if (salary && !rate) {
-      setError("rate", {
-        type: "manual",
-        message: "Rate is required when salary is provided",
-      });
-    } else {
-      clearErrors("rate");
-    }
-  }, [salary, rate, setError, clearErrors]);
-
-  useEffect(() => {
-    if (!salary || salary === "") {
-      setValue("rate", "");
-    }
-  }, [salary, setValue]);
-
 
   const latitude = watch("latitude");
   const longitude = watch("longitude");
@@ -104,27 +72,20 @@ const CustomQuilEditor = dynamic(
     if (postalCode) setValue("postalCode", postalCode);
   };
 
-  // useEffect(() => {
-  //   if (!isLoading && isSuccess) {
-  //     reset();
-  //   }
-  // }, [isLoading, isSuccess, reset]);
+  useEffect(() => {
+    if (!isLoading && isSuccess) {
+      router.push("/dashboard/employer/my-jobs")
+    }
+  }, [isLoading, isSuccess, router]);
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
-    const { skill, salary, rate, longitude, latitude, ...rest } = data;
+    const { skills, ...rest } = data;
     const finalValues: any = {
       ...rest,
-      skill: skill.split(",").map((s) => s.trim()),
-      location: {
-        longitude,
-        latitude,
-      },
+      skills: skills.split(",").map((s) => s.trim()),
     };
 
-    if (salary && rate) {
-      finalValues.salary = salary;
-      finalValues.rate = rate;
-    }
+    createJob(finalValues)
 
     // if (subscription_status?.subscription_status === "None") {
     //   ErrorToast("You have no subscription");
@@ -150,43 +111,17 @@ const CustomQuilEditor = dynamic(
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Select Trade Type
-              </label>
-              <div className="relative">
-                <select
-                  value={trade}
-                  onChange={(e) => setTrade(e.target.value)}
-                  className={`w-full px-3 py-2 border text-gray-700 disabled:bg-gray-200 rounded-md appearance-none focus:outline-none ${"border-gray-300 focus:border-blue-500"}`}
-                >
-                  <option value="">Select</option>
-                  {tradeOptions?.map((option, index) => (
-                    <option key={index} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                  <svg
-                    className="h-4 w-4 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-              </div>
+              <CustomSelect
+                label="Category"
+                name="categoryId"
+                control={control}
+                options={categoryOptions}
+                disabled={categoryOptions.length===0}
+              />
             </div>
-
             <CustomSelect
-              label="Type"
-              name="types"
+              label="Job Type"
+              name="jobType"
               control={control}
               options={typeOptions}
             />
@@ -198,20 +133,20 @@ const CustomQuilEditor = dynamic(
             />
             <CustomDatePicker
               label="Start Date"
-              name="start_date"
+              name="startDate"
               control={control}
               placeholder="DD/MM/YYYY"
             />
             <CustomDatePicker
               label="End Date (Optional)"
-              name="end_date"
+              name="endDate"
               control={control}
               placeholder="DD/MM/YYYY"
             />
             <div className="col-span-2 space-y-3">
               <CustomTextArea
                 label="Skills (technical or soft skills, Comma Separated)"
-                name="skill"
+                name="skills"
                 control={control}
                 placeholder="e.g. Pipefitting, Boiler Servicing"
               />
@@ -223,21 +158,42 @@ const CustomQuilEditor = dynamic(
                 placeholder="Enter benfits"
               />
             </div>
-            {/* <CustomInput
-              label="Remuneration"
-              name="salary"
-              type="text"
+            <CustomDatePicker
+              label="Deadline"
+              name="deadline"
               control={control}
-              placeholder="e.g. 20$ - 40$"
-            /> */}
-            <div className="col-span-2 space-y-3">
-              <CustomSelect
-                label="Rate Type"
-                name="rate"
-                control={control}
-                options={rateOptions}
-              />
-              <SalaryRange />
+              placeholder="DD/MM/YYYY"
+            />
+            <CustomSelect
+              label="Rate Type"
+              name="rateType"
+              control={control}
+              options={rateOptions}
+            />
+            <div className="col-span-2 space-y-2">
+              <h1 className="font-semibold">Salary Range</h1>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <CustomInput
+                  label="Min Range(£)"
+                  name="minRange"
+                  type="text"
+                  control={control}
+                  placeholder="enter value"
+                  onInput={(e: any) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                  }}
+                />
+                <CustomInput
+                  label="Max Range(£)"
+                  name="maxRange"
+                  type="text"
+                  control={control}
+                  placeholder="enter value"
+                  onInput={(e: any) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                  }}
+                />
+              </div>
             </div>
             <CustomInput
               label="Address"
@@ -266,7 +222,7 @@ const CustomQuilEditor = dynamic(
           <div className="mb-6">
             <CustomQuilEditor
               label="Description"
-              name="descriptions"
+              name="description"
               control={control}
               height={500}
             />

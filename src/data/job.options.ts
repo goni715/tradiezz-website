@@ -43,19 +43,19 @@ export const educationOptions = [
 export const experienceOptions = [
   {
     label: "Apprentice",
-    value: "Apprentice",
+    value: "apprentice",
   },
   {
     label: "Newly Qualified",
-    value: "Newly Qualified",
+    value: "newly_qualified",
   },
   {
     label: "1–3 Years",
-    value: "1–3 Years",
+    value: "1_3_years",
   },
   {
     label: "3–5 Years",
-    value: "3–5 Years",
+    value: "3_5_years",
   },
   {
     label: "5+ Years",
