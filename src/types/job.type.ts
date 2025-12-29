@@ -204,8 +204,17 @@ export type IMyJob = {
   postalCode: string;
   categoryId: string;
   category: string;
+  skills: string[];
+  benefits: string;
   applications: number;
+  coordinates: [number, number]; // [longitude, latitude]
   status: "visible" | "hidden";
+  description: string;
   createdAt: string;   // ISO date string
   updatedAt: string;   // ISO date string
+  longitude: number;
+  latitude: number;
 };
+
+
+

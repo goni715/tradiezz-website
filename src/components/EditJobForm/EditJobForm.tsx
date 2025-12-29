@@ -1,52 +1,86 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import LocationMap from "@/components/Location/LocationMap";
-import CustomInput from "@/components/form/CustomInput";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { createJobSchema } from "@/schema/job.schema";
-import CustomTextArea from "../form/CustomTextArea";
-import FormButton from "../form/SubmitButton";
-import CustomSelect from "../form/CustomSelect";
-import { experienceOptions, rateOptions, typeOptions } from "@/data/job.options";
-import CustomDatePicker from "../form/CustomDatePicker";
+import LocationMap, { LatLngTuple } from "@/components/Location/LocationMap";
+import CustomDatePicker from "@/components/form/CustomDatePicker";
+import CustomInput from "@/components/form/CustomInput";
+import CustomSelect from "@/components/form/CustomSelect";
+import CustomTextArea from "@/components/form/CustomTextArea";
+import {
+  experienceOptions,
+  rateOptions,
+  typeOptions,
+} from "@/data/job.options";
+import { useUpdateJobMutation } from "@/redux/features/job/jobApi";
 import { useAppSelector } from "@/redux/hooks/hooks";
+import { IMyJob, TJobExperience, TJobRateType, TJobType } from "@/types/job.type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import CustomQuilEditor from "../form/CustomQuilEditor";
+import { createJobSchema } from "@/schema/job.schema";
 import { useGetCategoryDropDownQuery } from "@/redux/features/category/categoryApi";
-import CustomQuilEditor from "@/components/form/CustomQuilEditor";
-import { useCreateJobMutation } from "@/redux/features/job/jobApi";
-import { useRouter } from "next/navigation";
+import SubmitButton from "../form/SubmitButton";
+import z from "zod";
+import checkEqualArray from "@/utils/checkEqualArray";
+import { WarningToast } from "@/helper/ValidationHelper";
+
+type TProps = {
+  job: IMyJob;
+};
 
 type TFormValues = z.infer<typeof createJobSchema>;
 
-const PostJobForm = () => {
-  const router = useRouter();
-  const [selectedLocation, setSelectedLocation] = useState<[number, number]>([
-    51.5072, 0.1276,
+const EditJobForm = ({ job }: TProps) => {
+  const coordinates = job?.coordinates ?? [0, 0];
+  const initialLongitude = coordinates[0];
+  const initialLatitude = coordinates[1];
+  const initialSkills: string = job?.skills?.join(", ");
+  const initialStartDate = job?.startDate?.split('T')[0] || "";
+  const initialEndDate = job?.endDate ? job?.endDate?.split('T')[0] : "";
+  const initialDeadline = job?.deadline?.split('T')[0] || "";
+      
+  const [selectedLocation, setSelectedLocation] = useState<LatLngTuple>([
+    initialLatitude,
+    initialLongitude,
   ]);
-  // const { subscription_status } = useAppSelector((state) => state.subscription);
-  const [createJob, { isLoading, isSuccess }] = useCreateJobMutation();
+
   useGetCategoryDropDownQuery(undefined);
   const { categoryOptions } = useAppSelector((state)=> state.category);
-
+  const [updateJob, { isLoading, isSuccess }] = useUpdateJobMutation();
 
   const {
     handleSubmit,
     control,
     setValue,
     watch,
+    reset,
   } = useForm({
     resolver: zodResolver(createJobSchema),
     defaultValues: {
-      latitude: "51.5072",
-      longitude: "0.1276",
-      address: "London, Greater London, England, United Kingdom",
-      postalCode: "SW1A 2DX"
+      title: job?.title,
+      categoryId: job?.categoryId,
+      experience: job?.experience,
+      skills: initialSkills,
+      jobType: job?.jobType,
+      rateType: job?.rateType,
+      startDate: initialStartDate,
+      endDate: initialEndDate,
+      deadline: initialDeadline,
+      address: job?.address,
+      postalCode: job?.postalCode,
+      description: job?.description,
+      benefits: job?.benefits,
+      latitude: initialLatitude.toString(),
+      longitude: initialLongitude.toString(),
+      minRange: String(job.minRange),
+      maxRange: String(job.maxRange),
     },
   });
 
+  
+
+  
   const latitude = watch("latitude");
   const longitude = watch("longitude");
 
@@ -74,31 +108,92 @@ const PostJobForm = () => {
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
-      router.push("/dashboard/employer/my-jobs")
+      reset();
     }
-  }, [isLoading, isSuccess, router]);
+  }, [isLoading, isSuccess, reset]);
+
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
-    const { skills, ...rest } = data;
-    const finalValues: any = {
-      ...rest,
-      skills: skills.split(",").map((s) => s.trim()),
-    };
+    const finalValues: Partial<IMyJob> = {};
 
-    createJob(finalValues)
+    //check title
+    if (job.title !== data.title) {
+      finalValues.title = data.title
+    }  
+    //check categoryId
+    if (job.categoryId !== data.categoryId) {
+      finalValues.categoryId = data.categoryId
+    }
+    //check jobType
+    if (job.jobType !== data.jobType) {
+      finalValues.jobType = data.jobType as TJobType;
+    }
+    //check experience
+    if (job.experience !== data.experience) {
+      finalValues.experience = data.experience as TJobExperience;
+    }
+    //check startDate
+    if (initialStartDate !== data.startDate) {
+      finalValues.startDate = data.startDate;
+    }
+    //check endDate
+    if (initialEndDate !== data.endDate) {
+      finalValues.endDate = data.endDate;
+    }
+    //check deadline
+    if (initialDeadline !== data.deadline) {
+      finalValues.deadline = data.deadline;
+    }
+    //check skills
+    const currentSkills = data.skills?.split(",").map((s) => s.trim());
+    if(!checkEqualArray(job.skills, currentSkills)){
+      finalValues.skills=currentSkills;
+    }
+    //check benefits
+    if (job.benefits !== data.benefits) {
+      finalValues.benefits = data.benefits;
+    }
+    //check rateType
+    if (job.rateType !== data.rateType) {
+      finalValues.rateType = data.rateType as TJobRateType;
+    }
+    //check minRange
+    if (job.minRange !== data.minRange) {
+      finalValues.minRange = data.minRange;
+    }
+    //check maxRange
+    if (job.maxRange !== data.maxRange) {
+      finalValues.maxRange = data.maxRange;
+    }
+    //check address & postalCode
+    if ((job.address !== data.address) && (job.postalCode !== data.postalCode)) {
+      finalValues.address = data.address;
+      finalValues.postalCode = data.postalCode;
+      finalValues.longitude=data.longitude;
+      finalValues.latitude=data.latitude;
+    }
+    if(job.description !== data.description){
+      finalValues.description=data.description
+    }
 
-    // if (subscription_status?.subscription_status === "None") {
-    //   ErrorToast("You have no subscription");
-    // } else {
-    //createJob(finalValues);
-    // }
+    if (Object.keys(finalValues).length === 0) {
+      WarningToast("No changes detected. Please update at least one field before saving.");
+    } else {
+      updateJob({
+        id: job._id,
+        data: finalValues,
+      });
+    }
+
+  
+
   };
 
   return (
     <div className="flex-1 overflow-auto">
       <div className="max-6xl mx-auto p-4 sm:p-6 rounded-lg">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">Post a job</h1>
-        <form
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">Edit job</h1>
+       <form
           onSubmit={handleSubmit(onSubmit)}
           className="bg-white px-4 py-6 rounded-md space-y-4"
         >
@@ -155,7 +250,7 @@ const PostJobForm = () => {
                 name="benefits"
                 type="text"
                 control={control}
-                placeholder="Enter benefits"
+                placeholder="Enter benifits"
               />
             </div>
             <CustomDatePicker
@@ -228,7 +323,7 @@ const PostJobForm = () => {
             />
           </div>
           <div className="mt-6">
-            <FormButton isLoading={isLoading}>Post Job</FormButton>
+            <SubmitButton isLoading={isLoading}>Save Changes</SubmitButton>
           </div>
         </form>
       </div>
@@ -236,4 +331,4 @@ const PostJobForm = () => {
   );
 };
 
-export default PostJobForm;
+export default EditJobForm;

@@ -10,12 +10,14 @@ import {
     XCircle,
     Clock
 } from "lucide-react";
+import { useRouter } from 'next/navigation';
 
 type TProps = {
     job: IMyJob;
 }
 
 const MyJobItem = ({ job }: TProps) => {
+   const router = useRouter();
 
     const getStatusIcon = (status: string) => {
         switch (status) {
@@ -88,7 +90,7 @@ const MyJobItem = ({ job }: TProps) => {
                   </button>
 
                   <div className="flex items-center gap-2">
-                    <button className="p-2 text-gray-400 hover:text-blue-600 cursor-pointer hover:bg-blue-50 rounded-lg transition-colors">
+                    <button onClick={()=> router.push(`/dashboard/employer/edit-job/${job._id}`)} className="p-2 text-gray-400 hover:text-blue-600 cursor-pointer hover:bg-blue-50 rounded-lg transition-colors">
                       <Edit className="w-4 h-4" />
                     </button>
                     <button className="p-2 text-gray-400 hover:text-red-600 cursor-pointer hover:bg-red-50 rounded-lg transition-colors">

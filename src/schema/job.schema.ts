@@ -124,6 +124,10 @@ export const createJobSchema = z
       })
       .trim()
       .min(1, "Address is required"),
+    benefits: z
+      .string()
+      .trim()
+      .optional(),
     description: z.preprocess(
       (val) => {
         if (typeof val === "string" && isEditorContentEmpty(val)) {

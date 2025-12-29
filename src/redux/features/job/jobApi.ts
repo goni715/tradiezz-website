@@ -91,7 +91,7 @@ export const jobApi = apiSlice.injectEndpoints({
     }),
     getSingleJob: builder.query({
       query: (id) => ({
-        url: `/jobs/details?jobId=${id}`,
+        url: `/job/get-my-single-job/${id}`,
         method: "GET",
       }),
       keepUnusedDataFor: 600,
@@ -99,14 +99,14 @@ export const jobApi = apiSlice.injectEndpoints({
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled;
-        } catch (err: any) {
+        } catch {
           ErrorToast("Server error is occured");
         }
       },
     }),
     updateJob: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/jobs/update-jobs/${id}`,
+        url: `/job/update-my-job/${id}`,
         method: "PATCH",
         body: data,
       }),
