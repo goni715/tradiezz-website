@@ -125,7 +125,7 @@ export const jobApi = apiSlice.injectEndpoints({
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled;
-          SuccessToast("Job is updated successfully");
+          SuccessToast("Update Success");
         } catch (err: any) {
           const message = err?.error?.data?.message;
           ErrorToast(message);

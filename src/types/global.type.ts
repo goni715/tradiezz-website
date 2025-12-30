@@ -33,3 +33,6 @@ export type TOption = {
   value: string;
   label: string;
 }
+
+
+export type TVisibility = 'visible' | 'hidden';

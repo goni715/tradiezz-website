@@ -5,32 +5,15 @@ import getJobTypeColor from '@/utils/getJobTypeColor';
 import getStatusBadge from '@/utils/getStatusBadge';
 import { Edit, Eye, Trash2 } from 'lucide-react';
 import React from 'react';
-import {
-    CheckCircle,
-    XCircle,
-    Clock
-} from "lucide-react";
 import { useRouter } from 'next/navigation';
+import ChangeJobStatusModal from '../modal/job/ChangeJobStatusModal';
 
 type TProps = {
     job: IMyJob;
 }
 
 const MyJobItem = ({ job }: TProps) => {
-   const router = useRouter();
-
-    const getStatusIcon = (status: string) => {
-        switch (status) {
-            case "visible":
-                return <CheckCircle className="w-5 h-5 text-green-500" />;
-            case "hidden":
-                return <XCircle className="w-5 h-5 text-red-500" />;
-            case "pending":
-                return <Clock className="w-5 h-5 text-yellow-500" />;
-            default:
-                return null;
-        }
-    };
+  const router = useRouter();
 
 
   return (
@@ -44,9 +27,7 @@ const MyJobItem = ({ job }: TProps) => {
                   <h3 className="text-lg font-semibold text-gray-900 truncate">
                     {job.title}
                   </h3>
-                  <div className="flex items-center gap-1">
-                    {getStatusIcon(job.status)}
-                  </div>
+                  <ChangeJobStatusModal jobId={job._id} status={job.status}/>
                 </div>
 
                 {/* Job Type Badge */}
