@@ -16,6 +16,7 @@ const TagTypes = {
    job: "Job",
    recentPostedJobs: "RecentPostedJobs",
    subscriptions: "Subscriptions",
+   subscriptionStatus: "SubscriptionStatus",
    recentBlogs: "RecentBlogs",
    blogs: "Blogs",
    blog: 'Blog',
@@ -29,7 +30,8 @@ const TagTypes = {
    subscription_status: "Subscription_Status",
    categoryDropDown: "CategoryDropDown",
    subCategoryDropDown: "CategoryDropDown",
-   blogCategoryDropDown: "BlogCategoryDropDown"
+   blogCategoryDropDown: "BlogCategoryDropDown",
+   plans: "Plans"
 }
 
 export default TagTypes;

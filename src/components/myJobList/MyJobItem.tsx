@@ -3,10 +3,11 @@ import { IMyJob } from '@/types/job.type';
 import findLabel from '@/utils/findLabel';
 import getJobTypeColor from '@/utils/getJobTypeColor';
 import getStatusBadge from '@/utils/getStatusBadge';
-import { Edit, Eye, Trash2 } from 'lucide-react';
+import { Edit, Eye } from 'lucide-react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import ChangeJobStatusModal from '../modal/job/ChangeJobStatusModal';
+import DeleteJobModal from '../modal/job/DeleteJobModal';
 
 type TProps = {
     job: IMyJob;
@@ -14,7 +15,6 @@ type TProps = {
 
 const MyJobItem = ({ job }: TProps) => {
   const router = useRouter();
-
 
   return (
     <>
@@ -74,9 +74,7 @@ const MyJobItem = ({ job }: TProps) => {
                     <button onClick={()=> router.push(`/dashboard/employer/edit-job/${job._id}`)} className="p-2 text-gray-400 hover:text-blue-600 cursor-pointer hover:bg-blue-50 rounded-lg transition-colors">
                       <Edit className="w-4 h-4" />
                     </button>
-                    <button className="p-2 text-gray-400 hover:text-red-600 cursor-pointer hover:bg-red-50 rounded-lg transition-colors">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <DeleteJobModal jobId={job._id}/>
                   </div>
                 </div>
               </div>

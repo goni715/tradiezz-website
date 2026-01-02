@@ -30,13 +30,6 @@ export const jobApi = apiSlice.injectEndpoints({
       keepUnusedDataFor: 600,
       providesTags: [TagTypes.employerJobs],
     }),
-    deleteEmployerJob: builder.mutation({
-      query: (id: string) => ({
-        url: `/jobs/deletes/${id}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: [TagTypes.employerJobs],
-    }),
     getRecentPostedJobs: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
@@ -130,6 +123,33 @@ export const jobApi = apiSlice.injectEndpoints({
           const message = err?.error?.data?.message;
           ErrorToast(message);
         }
+      },
+    }),
+    deleteJob: builder.mutation({
+      query: (id: string) => ({
+        url: `/job/delete-my-job/${id}`,
+        method: 'DELETE',
+      }),
+      async onQueryStarted(args, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          SuccessToast("Job is deleted successfully");
+        } catch (err: any) {
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            ErrorToast("Something Went Wrong");
+          }
+          else {
+            ErrorToast(message);
+          }
+        }
+      },
+      invalidatesTags: (result, error, arg) => {
+        if (result?.success) {
+          return [TagTypes.employerJobs];
+        }
+        return [];
       },
     }),
     makeActiveExpireJob: builder.mutation({
@@ -336,4 +356,4 @@ export const jobApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetEmployerJobsQuery, useCreateJobMutation, useGetSingleJobQuery, useUpdateJobMutation, useMakeActiveExpireJobMutation, useGetRecentPostedJobsQuery, useSearchJobsQuery, useGetSingleFindJobQuery, useAddRemoveFavouriteJobMutation, useGetFavouriteJobsQuery, useApplyJobMutation, useGetAppliedJobsQuery, useGetRecentAppliedJobsQuery, useGetApplicationsQuery, useDeleteEmployerJobMutation } = jobApi;
+export const { useGetEmployerJobsQuery, useCreateJobMutation, useGetSingleJobQuery, useUpdateJobMutation, useMakeActiveExpireJobMutation, useGetRecentPostedJobsQuery, useSearchJobsQuery, useGetSingleFindJobQuery, useAddRemoveFavouriteJobMutation, useGetFavouriteJobsQuery, useApplyJobMutation, useGetAppliedJobsQuery, useGetRecentAppliedJobsQuery, useGetApplicationsQuery, useDeleteJobMutation } = jobApi;

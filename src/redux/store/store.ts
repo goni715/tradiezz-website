@@ -8,6 +8,7 @@ import { apiSlice } from '../features/api/apiSlice'
 import subCategorySliceReducer from '../features/subCategory/subCategorySlice'
 import contactSliceReducer from '../features/contact/contactSlice'
 import blogCategorySliceReducer from '../features/blogCategory/blogCategorySlice'
+import subscriptionSliceReducer from '../features/subscription/subscriptionSlice'
 
 
 export const store = configureStore({
@@ -20,7 +21,8 @@ export const store = configureStore({
     user: userSliceReducer,
     candidate: candidateSliceReducer,
     contact: contactSliceReducer,
-    blogCategory: blogCategorySliceReducer
+    blogCategory: blogCategorySliceReducer,
+    subscription: subscriptionSliceReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware)

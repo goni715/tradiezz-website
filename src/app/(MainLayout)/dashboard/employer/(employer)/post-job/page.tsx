@@ -1,5 +1,6 @@
 "use client"
 import PostJobLoading from "@/components/loader/PostJobLoading";
+import { useCheckSubscriptionStatusQuery } from "@/redux/features/subscription/subscriptionApi";
 import dynamic from "next/dynamic";
 
 
@@ -8,6 +9,8 @@ const PostJobPage = () => {
     ssr: false,
     loading: () => <PostJobLoading />
   });
+  useCheckSubscriptionStatusQuery(undefined);
+
 
 
   return (

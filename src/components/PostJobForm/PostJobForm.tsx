@@ -9,7 +9,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { createJobSchema } from "@/schema/job.schema";
 import CustomTextArea from "../form/CustomTextArea";
-import FormButton from "../form/SubmitButton";
 import CustomSelect from "../form/CustomSelect";
 import { experienceOptions, rateOptions, typeOptions } from "@/data/job.options";
 import CustomDatePicker from "../form/CustomDatePicker";
@@ -18,6 +17,8 @@ import { useGetCategoryDropDownQuery } from "@/redux/features/category/categoryA
 import CustomQuilEditor from "@/components/form/CustomQuilEditor";
 import { useCreateJobMutation } from "@/redux/features/job/jobApi";
 import { useRouter } from "next/navigation";
+import { WarningToast } from "@/helper/ValidationHelper";
+import SubmitButton from "../form/SubmitButton";
 
 type TFormValues = z.infer<typeof createJobSchema>;
 
@@ -30,6 +31,7 @@ const PostJobForm = () => {
   const [createJob, { isLoading, isSuccess }] = useCreateJobMutation();
   useGetCategoryDropDownQuery(undefined);
   const { categoryOptions } = useAppSelector((state)=> state.category);
+  const { isActive } = useAppSelector((state)=> state.subscription);
 
 
   const {
@@ -228,7 +230,24 @@ const PostJobForm = () => {
             />
           </div>
           <div className="mt-6">
-            <FormButton isLoading={isLoading}>Post Job</FormButton>
+            {isActive ? (
+              <>
+                 <SubmitButton isLoading={isLoading}>Post Job</SubmitButton>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    WarningToast("You have no subscription");
+                    router.push("/dashboard/employer/subscription-plans")
+                  }}
+                  className="w-full flex items-center cursor-pointer justify-center gap-2 bg-primary text-white py-2 rounded-md hover:bg-dis transition disabled:bg-gray-800 disabled:cursor-not-allowed"
+                >
+                  Post Job
+                </button>
+              </>
+            )}
           </div>
         </form>
       </div>

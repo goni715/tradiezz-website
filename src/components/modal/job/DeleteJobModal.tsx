@@ -1,14 +1,34 @@
 "use client";
 import { Modal } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Trash2} from "lucide-react";
+import { useDeleteJobMutation } from "@/redux/features/job/jobApi";
+import DeleteButton from "@/components/form/DeleteButton";
 
-const DeleteJobModal = () => {
+type TProps ={
+  jobId:string;
+}
+
+
+const DeleteJobModal = ({ jobId } : TProps) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteJob, { isLoading, isSuccess }] = useDeleteJobMutation();
+
+  useEffect(() => {
+    if (!isLoading && isSuccess) {
+      setModalOpen(false);
+    }
+  }, [isLoading, isSuccess]);
+
+  const handleDelete = () => {
+    deleteJob(jobId);
+  };
 
   return (
     <>
-      <Trash2 onClick={() => setModalOpen(true)}className="h-3 sm:h-4 w-3 sm:w-4 mr-1 text-red-500 cursor-pointer" /> 
+      <button onClick={() => setModalOpen(true)} className="p-2 text-gray-400 hover:text-red-600 cursor-pointer hover:bg-red-50 rounded-lg transition-colors">
+        <Trash2 className="w-4 h-4" />
+      </button>
       <Modal
         open={modalOpen}
         onCancel={() => setModalOpen(false)}
@@ -33,12 +53,7 @@ const DeleteJobModal = () => {
               >
                 No
               </button>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="px-4 cursor-pointer py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none"
-              >
-                Yes
-              </button>
+              <DeleteButton onClick={handleDelete} isLoading={isLoading}/>
             </div>
           </div>
         </div>

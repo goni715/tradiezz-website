@@ -26,9 +26,15 @@ const EmployerSidebar = () => {
             label="Overview"
           />
           <SidebarLink
-            href="/dashboard/employer/subscription"
+            href="/dashboard/employer/subscription-plans"
             icon={<Podcast className="h-5 w-5" />}
-            label="Subscription"
+            label="Subscription Plans"
+            // badge="08"
+          />
+          <SidebarLink
+            href="/dashboard/employer/my-subscriptions"
+            icon={<Podcast className="h-5 w-5" />}
+            label="My Subscriptions"
             // badge="08"
           />
           <SidebarLink

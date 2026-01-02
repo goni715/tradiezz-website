@@ -14,7 +14,12 @@ import {
 } from "@/data/job.options";
 import { useUpdateJobMutation } from "@/redux/features/job/jobApi";
 import { useAppSelector } from "@/redux/hooks/hooks";
-import { IMyJob, TJobExperience, TJobRateType, TJobType } from "@/types/job.type";
+import {
+  IMyJob,
+  TJobExperience,
+  TJobRateType,
+  TJobType,
+} from "@/types/job.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import CustomQuilEditor from "../form/CustomQuilEditor";
@@ -24,6 +29,7 @@ import SubmitButton from "../form/SubmitButton";
 import z from "zod";
 import checkEqualArray from "@/utils/checkEqualArray";
 import { WarningToast } from "@/helper/ValidationHelper";
+import { useRouter } from "next/navigation";
 
 type TProps = {
   job: IMyJob;
@@ -36,26 +42,22 @@ const EditJobForm = ({ job }: TProps) => {
   const initialLongitude = coordinates[0];
   const initialLatitude = coordinates[1];
   const initialSkills: string = job?.skills?.join(", ");
-  const initialStartDate = job?.startDate?.split('T')[0] || "";
-  const initialEndDate = job?.endDate ? job?.endDate?.split('T')[0] : "";
-  const initialDeadline = job?.deadline?.split('T')[0] || "";
-      
+  const initialStartDate = job?.startDate?.split("T")[0] || "";
+  const initialEndDate = job?.endDate ? job?.endDate?.split("T")[0] : "";
+  const initialDeadline = job?.deadline?.split("T")[0] || "";
+
   const [selectedLocation, setSelectedLocation] = useState<LatLngTuple>([
     initialLatitude,
     initialLongitude,
   ]);
 
   useGetCategoryDropDownQuery(undefined);
-  const { categoryOptions } = useAppSelector((state)=> state.category);
+  const { categoryOptions } = useAppSelector((state) => state.category);
   const [updateJob, { isLoading, isSuccess }] = useUpdateJobMutation();
+  const { isActive } = useAppSelector((state) => state.subscription);
+  const router = useRouter();
 
-  const {
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    reset,
-  } = useForm({
+  const { handleSubmit, control, setValue, watch, reset } = useForm({
     resolver: zodResolver(createJobSchema),
     defaultValues: {
       title: job?.title,
@@ -78,9 +80,6 @@ const EditJobForm = ({ job }: TProps) => {
     },
   });
 
-  
-
-  
   const latitude = watch("latitude");
   const longitude = watch("longitude");
 
@@ -112,17 +111,16 @@ const EditJobForm = ({ job }: TProps) => {
     }
   }, [isLoading, isSuccess, reset]);
 
-
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
     const finalValues: Partial<IMyJob> = {};
 
     //check title
     if (job.title !== data.title) {
-      finalValues.title = data.title
-    }  
+      finalValues.title = data.title;
+    }
     //check categoryId
     if (job.categoryId !== data.categoryId) {
-      finalValues.categoryId = data.categoryId
+      finalValues.categoryId = data.categoryId;
     }
     //check jobType
     if (job.jobType !== data.jobType) {
@@ -146,8 +144,8 @@ const EditJobForm = ({ job }: TProps) => {
     }
     //check skills
     const currentSkills = data.skills?.split(",").map((s) => s.trim());
-    if(!checkEqualArray(job.skills, currentSkills)){
-      finalValues.skills=currentSkills;
+    if (!checkEqualArray(job.skills, currentSkills)) {
+      finalValues.skills = currentSkills;
     }
     //check benefits
     if (job.benefits !== data.benefits) {
@@ -166,34 +164,33 @@ const EditJobForm = ({ job }: TProps) => {
       finalValues.maxRange = data.maxRange;
     }
     //check address & postalCode
-    if ((job.address !== data.address) && (job.postalCode !== data.postalCode)) {
+    if (job.address !== data.address && job.postalCode !== data.postalCode) {
       finalValues.address = data.address;
       finalValues.postalCode = data.postalCode;
-      finalValues.longitude=data.longitude;
-      finalValues.latitude=data.latitude;
+      finalValues.longitude = data.longitude;
+      finalValues.latitude = data.latitude;
     }
-    if(job.description !== data.description){
-      finalValues.description=data.description
+    if (job.description !== data.description) {
+      finalValues.description = data.description;
     }
 
     if (Object.keys(finalValues).length === 0) {
-      WarningToast("No changes detected. Please update at least one field before saving.");
+      WarningToast(
+        "No changes detected. Please update at least one field before saving."
+      );
     } else {
       updateJob({
         id: job._id,
         data: finalValues,
       });
     }
-
-  
-
   };
 
   return (
     <div className="flex-1 overflow-auto">
       <div className="max-6xl mx-auto p-4 sm:p-6 rounded-lg">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">Edit job</h1>
-       <form
+        <form
           onSubmit={handleSubmit(onSubmit)}
           className="bg-white px-4 py-6 rounded-md space-y-4"
         >
@@ -211,7 +208,7 @@ const EditJobForm = ({ job }: TProps) => {
                 name="categoryId"
                 control={control}
                 options={categoryOptions}
-                disabled={categoryOptions.length===0}
+                disabled={categoryOptions.length === 0}
               />
             </div>
             <CustomSelect
@@ -323,7 +320,24 @@ const EditJobForm = ({ job }: TProps) => {
             />
           </div>
           <div className="mt-6">
-            <SubmitButton isLoading={isLoading}>Save Changes</SubmitButton>
+            {isActive ? (
+              <>
+              <SubmitButton isLoading={isLoading}>Save Changes</SubmitButton>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    WarningToast("You have no subscription");
+                    router.push("/dashboard/employer/subscription-plans");
+                  }}
+                  className="w-full flex items-center cursor-pointer justify-center gap-2 bg-primary text-white py-2 rounded-md hover:bg-dis transition disabled:bg-gray-800 disabled:cursor-not-allowed"
+                >
+                  Save Changes
+                </button>
+              </>
+            )}
           </div>
         </form>
       </div>

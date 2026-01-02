@@ -6,11 +6,13 @@ import ServerErrorCard from "@/components/card/ServerErrorCard";
 import EditJobForm from "@/components/EditJobForm/EditJobForm";
 import PostJobLoading from "@/components/loader/PostJobLoading";
 import { useGetSingleJobQuery } from "@/redux/features/job/jobApi";
+import { useCheckSubscriptionStatusQuery } from "@/redux/features/subscription/subscriptionApi";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useParams } from "next/navigation";
 
 
 const EditJobPage = () => {
+  useCheckSubscriptionStatusQuery(undefined);
   const params = useParams<{ id: string; }>()
   const { data, isLoading,isFetching, isError, error } = useGetSingleJobQuery(params.id);
   const fetchError = error as FetchBaseQueryError;
