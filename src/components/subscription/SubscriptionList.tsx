@@ -1,5 +1,5 @@
 "use client";
-import { ISubscription } from "@/types/job.type";
+import { ISubscription } from "@/types/subscription.type";
 import SubscriptionCard from "./SubscriptionCard";
 
 
@@ -11,9 +11,9 @@ const SubscriptionList = ({ subscriptions }: TProps) => {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {subscriptions?.map((subscription, index) => (
-          <SubscriptionCard job={job} key={index} />
+          <SubscriptionCard subscription={subscription} key={index} />
         ))}
       </div>
     </>

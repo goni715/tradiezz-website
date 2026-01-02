@@ -1,3 +1,6 @@
+import { WarningToast } from "@/helper/ValidationHelper";
+import { useCreateSubscriptionMutation } from "@/redux/features/subscription/subscriptionApi";
+import { useAppSelector } from "@/redux/hooks/hooks";
 import { IPlan } from "@/types/plan.type";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { CgSpinnerTwo } from "react-icons/cg";
@@ -7,21 +10,18 @@ type TProps = {
 }
 
 const PriceCard = ({ plan }: TProps ) => {
-  //const [createPaymentIntent, {isLoading}] = useCreatePaymentIntentMutation();
-  //const { subscription_status } = useAppSelector((state) => state.subscription);
-  const isLoading = false;
-  
+  const [createSubscription, {isLoading}] = useCreateSubscriptionMutation();
+  const { isActive } = useAppSelector((state) => state.subscription);
   
   const handlePaymentIntent = () => {
-    // if (subscription_status?.subscription_status === "Active") {
-    //   ErrorToast("You have already subscription")
-    // }
-    // else {
-    //   createPaymentIntent({
-    //     subscriptionId: subscription?._id
-    //   })
-    // }
-  }
+    if (isActive) {
+      WarningToast("You have already subscription");
+    } else {
+      createSubscription({
+        planId: plan?._id,
+      });
+    }
+  };
 
   return (
     <div
@@ -44,7 +44,7 @@ const PriceCard = ({ plan }: TProps ) => {
         </div>
         <button
           onClick={handlePaymentIntent}
-          // disabled={isLoading || subscription_status?.subscription}
+          disabled={isLoading}
           className={`mt-6 w-full py-2 px-4 rounded flex items-center justify-center gap-2 bg-light-gray text-primary hover:bg-primary hover:text-white cursor-pointer duration-200 disabled:cursor-not-allowed"
           `}
         >

@@ -7,7 +7,7 @@ import { Check, Calendar, Zap } from "lucide-react";
 const getStatusColor = (status: string) => {
   switch (status) {
     case "active":
-      return "bg-emerald-50 text-emerald-700 border-emerald-200";
+      return "bg-green-50 text-green-700 border-green-200";
     case "pending":
       return "bg-amber-50 text-amber-700 border-amber-200";
     case "expired":
@@ -46,7 +46,6 @@ const SubscriptionCard = ({
   subscription: ISubscription;
 }) => {
   const {
-    _id,
     amount,
     startDate,
     endDate,
@@ -57,12 +56,11 @@ const SubscriptionCard = ({
     description,
     paymentStatus,
     status,
-    createdAt,
   } = subscription || {};
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <div className="bg-white rounded-2xl border border-gray-300 shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-slate-50 to-slate-100 px-6 sm:px-8 py-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
@@ -75,7 +73,7 @@ const SubscriptionCard = ({
             <div className="flex flex-col gap-2">
               {/* Status Badge */}
               <div
-                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border w-fit ${getStatusColor(
+                className={`inline-flex items-center px-3 py-1 rounded-full text-xs justify-center font-semibold border w-fit ${getStatusColor(
                   status
                 )}`}
               >
@@ -88,7 +86,9 @@ const SubscriptionCard = ({
                 )}`}
               >
                 Payment:{" "}
-                {paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1)}
+               <span className="capitalize">
+                 {paymentStatus}
+               </span>
               </div>
             </div>
           </div>
@@ -160,17 +160,6 @@ const SubscriptionCard = ({
               ))}
             </ul>
           </div>
-        </div>
-
-        {/* Footer Section */}
-        <div className="bg-slate-50 px-6 sm:px-8 py-4 border-t border-slate-200">
-          <p className="text-xs text-slate-500">
-            Subscription ID:{" "}
-            <span className="font-mono text-slate-700">{_id}</span>
-          </p>
-          <p className="text-xs text-slate-500 mt-1">
-            Created: {formatDate(createdAt)}
-          </p>
         </div>
       </div>
     </div>
