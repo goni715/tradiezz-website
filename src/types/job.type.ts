@@ -95,7 +95,8 @@ export type TEmployerJob = {
 
 
 export type IFindJob = {
-  _id: string;
+  _id: string; //this is jobId--sometime
+  jobId: string; //this is jobId -- sometime
   userId: string;
   title: string;
   categoryId: string;

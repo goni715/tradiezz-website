@@ -10,7 +10,6 @@ import CustomPagination from "../common/CustomPagination";
 
 const FindWork = () => {
   const searchParams = useSearchParams();
-
   const [searchQuery, setSearchQuery] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [location, setLocation] = useState("");

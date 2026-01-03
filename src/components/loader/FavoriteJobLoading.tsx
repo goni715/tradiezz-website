@@ -1,11 +1,11 @@
 
-export default function FindWorkLoading() {
+const FavoriteJobLoading = () => {
   return (
-    <div className="min-h-full bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto p-4">
+    <div className="min-h-full bg-gray-50">
+      <div className="w-full mx-auto ">
 
         {/* Job Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {Array.from({ length: 6 }).map((_, index) => (
             <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-300 p-6 space-y-4">
               {/* Job Title and Bookmark */}
@@ -41,3 +41,5 @@ export default function FindWorkLoading() {
     </div>
   )
 }
+
+export default FavoriteJobLoading;

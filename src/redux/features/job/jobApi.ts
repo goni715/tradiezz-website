@@ -12,7 +12,6 @@ export const jobApi = apiSlice.injectEndpoints({
     getEmployerJobs: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
-
         if (args !== undefined && args.length > 0) {
           args.forEach((item: IParam) => {
             if (item.value) {
@@ -212,10 +211,21 @@ export const jobApi = apiSlice.injectEndpoints({
       },
     }),
     getFavouriteJobs: builder.query({
-      query: () => ({
-        url: `/favorite-job/get-favorite-jobs`,
-        method: "GET",
-      }),
+      query: (args) => {
+        const params = new URLSearchParams();
+        if (args !== undefined && args.length > 0) {
+          args.forEach((item: IParam) => {
+            if (item.value) {
+              params.append(item.name, item.value);
+            }
+          });
+        }
+        return {
+          url: `/favorite-job/get-favorite-jobs`,
+          method: "GET",
+          params: params,
+        };
+      },
       keepUnusedDataFor: 600,
       providesTags: (result, error, arg) => [TagTypes.favouriteJobs],
       async onQueryStarted(_arg, { queryFulfilled }) {
@@ -245,7 +255,7 @@ export const jobApi = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `/favorite-job/add-remove-favorite-job`,
         method: "POST",
-        body: data
+        body: data,
       }),
       invalidatesTags: (result, error, arg) => {
         if (result?.success) {

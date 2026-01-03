@@ -1,31 +1,63 @@
 "use client";
-
-import { favouriteJobs } from "@/data/jobList.data";
-import BlogPagination from "@/components/BlogList/BlogPagination";
 import { useState } from "react";
+import { useGetFavouriteJobsQuery } from "@/redux/features/job/jobApi";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import FavoriteJobLoading from "../loader/FavoriteJobLoading";
+import AuthenticationCard from "../card/AuthenticationCard";
+import { IFindJob } from "@/types/job.type";
 import FavouriteJobCard from "./FavouriteJobCard";
+import NotFoundCard from "../card/NotFoundCard";
+import CustomPagination from "../common/CustomPagination";
 
 const FavouriteJobList = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  // const [searchTerm, setSearchTerm] = useState("");
-  const totalPages = 5;
+  const [pageSize, setPageSize] = useState<number>(6);
+  const { data, isLoading, isError, error } = useGetFavouriteJobsQuery([
+    { name: "page", value: currentPage },
+    { name: "limit", value: pageSize },
+  ]);
 
-  return (
-    <>
-      <div className="pt-8 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {favouriteJobs.map((job) => (
-            <FavouriteJobCard key={job.id} job={job} />
-          ))}
+  const fetchError = error as FetchBaseQueryError;
+  const jobs = data?.data || [];
+  const meta = data?.meta || {};
+
+  if (isLoading) {
+    return <FavoriteJobLoading />;
+  }
+  if (!isLoading && isError && fetchError?.status === 401) {
+    return <AuthenticationCard />;
+  }
+
+  if (!isLoading && isError) {
+    return <h1 className="text-red-500">Something Went Wrong</h1>;
+  }
+
+  if (!isLoading && !isError && jobs.length > 0) {
+    return (
+      <>
+        <div className="pb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-4">
+            {jobs.map((job: IFindJob, index: number) => (
+              <FavouriteJobCard key={index} job={job} />
+            ))}
+          </div>
+          {meta?.totalPages > 1 && (
+            <CustomPagination
+              meta={meta}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              pageSize={pageSize}
+              setPageSize={setPageSize}
+            />
+          )}
         </div>
-        <BlogPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-      </div>
-    </>
-  );
+      </>
+    );
+  }
+
+  if (!isLoading && !isError && jobs?.length === 0) {
+    return <NotFoundCard title="There are no favourite jobs" />;
+  }
 };
 
 export default FavouriteJobList;
