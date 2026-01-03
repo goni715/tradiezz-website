@@ -15,8 +15,8 @@ type TProps = {
 const MyJobsHeader = ({ meta, setCurrentPage, setSearchTerm, status, setStatus } : TProps) => {
 
     const handleSearch = useDebouncedCallback((term: string) => {
-        setSearchTerm(term);
-        setCurrentPage(1);
+      setSearchTerm(term);
+      setCurrentPage(1);
     }, 300);
 
     return (

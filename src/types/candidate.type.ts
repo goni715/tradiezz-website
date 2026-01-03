@@ -65,3 +65,18 @@ export type ICandidateDetails = {
   availabil_date: string;
   resume: string;
 };
+
+
+export interface ICandidate {
+  userId: string;
+  fullName: string;
+  email: string;
+  profileImg: string;
+  availableDate: string;
+  address: string;
+  experience: "entry" | "mid" | "senior";
+  isPrivate: boolean;
+  ratings: number;
+  totalReview: number;
+  isFavorite: boolean;
+}

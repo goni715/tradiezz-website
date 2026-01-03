@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { EducationLevel, ExperienceRange } from '@/types/candidate.type';
-import { tradeOptions } from '@/data/options';
 import { ICategory } from '@/types/category.type';
+import { useDebouncedCallback } from 'use-debounce';
 
 interface FilterSectionProps {
   title: string;
@@ -33,31 +33,42 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, children, defaultO
   );
 };
 
-interface FilterSidebarProps {
+interface TProps {
   locationRadius: number;
   setLocationRadius: (radius: number) => void;
   selectedExperience: ExperienceRange | null;
   setSelectedExperience: (experience: ExperienceRange | null) => void;
   selectedEducation: EducationLevel;
   setSelectedEducation: (education: EducationLevel) => void;
-  categories: ICategory[]
+  categories: ICategory[],
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const FilterSidebar: React.FC<FilterSidebarProps> = ({
+const CandidateFilter: React.FC<TProps> = ({
   locationRadius,
   setLocationRadius,
   selectedExperience,
   setSelectedExperience,
   selectedEducation,
   setSelectedEducation,
-  categories
+  categories,
+  setCurrentPage,
+  setSearchTerm
 }) => {
 
    const filterOptions: { label: string; value: string }[] = [
+      { label: 'All', value: '' },
       { label: 'Both', value: 'both' },
       { label: 'Self-Employed', value: 'Self-Employed' },
       { label: 'Seeking Permanent Jobs', value: 'Seeking Permanent Jobs' },
     ];
+
+
+    const handleSearch = useDebouncedCallback((term: string) => {
+      setSearchTerm(term);
+      setCurrentPage(1);
+    }, 300);
 
   return (
     <aside className="w-full md:w-64 bg-white rounded-lg shadow p-5 h-fit">
@@ -68,8 +79,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 type="text"
                 placeholder="search here..."
                 className="w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500 py-2 px-3 pl-8 text-sm"
-                //value={searchQuery}
-                //onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -94,8 +104,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 type="text"
                 placeholder="search location..."
                 className="w-full border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-blue-500 py-2 px-3 pl-8 text-sm"
-                //value={searchQuery}
-                //onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -150,4 +159,4 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   );
 };
 
-export default FilterSidebar;
+export default CandidateFilter;

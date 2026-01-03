@@ -27,7 +27,7 @@ export const candidateApi = apiSlice.injectEndpoints({
         }
       },
     }), 
-    searchCandidates: builder.query({
+    getFindCandidates: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
 
@@ -39,7 +39,7 @@ export const candidateApi = apiSlice.injectEndpoints({
           });
         }
         return {
-          url: "/jobs/search_candidate",
+          url: "/user/get-find-candidates",
           method: "GET",
           params: params,
         };
@@ -82,10 +82,11 @@ export const candidateApi = apiSlice.injectEndpoints({
       keepUnusedDataFor: 600,
       providesTags: [TagTypes.favouriteCandidates],
     }),
-    addRemoveFavouriteCandidate: builder.mutation({
-      query: (id) => ({
-        url: `/jobs/toggle_user_favorite/${id}`,
-        method: "PATCH",
+    addRemoveFavoriteCandidate: builder.mutation({
+      query: (data) => ({
+        url: `/favorite-candidate/add-remove-favorite-candidate`,
+        method: "POST",
+        body: data
       }),
       invalidatesTags: (result, error, arg) => {
         if (result?.success) {
@@ -95,12 +96,15 @@ export const candidateApi = apiSlice.injectEndpoints({
       },
       async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
         try {
-          const res = await queryFulfilled;
-          const msg = res?.data?.message;
-          SuccessToast(msg);
-        } catch (err:any) {
-          const message = err?.error?.data?.message;
-          ErrorToast(message)
+          await queryFulfilled;
+        } catch (err: any) {
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            ErrorToast("Something Went Wrong");
+          } else {
+            ErrorToast(message);
+          }
         }
       },
     }),
@@ -153,4 +157,4 @@ export const candidateApi = apiSlice.injectEndpoints({
 });
 
 
-export const { useGetCandidateOverviewQuery, useSearchCandidatesQuery, useGetSingleCandidateQuery, useAddRemoveFavouriteCandidateMutation, useSendAccessRequestMutation, useGetFavouriteCandidatesQuery, useUploadCVMutation } = candidateApi;
+export const { useGetCandidateOverviewQuery, useGetFindCandidatesQuery, useGetSingleCandidateQuery, useAddRemoveFavoriteCandidateMutation, useSendAccessRequestMutation, useGetFavouriteCandidatesQuery, useUploadCVMutation } = candidateApi;
