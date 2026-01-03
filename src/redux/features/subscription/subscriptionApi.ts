@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
+import { ErrorToast } from "@/helper/ValidationHelper";
 import TagTypes from "../../../constant/tagType.constant";
 import type { IParam } from "../../../types/global.type";
 import { apiSlice } from "../api/apiSlice";
@@ -49,6 +49,7 @@ export const subscriptionApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: [ TagTypes.subscriptions ],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           const res = await queryFulfilled;
@@ -69,7 +70,7 @@ export const subscriptionApi = apiSlice.injectEndpoints({
     }),
     verifySession: builder.query({
       query: (sessionId) => ({
-        url: `/subscription/verify-session?sessionId==${sessionId}`,
+        url: `/subscription/verify-session?sessionId=${sessionId}`,
         method: "GET",
       }),
       keepUnusedDataFor: 600,
@@ -77,7 +78,7 @@ export const subscriptionApi = apiSlice.injectEndpoints({
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled;
-          SuccessToast("Payment Successfull");
+          //SuccessToast("Payment Successfull");
         } catch {
           ErrorToast("Server error is occured");
         }

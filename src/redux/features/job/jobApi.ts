@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
 import TagTypes from "@/constant/tagType.constant";
 import { apiSlice } from "../api/apiSlice";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
@@ -108,6 +107,8 @@ export const jobApi = apiSlice.injectEndpoints({
           return [
             TagTypes.jobs,
             TagTypes.employerJobs,
+            TagTypes.favouriteJobs,
+            TagTypes.favouriteJobIds,
             TagTypes.recentPostedJobs,
             { type: TagTypes.job, id: arg.id },
             { type: TagTypes.findJob, id: arg.id },
@@ -128,7 +129,7 @@ export const jobApi = apiSlice.injectEndpoints({
     deleteJob: builder.mutation({
       query: (id: string) => ({
         url: `/job/delete-my-job/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
       async onQueryStarted(args, { queryFulfilled }) {
         try {
@@ -139,8 +140,7 @@ export const jobApi = apiSlice.injectEndpoints({
           const message = err?.error?.data?.message || "Something Went Wrong";
           if (status === 500) {
             ErrorToast("Something Went Wrong");
-          }
-          else {
+          } else {
             ErrorToast(message);
           }
         }
@@ -174,7 +174,7 @@ export const jobApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    searchJobs: builder.query({
+    getJobs: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
 
@@ -186,7 +186,7 @@ export const jobApi = apiSlice.injectEndpoints({
           });
         }
         return {
-          url: "/jobs/get_search_filter",
+          url: "/job/get-candidate-jobs",
           method: "GET",
           params: params,
         };
@@ -213,11 +213,26 @@ export const jobApi = apiSlice.injectEndpoints({
     }),
     getFavouriteJobs: builder.query({
       query: () => ({
-        url: `/jobs/get_user_favorites_jobs`,
+        url: `/favorite-job/get-favorite-jobs`,
         method: "GET",
       }),
       keepUnusedDataFor: 600,
-      providesTags: (result, error, arg) => [TagTypes.jobs, TagTypes.job],
+      providesTags: (result, error, arg) => [TagTypes.favouriteJobs],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch (err: any) {
+          ErrorToast("Server error is occured");
+        }
+      },
+    }),
+    getFavouriteJobIds: builder.query({
+      query: () => ({
+        url: `/favorite-job/get-favorite-job-id-list`,
+        method: "GET",
+      }),
+      keepUnusedDataFor: 600,
+      providesTags: (result, error, arg) => [TagTypes.favouriteJobIds],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           await queryFulfilled;
@@ -227,15 +242,17 @@ export const jobApi = apiSlice.injectEndpoints({
       },
     }),
     addRemoveFavouriteJob: builder.mutation({
-      query: (id) => ({
-        url: `/jobs/toggle_favorite/${id}`,
-        method: "PATCH",
+      query: (data) => ({
+        url: `/favorite-job/add-remove-favorite-job`,
+        method: "POST",
+        body: data
       }),
       invalidatesTags: (result, error, arg) => {
         if (result?.success) {
           return [
             TagTypes.jobs,
             TagTypes.favouriteJobs,
+            TagTypes.favouriteJobIds,
             { type: TagTypes.job, id: arg },
           ];
         }
@@ -259,7 +276,11 @@ export const jobApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => {
         if (result?.success) {
-          return [TagTypes.appliedJobs, TagTypes.recentAppliedJobs, TagTypes.me];
+          return [
+            TagTypes.appliedJobs,
+            TagTypes.recentAppliedJobs,
+            TagTypes.me,
+          ];
         }
         return [];
       },
@@ -356,4 +377,21 @@ export const jobApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetEmployerJobsQuery, useCreateJobMutation, useGetSingleJobQuery, useUpdateJobMutation, useMakeActiveExpireJobMutation, useGetRecentPostedJobsQuery, useSearchJobsQuery, useGetSingleFindJobQuery, useAddRemoveFavouriteJobMutation, useGetFavouriteJobsQuery, useApplyJobMutation, useGetAppliedJobsQuery, useGetRecentAppliedJobsQuery, useGetApplicationsQuery, useDeleteJobMutation } = jobApi;
+export const {
+  useGetEmployerJobsQuery,
+  useCreateJobMutation,
+  useGetSingleJobQuery,
+  useUpdateJobMutation,
+  useMakeActiveExpireJobMutation,
+  useGetRecentPostedJobsQuery,
+  useGetJobsQuery,
+  useGetSingleFindJobQuery,
+  useAddRemoveFavouriteJobMutation,
+  useGetFavouriteJobsQuery,
+  useGetFavouriteJobIdsQuery,
+  useApplyJobMutation,
+  useGetAppliedJobsQuery,
+  useGetRecentAppliedJobsQuery,
+  useGetApplicationsQuery,
+  useDeleteJobMutation,
+} = jobApi;

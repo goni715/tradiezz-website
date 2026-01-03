@@ -17,7 +17,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const router = useRouter();
   return (
     <div className="bg-white rounded-lg shadow-md transition-all duration-300 hover:shadow-lg border border-gray-100 overflow-hidden flex flex-col h-full">
-      <div className="p-5 flex flex-col flex-grow">
+      <div className="p-5 flex flex-col grow">
         <div className="flex justify-between items-start mb-3">
           <h2 className="text-lg font-semibold text-gray-800 line-clamp-2">
             {job.title}

@@ -34,11 +34,7 @@ const DashboardButton = () => {
     return (
       <Link
         href="/dashboard/candidate/overview"
-        className={`hover:text-secondary ${
-          pathname === "/dashboard/candidate/overview"
-            ? "text-secondary"
-            : "text-white"
-        }`}
+       className={`hover:text-brand-color ${isDashboard ? "text-brand-color" : "text-primary"}`}
       >
         Dashboard
       </Link>

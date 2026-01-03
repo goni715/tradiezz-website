@@ -7,6 +7,7 @@ const TagTypes = {
    appliedJobs: "AppliedJobs",
    recentAppliedJobs: "RecentAppliedJobs",
    favouriteJobs: "FavouriteJobs",
+   favouriteJobIds: "FavouriteJobids",
    employerJobs: "EmployerJobs",
    jobs: "Jobs",
    findJob: "FindJob",
