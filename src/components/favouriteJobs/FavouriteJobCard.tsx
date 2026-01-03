@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { MapPin, Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -11,56 +13,73 @@ type TProps = {
   job: IFindJob;
 };
 
-const FavouriteJobCard: React.FC<TProps> = ({ job }) => {
+const JobCard: React.FC<TProps> = ({ job }) => {
   const router = useRouter();
   const userInfo = useUserInfo();
   const daysRemaining = getDaysRemaining(job?.deadline);
 
   return (
-    <div className="bg-white rounded-lg shadow-md transition-all duration-300 hover:shadow-lg border border-gray-100 overflow-hidden flex flex-col h-full">
-      <div className="p-5 flex flex-col grow">
-        <div className="flex justify-between items-start mb-3 gap-x-4">
-          <h2 className="text-lg font-semibold text-gray-800 truncate">
+    <div className="relative flex h-full flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md transition-all duration-300 hover:shadow-lg">
+      <div className="flex grow flex-col p-5">
+        {/* Header */}
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <h2 className="flex-1 truncate text-lg font-semibold text-gray-800">
             {job?.title}
           </h2>
+
           {userInfo?.userId && userInfo.role === "candidate" && (
-            <FavouriteCard jobId={job?.jobId} />
+            <div className="shrink-0">
+              <FavouriteCard jobId={job?.jobId} />
+            </div>
           )}
         </div>
 
-        <div className="flex items-center text-gray-600 mt-1 mb-2">
-          <MapPin size={16} className="mr-1 text-gray-400" />
-          <span className="text-sm">{job?.address}</span>
+        {/* Address */}
+        <div className="mb-3 flex items-center text-sm text-gray-600">
+          <MapPin size={16} className="mr-1 shrink-0 text-gray-400" />
+          <span className="line-clamp-1 truncate">{job?.address}</span>
         </div>
 
-        <div className="text-gray-800 font-medium mt-1 mb-2">
-          salary: £{job?.minRange}-£{job.maxRange} /{" "}
-          <span className="capitalize">{job.rateType}</span>
+        {/* Salary */}
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <div className="font-medium text-gray-800">
+            Salary: £{job?.minRange} – £{job?.maxRange} /{" "}
+            <span className="capitalize">{job?.rateType}</span>
+          </div>
+
+          {/* {job?.isApplied && ( */}
+            <span className="shrink-0 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+              Applied
+            </span>
+          {/* )} */}
         </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-500 mt-auto">
-          <div className="flex items-center text-sm">
-            <Clock size={16} className="mr-1 text-gray-400" />
+        {/* Footer Info */}
+        <div className="mt-auto flex items-center justify-between text-sm text-gray-500">
+          <div className="flex items-center">
+            <Clock size={16} className="mr-1 shrink-0 text-gray-400" />
             <span>
               {daysRemaining > 0
                 ? `${daysRemaining} days remaining`
                 : "Deadline passed"}
             </span>
           </div>
+
           <span
-            className={`px-3 py-1 rounded-full text-xs text-center font-medium ${getCategoryColor(
-              job.category
+            className={`rounded-full px-3 py-1 text-xs font-medium ${getCategoryColor(
+              job?.category
             )}`}
           >
-            {job.category}
+            {job?.category}
           </span>
         </div>
       </div>
 
-      <div className="p-4 border-t border-gray-100 bg-gray-50">
+      {/* Action */}
+      <div className="border-t border-gray-100 bg-gray-50 p-4">
         <button
           onClick={() => router.push(`/jobs/job-details/${job?._id}`)}
-          className="w-full py-2 px-4 bg-primary hover:bg-primary/90 cursor-pointer text-white text-sm font-medium rounded-md transition-colors duration-300 focus:outline-none"
+          className="w-full cursor-pointer rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors duration-300 hover:bg-primary/90 focus:outline-none"
         >
           View Details
         </button>
@@ -69,4 +88,4 @@ const FavouriteJobCard: React.FC<TProps> = ({ job }) => {
   );
 };
 
-export default FavouriteJobCard;
+export default JobCard;

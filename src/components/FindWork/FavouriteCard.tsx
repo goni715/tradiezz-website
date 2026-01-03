@@ -16,37 +16,28 @@ const FavouriteCard = ({ jobId }: TProps) => {
   const favouriteJobIds = data?.data || [];
   const [isFavourite, setIsFavourite] = useState(false);
 
-  // Update isFavourite when favouriteJobIds are loaded
   useEffect(() => {
     setIsFavourite(favouriteJobIds.includes(jobId));
   }, [favouriteJobIds, jobId]);
 
   const toggleFavourite = () => {
     setIsFavourite((prev) => !prev);
-    addRemoveFavouriteJob({
-      jobId
-    });
+    addRemoveFavouriteJob({ jobId });
   };
 
   if (isLoading || isError) return null;
 
-  if (!isLoading && !isError) {
-    return (
-      <>
-        {isFavourite ? (
-          <BookmarkCheck
-            onClick={toggleFavourite}
-            className="h-5 w-5 cursor-pointer text-blue-500"
-          />
-        ) : (
-          <Bookmark
-            onClick={toggleFavourite}
-            className="h-5 w-5 cursor-pointer text-gray-800"
-          />
-        )}
-      </>
-    );
-  }
+  return isFavourite ? (
+    <BookmarkCheck
+      onClick={toggleFavourite}
+      className="h-6 w-6 cursor-pointer text-blue-500 transition hover:scale-105"
+    />
+  ) : (
+    <Bookmark
+      onClick={toggleFavourite}
+      className="h-6 w-6 cursor-pointer text-gray-600 transition hover:scale-105 hover:text-blue-500"
+    />
+  );
 };
 
 export default FavouriteCard;

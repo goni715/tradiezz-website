@@ -8,6 +8,7 @@ import {
   MessageSquareMore,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { FaLayerGroup } from "react-icons/fa";
 
 const EmployerSidebar = () => {
   return (
@@ -27,7 +28,7 @@ const EmployerSidebar = () => {
           />
           <SidebarLink
             href="/dashboard/employer/subscription-plans"
-            icon={<Podcast className="h-5 w-5" />}
+            icon={<FaLayerGroup className="h-5 w-5" />}
             label="Subscription Plans"
             // badge="08"
           />
