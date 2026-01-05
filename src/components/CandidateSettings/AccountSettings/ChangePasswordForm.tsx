@@ -1,24 +1,24 @@
 "use client";
 
 import CustomInput from "@/components/form/CustomInput";
+import SubmitButton from "@/components/form/SubmitButton";
 import Error from "@/components/validation/FormError";
 import PasswordStrength from "@/components/validation/PasswordStrength";
+import { useChangePasswordMutation } from "@/redux/features/auth/authApi";
 import { SetChangePasswordError } from "@/redux/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { changePasswordSchema } from "@/schema/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { CgSpinnerTwo } from "react-icons/cg";
 import { z } from "zod";
 
 type TFormValues = z.infer<typeof changePasswordSchema>;
 
 const ChangePasswordForm = () => {
-  const isLoading = false;
   const dispatch = useAppDispatch();
   const { ChangePasswordError } = useAppSelector((state) => state.auth);
-  //const [changePassword, { isLoading }] = useChangePasswordMutation();
+  const [changePassword, { isLoading }] = useChangePasswordMutation();
   const { handleSubmit, control, watch, trigger } = useForm({
     resolver: zodResolver(changePasswordSchema),
   });
@@ -34,9 +34,12 @@ const ChangePasswordForm = () => {
     }
   }, [newPassword, watch, trigger]);
 
-  const onSubmit: SubmitHandler<TFormValues> = () => {
+  const onSubmit: SubmitHandler<TFormValues> = (data) => {
     dispatch(SetChangePasswordError(""));
-    //changePassword(data);
+    changePassword({
+      currentPassword: data.currentPassword,
+      newPassword: data.newPassword,
+    });
   };
 
   return (
@@ -48,7 +51,7 @@ const ChangePasswordForm = () => {
           <div className="grid grid-cols-1 gap-4">
             <CustomInput
               label="Current Password"
-              name="oldPassword"
+              name="currentPassword"
               type="password"
               control={control}
               placeholder="Enter Current password"
@@ -69,22 +72,7 @@ const ChangePasswordForm = () => {
               placeholder="Enter new password"
             />
           </div>
-
-          <div>
-            <button
-              type="submit"
-              className="px-4 w-full md:w-64 md:justify-center py-2 flex gap-2 items-center bg-primary hover:bg-[#2b4773] text-white font-medium rounded-md focus:outline-none transition-colors cursor-pointer"
-            >
-              {isLoading ? (
-                <>
-                  <CgSpinnerTwo className="animate-spin" fontSize={16} />
-                  Processing...
-                </>
-              ) : (
-                "Save Changes"
-              )}
-            </button>
-          </div>
+          <SubmitButton isLoading={isLoading}> Save Changes </SubmitButton>
         </form>
       </div>
     </>

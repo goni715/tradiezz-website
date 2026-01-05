@@ -12,7 +12,7 @@ export const authApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      async onQueryStarted({email}, { queryFulfilled }) {
+      async onQueryStarted({ email }, { queryFulfilled }) {
         try {
           await queryFulfilled;
           setVerifyEmail(email);
@@ -22,8 +22,7 @@ export const authApi = apiSlice.injectEndpoints({
           const message = err?.error?.data?.message || "Something Went Wrong";
           if (status === 500) {
             ErrorToast("Something Went Wrong");
-          }
-          else {
+          } else {
             ErrorToast(message);
           }
         }
@@ -35,7 +34,7 @@ export const authApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      async onQueryStarted({email}, { queryFulfilled, dispatch }) {
+      async onQueryStarted({ email }, { queryFulfilled, dispatch }) {
         try {
           await queryFulfilled;
           setVerifyEmail(email);
@@ -45,8 +44,7 @@ export const authApi = apiSlice.injectEndpoints({
           const message = err?.error?.data?.message || "Something Went Wrong";
           if (status === 500) {
             dispatch(SetRegisterError("Something Went Wrong"));
-          }
-          else {
+          } else {
             dispatch(SetRegisterError(message));
           }
         }
@@ -72,8 +70,7 @@ export const authApi = apiSlice.injectEndpoints({
           const message = err?.error?.data?.message || "Something Went Wrong";
           if (status === 500) {
             dispatch(SetLoginError("Something Went Wrong"));
-          }
-          else {
+          } else {
             dispatch(SetLoginError(message));
           }
         }
@@ -95,8 +92,7 @@ export const authApi = apiSlice.injectEndpoints({
           const message = err?.error?.data?.message || "Something Went Wrong";
           if (status === 500) {
             dispatch(SetForgotError("Something Went Wrong"));
-          }
-          else {
+          } else {
             dispatch(SetForgotError(message));
           }
         }
@@ -118,8 +114,7 @@ export const authApi = apiSlice.injectEndpoints({
           const message = err?.error?.data?.message || "Something Went Wrong";
           if (status === 500) {
             ErrorToast("Something Went Wrong");
-          }
-          else {
+          } else {
             ErrorToast(message);
           }
         }
@@ -134,15 +129,14 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted({ otp }, { queryFulfilled, dispatch }) {
         try {
           await queryFulfilled;
-          setOtp(otp)
+          setOtp(otp);
           SuccessToast("Otp is verified successfully");
         } catch (err: any) {
           const status = err?.error?.status;
           const message = err?.error?.data?.message || "Something Went Wrong";
           if (status === 500) {
             dispatch(SetVerifyOtpError("Something Went Wrong"));
-          }
-          else {
+          } else {
             dispatch(SetVerifyOtpError(message));
           }
         }
@@ -167,8 +161,7 @@ export const authApi = apiSlice.injectEndpoints({
           const message = err?.error?.data?.message || "Something Went Wrong";
           if (status === 500) {
             dispatch(SetResetPasswordError("Something Went Wrong"));
-          }
-          else {
+          } else {
             dispatch(SetResetPasswordError(message));
           }
         }
@@ -185,15 +178,16 @@ export const authApi = apiSlice.injectEndpoints({
           await queryFulfilled;
           SuccessToast("Password is updated successfully");
           setTimeout(() => {
-            localStorage.clear()
+            localStorage.clear();
             window.location.href = "/login";
           }, 300);
-        } catch (err:any) {
-          const message = err?.error?.data?.message;
-          if(message === "password is incorrect"){
-            dispatch(SetChangePasswordError("Wrong Current Password"))
-          }else{
-            dispatch(SetChangePasswordError(message))
+        } catch (err: any) {
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            dispatch(SetChangePasswordError("Something Went Wrong"));
+          } else {
+            dispatch(SetChangePasswordError(message));
           }
         }
       },
@@ -214,8 +208,7 @@ export const authApi = apiSlice.injectEndpoints({
           const message = err?.error?.data?.message || "Something Went Wrong";
           if (status === 500) {
             dispatch(SetVerifyAccountError("Something Went Wrong"));
-          }
-          else {
+          } else {
             dispatch(SetVerifyAccountError(message));
           }
         }
@@ -235,10 +228,9 @@ export const authApi = apiSlice.injectEndpoints({
         } catch (err: any) {
           const status = err?.error?.status;
           const message = err?.error?.data?.message;
-           if (status === 500) {
+          if (status === 500) {
             ErrorToast("Something Went Wrong");
-          }
-          else{
+          } else {
             ErrorToast(message);
           }
         }
@@ -274,12 +266,12 @@ export const authApi = apiSlice.injectEndpoints({
           await queryFulfilled;
           SuccessToast("Account is deleted successfully");
           setTimeout(() => {
-            localStorage.clear()
+            localStorage.clear();
             window.location.href = "/";
           }, 300);
         } catch (err: any) {
           const message = err?.error?.data?.message;
-          ErrorToast(message)
+          ErrorToast(message);
         }
       },
     }),

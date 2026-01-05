@@ -1,28 +1,28 @@
 "use client";
 import Error from "@/components/validation/FormError";
-import { useUpdateCandidateProfileMutation } from "@/redux/features/user/userApi";
+import { useUpdatePrivacyMutation } from "@/redux/features/user/userApi";
 import { useAppSelector } from "@/redux/hooks/hooks";
 import { useState } from "react";
 
 const PrivacySettings = () => {
   const { user } = useAppSelector((state) => state.user);
   const [profileIsPublic, setProfileIsPublic] = useState<boolean>(
-    user?.profile_private
+    user?.isPrivate
   );
-
   const { ProfileError } = useAppSelector((state) => state.auth);
-  const [updateCandidateProfile] = useUpdateCandidateProfileMutation();
+  const [updateCandidateProfile] = useUpdatePrivacyMutation();
+
 
   const handleChange = (val: boolean) => {
-    const formData = new FormData();
     setProfileIsPublic(val);
-    formData.append("profile_private", val.toString());
-    updateCandidateProfile(formData);
+    updateCandidateProfile({
+      isPrivate: val,
+    });
   };
 
   return (
     <>
-      <div className="bg-white p-6 rounded-lg shadow-sm">
+      <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <h2 className="text-xl font-semibold mb-4">Profile Privacy</h2>

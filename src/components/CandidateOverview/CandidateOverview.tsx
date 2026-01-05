@@ -11,6 +11,8 @@ import OverviewStats from "./OverviewStats";
 // import RecentlyApplied from "./RecentlyApplied";
 
 const CandidateOverview = () => {
+  
+
   return (
     <>
       <main className="flex-1 overflow-auto">

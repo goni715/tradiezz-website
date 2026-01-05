@@ -7,7 +7,6 @@ import { SetUser } from "./userSllice";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
 import { SetProfileError } from "../auth/authSlice";
 
-
 export const userApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getMe: builder.query({
@@ -17,13 +16,13 @@ export const userApi = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 600,
       providesTags: [TagTypes.me],
-      async onQueryStarted(_arg, { queryFulfilled, dispatch}) {
+      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
         try {
           const res = await queryFulfilled;
           const data = res?.data?.data;
-          dispatch(SetUser(data))
-        } catch (err:any) {
-         ErrorToast("Server error is occured");
+          dispatch(SetUser(data));
+        } catch (err: any) {
+          ErrorToast("Server error is occured");
         }
       },
     }),
@@ -43,15 +42,15 @@ export const userApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
           SuccessToast("Update Success");
-        } catch (err:any) {
+        } catch (err: any) {
           const message = err?.error?.data?.message;
-          dispatch(SetProfileError(message))
+          dispatch(SetProfileError(message));
         }
       },
     }),
     updateCandidateProfile: builder.mutation({
       query: (data) => ({
-        url: `/auth/user/edit-profile`,
+        url: `/user/update-candidate-profile`,
         method: "PATCH",
         body: data,
       }),
@@ -65,9 +64,30 @@ export const userApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
           SuccessToast("Update Success");
-        } catch (err:any) {
+        } catch (err: any) {
           const message = err?.error?.data?.message;
-          dispatch(SetProfileError(message))
+          dispatch(SetProfileError(message));
+        }
+      },
+    }),
+    updatePrivacy: builder.mutation({
+      query: (data) => ({
+        url: `/user/update-candidate-profile`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: (result) => {
+        if (result?.success) {
+          return [TagTypes.me];
+        }
+        return [];
+      },
+      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
+        try {
+          await queryFulfilled;
+        } catch (err: any) {
+          const message = err?.error?.data?.message;
+          dispatch(SetProfileError(message));
         }
       },
     }),
@@ -87,9 +107,9 @@ export const userApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
           SuccessToast("Update Success");
-        } catch (err:any) {
+        } catch (err: any) {
           const message = err?.error?.data?.message;
-          dispatch(SetProfileError(message))
+          dispatch(SetProfileError(message));
         }
       },
     }),
@@ -109,9 +129,9 @@ export const userApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
           SuccessToast("Update Success");
-        } catch (err:any) {
+        } catch (err: any) {
           const message = err?.error?.data?.message;
-          dispatch(SetProfileError(message))
+          dispatch(SetProfileError(message));
         }
       },
     }),
@@ -131,9 +151,9 @@ export const userApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
           SuccessToast("Added Success");
-        } catch (err:any) {
+        } catch (err: any) {
           const message = err?.error?.data?.message;
-          dispatch(SetProfileError(message))
+          dispatch(SetProfileError(message));
         }
       },
     }),
@@ -152,17 +172,17 @@ export const userApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
           SuccessToast("Added Success");
-        } catch (err:any) {
+        } catch (err: any) {
           const message = err?.error?.data?.message;
-          dispatch(SetProfileError(message))
+          dispatch(SetProfileError(message));
         }
       },
     }),
     updateWorkExperience: builder.mutation({
-      query: ({ data, id}) => ({
+      query: ({ data, id }) => ({
         url: `/auth/update_work_experience/${id}`,
         method: "PATCH",
-        body: data
+        body: data,
       }),
       invalidatesTags: (result) => {
         if (result?.success) {
@@ -174,14 +194,23 @@ export const userApi = apiSlice.injectEndpoints({
         try {
           await queryFulfilled;
           SuccessToast("Update Success");
-        } catch (err:any) {
+        } catch (err: any) {
           const message = err?.error?.data?.message;
-          dispatch(SetProfileError(message))
+          dispatch(SetProfileError(message));
         }
       },
     }),
   }),
 });
 
-
-export const { useGetMeQuery, useUpdateEmployerProfileMutation, useUpdateCandidateProfileMutation, useUpdateCandidateLocationMutation, useUpdateEmployerLocationMutation, useAddWorkExperienceMutation, useRemoveWorkExperienceMutation, useUpdateWorkExperienceMutation } = userApi;
+export const {
+  useGetMeQuery,
+  useUpdateEmployerProfileMutation,
+  useUpdateCandidateProfileMutation,
+  useUpdateCandidateLocationMutation,
+  useUpdateEmployerLocationMutation,
+  useAddWorkExperienceMutation,
+  useRemoveWorkExperienceMutation,
+  useUpdateWorkExperienceMutation,
+  useUpdatePrivacyMutation
+} = userApi;
