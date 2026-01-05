@@ -1,6 +1,6 @@
 import { IAuthUser } from "@/types/global.type";
 import { jwtDecode } from "jwt-decode";
-
+import { SuccessToast } from "./ValidationHelper";
 
 class SessionHelper {
   setToken(token: string) {
@@ -21,12 +21,12 @@ class SessionHelper {
       return decodedData;
     }
     if (typeof window !== "undefined" && window.localStorage) {
-       window.localStorage.clear();
-       window.location.href = "/";
+      window.localStorage.clear();
+      window.location.href = "/";
     }
   }
 
-   isLoggedIn() {
+  isLoggedIn() {
     const token = getToken();
     if (token) {
       return true;
@@ -71,13 +71,23 @@ class SessionHelper {
 
   logout() {
     localStorage.clear();
+    SuccessToast("Logout Successfull");
     window.location.href = "/";
-    //SuccessToast("Logout Success");
   }
 }
 
-
-
-
-
-export const { setToken, getToken, setEmail, getEmail, setVerifyEmail, getUserInfo, getVerifyEmail, setOtp, getOtp, logout, isLoggedIn, setAuthId, getAuthId } = new SessionHelper();
+export const {
+  setToken,
+  getToken,
+  setEmail,
+  getEmail,
+  setVerifyEmail,
+  getUserInfo,
+  getVerifyEmail,
+  setOtp,
+  getOtp,
+  logout,
+  isLoggedIn,
+  setAuthId,
+  getAuthId,
+} = new SessionHelper();

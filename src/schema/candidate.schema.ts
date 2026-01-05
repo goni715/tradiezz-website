@@ -3,18 +3,23 @@ import { fullNameRegex, ukPhoneRegex } from "./auth.schema";
 import { isEditorContentEmpty } from "./job.schema";
 
 export const candidatePersonalSchema = z.object({
-  name: z
+  fullName: z
     .string({
       invalid_type_error: "Name must be string",
-      required_error: "Name is required",
+      required_error: "Full Name is required",
     })
     .trim()
-    .min(1, "Name is required")
+    .min(1, "Full Name is required")
     .regex(fullNameRegex, {
       message:
-        "Name can only contain letters, spaces, apostrophes, hyphens, and dots.",
+        "Full Name can only contain letters, spaces, apostrophes, hyphens, and dots.",
     }),
-  phone_number: z
+  email: z
+    .string({ required_error: "Email is required" })
+    .min(1, "Email is required")
+    .email("Please enter a valid email address")
+    .optional(),
+  phone: z
     .string({
       invalid_type_error: "Phone Number must be string",
       required_error: "Phone number is required",
@@ -24,14 +29,13 @@ export const candidatePersonalSchema = z.object({
     .regex(ukPhoneRegex, {
       message: "Enter a valid UK phone number",
     }),
-  address: z
+  dateOfBirth: z
     .string({
-      invalid_type_error: "Address must be string",
-      required_error: "Address is required",
+      required_error: "Select date of birth",
     })
-    .min(1, "Address is required")
-    .trim(),
-  details: z.preprocess(
+    .trim()
+    .min(1, "Select date of birth"),
+  description: z.preprocess(
     (val) => {
       if (typeof val === "string" && isEditorContentEmpty(val)) {
         return ""; // force fail if visually empty
@@ -161,7 +165,6 @@ const startDateSchema = z
 //     },
 //   )
 
-
 export const workExperienceSchema = z
   .object({
     job_title: z
@@ -245,16 +248,14 @@ export const workExperienceSchema = z
     }
   });
 
+const candidateLocationSchema = z.object({
+  lat: z.number(),
+  lng: z.number(),
+  address: z.string().min(1, "Address is required"),
+});
 
-
-  
-  const candidateLocationSchema = z.object({
-    lat: z.number(),
-    lng: z.number(),
-    address: z.string().min(1, "Address is required"),
-  })
-  
-  export const candidateRegisterSchema = z.object({
+export const candidateRegisterSchema = z
+  .object({
     // Step 1: Basic Information
     fullName: z.string().min(1, "Name is required"),
     email: z.string().email("Email is invalid").min(1, "Email is required"),
@@ -270,7 +271,7 @@ export const workExperienceSchema = z
       }),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(1, "Confirm Password is required"),
-  
+
     // Step 2: Category Selection
     categoryId: z.string().min(1, "Category is required"),
     subCategoryId: z.string().min(1, "Sub-category is required"),
@@ -281,7 +282,7 @@ export const workExperienceSchema = z
         invalid_type_error: "availableDate must be string value",
       })
       .trim()
-      .min(1, { message: "Please, select available date"})
+      .min(1, { message: "Please, select available date" })
       .superRefine((date, ctx) => {
         const formatRegex = /^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
@@ -309,12 +310,12 @@ export const workExperienceSchema = z
       }),
     workType: z.string().min(1, "Type is required"),
     employmentType: z.string().min(1, "Employment Type is required"),
-  
+
     // Step 3: Location
-   location: candidateLocationSchema.refine((val) => val !== null, {
-      message: "Location is required",
-    }),
-  
+    location: candidateLocationSchema.refine((val) => val !== null, {
+      message: "Location is required",
+    }),
+
     // Step 4: Skills & Experience
     skills: z.array(z.string()).min(1, "At least one skill is required"),
     experience: z.string().min(1, "Experience is required"),
@@ -349,9 +350,10 @@ export const workExperienceSchema = z
           });
         }
       }),
-  }).refine((data) => data.password === data.confirmPassword, {
+  })
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  })
-  
-  export type TCandidateFormValues = z.infer<typeof candidateRegisterSchema>
+  });
+
+export type TCandidateFormValues = z.infer<typeof candidateRegisterSchema>;

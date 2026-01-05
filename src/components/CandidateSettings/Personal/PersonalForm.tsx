@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
@@ -6,47 +7,79 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CustomInput from "@/components/form/CustomInput";
 import { z } from "zod";
 import { SetProfileError } from "@/redux/features/auth/authSlice";
-import { CgSpinnerTwo } from "react-icons/cg";
 import Error from "@/components/validation/FormError";
 import { useState } from "react";
 import EditProfilePic from "./EditProfilePic";
 import { candidatePersonalSchema } from "@/schema/candidate.schema";
 import UpdateLocationForm from "../LocationForm/UpdateLocationForm";
 import SetLocationForm from "../LocationForm/SetLocationForm";
+import SubmitButton from "@/components/form/SubmitButton";
+import CustomDatePicker from "@/components/form/CustomDatePicker";
+import CustomQuilEditor from "@/components/form/CustomQuilEditor";
+import { WarningToast } from "@/helper/ValidationHelper";
+import { useUpdateCandidateProfileMutation } from "@/redux/features/user/userApi";
 
 type TFormValues = z.infer<typeof candidatePersonalSchema>;
 
 const PersonalForm = () => {
-  const isLoading = false;
   const [file, setFile] = useState<File | null>(null)
   const { user } = useAppSelector((state) => state.user);
-
   const dispatch = useAppDispatch();
   const { ProfileError } = useAppSelector((state) => state.auth);
-  // const [updateCandidateProfile, { isLoading }] =
-  //   useUpdateCandidateProfileMutation();
+  const [updateCandidateProfile, { isLoading }] =
+    useUpdateCandidateProfileMutation();
+
+  const initialDateOfBirth = user?.dateOfBirth.split('T')[0] as string || "";
   const { handleSubmit, control } = useForm({
     resolver: zodResolver(candidatePersonalSchema),
     defaultValues: {
-      name: user?.name as string,
-      phone_number: user?.phone_number as string,
-      address: user?.address===null ? "" : user?.address,
-      details: user?.details===null ? "" : user?.details
+      fullName: user.fullName as string,
+      email: user.email,
+      phone: user?.phone as string,
+      description: user?.description as string,
+      dateOfBirth: initialDateOfBirth
     },
   });
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
     dispatch(SetProfileError(""));
     const formData = new FormData();
-    if(file){
-      formData.append("profile_image", file);
+
+    if (
+      user.fullName === data.fullName &&
+      user.phone === data.phone &&
+      initialDateOfBirth === data.dateOfBirth &&
+      user.description === data.description &&
+      !file
+    ) {
+      WarningToast("No changes detected !");
     }
 
-    formData.append("name", data.name);
-    formData.append("phone_number", data.phone_number)
-    formData.append("address", data.address)
-    formData.append("details", data.details)
-   // updateCandidateProfile(formData)
+    //check fullName
+    if (user.fullName !== data.fullName) {
+      formData.append("fullName", data.fullName);
+    }
+    //check phone
+    if (user.phone !== data.phone) {
+      formData.append("phone", data.phone);
+    }
+    //check birth date
+    if (initialDateOfBirth !== data.dateOfBirth) {
+      formData.append("dateOfBirth", data.dateOfBirth);
+    }
+    //check description
+    if (user.description !== data.description) {
+      formData.append("description", data.description);
+    }
+
+    if (file) {
+      formData.append("image", file);
+    }
+
+   //const formObject = Object.fromEntries(formData.entries());
+   //console.log(formObject);
+
+    updateCandidateProfile(formData)
   };
 
   return (
@@ -66,73 +99,44 @@ const PersonalForm = () => {
             <div className="space-y-4">
               <CustomInput
                 label="Name"
-                name="name"
+                name="fullName"
                 type="text"
                 control={control}
                 placeholder="Enter full name"
               />
-
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Email
-                </label>
-                <div className="relative">
-                  <input
-                    id="email"
-                    type="email"
-                    disabled
-                    value={user?.email}
-                    placeholder="Email address"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md disabled:bg-gray-200 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                  />
-                </div>
-              </div>
-
+              <CustomInput
+                label="Email"
+                name="email"
+                type="text"
+                control={control}
+                placeholder="Enter email address"
+                disabled
+              />
               <CustomInput
                 label="Phone Number(only UK)"
-                name="phone_number"
+                name="phone"
                 type="text"
                 control={control}
                 placeholder="Enter phone number"
               />
-
-              <CustomInput
-                label="Address"
-                name="address"
-                type="text"
+              <CustomDatePicker
+                label="Birth Date"
+                name="dateOfBirth"
                 control={control}
-                placeholder="Enter address"
               />
-
-              {/* <CustomQuilEditor label="Description" name="details" control={control} placeholder="Write a description about yourself..."/> */}
-              <button
-                type="submit"
-                className="px-4 w-full md:w-64 md:justify-center py-2 flex gap-2 items-center bg-primary hover:bg-[#2b4773] text-white font-medium rounded-md focus:outline-none transition-colors cursor-pointer"
-              >
-                {isLoading ? (
-                  <>
-                    <CgSpinnerTwo className="animate-spin" fontSize={16} />
-                    Processing...
-                  </>
-                ) : (
-                  "Save Changes"
-                )}
-              </button>
+              <CustomQuilEditor
+                label="Description"
+                name="description"
+                control={control}
+                height={200}
+              />
+              <SubmitButton isLoading={isLoading}> Save Changes </SubmitButton>
             </div>
           </form>
         </div>
       </div>
 
-      {
-        user?.locations ? (
-          <UpdateLocationForm />
-        ): (
-          <SetLocationForm/>
-        )
-      }
+      {user?.locations ? <UpdateLocationForm /> : <SetLocationForm />}
     </>
   );
 };
