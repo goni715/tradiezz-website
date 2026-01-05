@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
@@ -11,8 +10,6 @@ import Error from "@/components/validation/FormError";
 import { useState } from "react";
 import EditProfilePic from "./EditProfilePic";
 import { candidatePersonalSchema } from "@/schema/candidate.schema";
-import UpdateLocationForm from "../LocationForm/UpdateLocationForm";
-import SetLocationForm from "../LocationForm/SetLocationForm";
 import SubmitButton from "@/components/form/SubmitButton";
 import CustomDatePicker from "@/components/form/CustomDatePicker";
 import CustomQuilEditor from "@/components/form/CustomQuilEditor";
@@ -33,13 +30,14 @@ const PersonalForm = () => {
   const { handleSubmit, control } = useForm({
     resolver: zodResolver(candidatePersonalSchema),
     defaultValues: {
-      fullName: user.fullName as string,
-      email: user.email,
+      fullName: user?.fullName as string,
+      email: user?.email,
       phone: user?.phone as string,
       description: user?.description as string,
       dateOfBirth: initialDateOfBirth
     },
   });
+
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
     dispatch(SetProfileError(""));
@@ -53,6 +51,7 @@ const PersonalForm = () => {
       !file
     ) {
       WarningToast("No changes detected !");
+      return;
     }
 
     //check fullName
@@ -136,7 +135,6 @@ const PersonalForm = () => {
         </div>
       </div>
 
-      {user?.locations ? <UpdateLocationForm /> : <SetLocationForm />}
     </>
   );
 };

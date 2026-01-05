@@ -3,6 +3,7 @@
 import ChangePasswordForm from "../CandidateSettings/AccountSettings/ChangePasswordForm";
 import DeleteCandidateAccount from "../CandidateSettings/AccountSettings/DeleteCandidateAccount";
 import PrivacySettings from "../CandidateSettings/AccountSettings/PrivacySettings";
+import UpdateLocationForm from "../CandidateSettings/LocationForm/UpdateLocationForm";
 import PersonalForm from "../CandidateSettings/Personal/PersonalForm";
 import ProfessionalForm from "../CandidateSettings/Professional/ProfessionalForm";
 import OverviewHeader from "./OverviewHeader";
@@ -21,6 +22,7 @@ const CandidateOverview = () => {
           <OverviewStats />
           {/* <ProfileCompletion /> */}
           <PersonalForm/>
+          <UpdateLocationForm/>
           <ProfessionalForm/>
           <PrivacySettings/>
           <ChangePasswordForm/>

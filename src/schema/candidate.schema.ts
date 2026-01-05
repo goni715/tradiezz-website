@@ -52,66 +52,72 @@ export const candidatePersonalSchema = z.object({
 });
 
 export const candidateProfessionalSchema = z.object({
-  job_title: z
+  categoryId: z
     .string({
-      invalid_type_error: "Job Title must be string",
-      required_error: "At least one job title required",
+      invalid_type_error: "subCategoryId must be a string",
+      required_error: "Select category",
     })
     .trim()
-    .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
-      message: "Please enter valid comma-separated skills",
-    }),
-  careerObjective: z
+    .min(1, "Select category"),
+  subCategoryId: z
     .string({
-      invalid_type_error: "Career Objective must be a string",
-      required_error: "Career Objective is required",
+      invalid_type_error: "subCategoryId must be a string",
+      required_error: "Select sub category",
     })
     .trim()
-    .min(10, "Career Objective must be at least 10 characters"),
-  job_seeking: z
+    .min(1, "Select sub category"),
+  // careerObjective: z
+  //   .string({
+  //     invalid_type_error: "Career Objective must be a string",
+  //     required_error: "Career Objective is required",
+  //   })
+  //   .trim()
+  //   .min(10, "Career Objective must be at least 10 characters"),
+  // job_seeking: z
+  //   .string({
+  //     invalid_type_error: "Job Seeking Title must be string",
+  //     required_error: "At least one job seeking title required",
+  //   })
+  //   .trim()
+  //   .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
+  //     message: "Please enter valid comma-separated skills",
+  //   }),
+  // education: z
+  //   .string({
+  //     invalid_type_error: "Education must be string",
+  //     required_error: "Select education",
+  //   })
+  //   .trim()
+  //   .min(1, "Select education"),
+  // experience: z
+  //   .string({
+  //     invalid_type_error: "Experience must be string",
+  //     required_error: "Select experience",
+  //   })
+  //   .trim()
+  //   .min(1, "Select experience"),
+  availableDate: z
     .string({
-      invalid_type_error: "Job Seeking Title must be string",
-      required_error: "At least one job seeking title required",
-    })
-    .trim()
-    .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
-      message: "Please enter valid comma-separated skills",
-    }),
-  education: z
-    .string({
-      invalid_type_error: "Education must be string",
-      required_error: "Select education",
-    })
-    .trim()
-    .min(1, "Select education"),
-  experience: z
-    .string({
-      invalid_type_error: "Experience must be string",
-      required_error: "Select experience",
-    })
-    .trim()
-    .min(1, "Select experience"),
-  availability: z
-    .array(z.string(), {
-      required_error: "Select at least one availibility",
-    })
-    .min(1, { message: "Select at least one availibility" }),
-  skill: z
-    .string({
-      invalid_type_error: "Skill must be string",
-      required_error: "Skills required",
-    })
-    .trim()
-    .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
-      message: "Please enter valid comma-separated skills",
-    }),
-  availabil_date: z
-    .string({
-      invalid_type_error: "Available date must be string",
       required_error: "Select available date",
     })
     .trim()
-    .min(1, "Select available date"),
+    .min(1, { message: "Select available date" }),
+  // skill: z
+  //   .string({
+  //     invalid_type_error: "Skill must be string",
+  //     required_error: "Skills required",
+  //   })
+  //   .trim()
+  //   .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
+  //     message: "Please enter valid comma-separated skills",
+  //   }),
+  // availabil_date: z
+  //   .string({
+  //     invalid_type_error: "Available date must be string",
+  //     required_error: "Select available date",
+  //   })
+  //   .trim()
+  //   .min(1, "Select available date"),
 });
 
 export const locationSchema = z.object({
@@ -133,6 +139,24 @@ export const locationSchema = z.object({
     .refine((val) => val <= 90, {
       message: "Latitude must be <= 90",
     }),
+  address: z
+    .string({
+      invalid_type_error: "Address must be string",
+      required_error: "Address is required",
+    })
+    .optional(),
+  city: z
+    .string({
+      invalid_type_error: "city must be string",
+      required_error: "city is required",
+    })
+    .optional(),
+  postalCode: z
+    .string({
+      invalid_type_error: "postalCode must be string",
+      required_error: "postalCode is required",
+    })
+    .optional(),
 });
 
 const startDateSchema = z
@@ -252,6 +276,8 @@ const candidateLocationSchema = z.object({
   lat: z.number(),
   lng: z.number(),
   address: z.string().min(1, "Address is required"),
+  city: z.string().min(1, "City is required").optional(),
+  postalCode: z.string().min(1, "City is required").optional(),
 });
 
 export const candidateRegisterSchema = z

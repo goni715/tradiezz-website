@@ -11,11 +11,19 @@ type TProps = {
     label: string;
     value: string;
   }[];
-  disabled?:boolean
-  placeholder?: string
+  disabled?: boolean;
+  placeholder?: string;
+  blankOption?: boolean;
 };
 
-const CustomSelect = ({ label, name, control, options, disabled=false }: TProps) => {
+const CustomSelect = ({
+  label,
+  name,
+  control,
+  options,
+  disabled = false,
+  blankOption = true,
+}: TProps) => {
   return (
     <>
       <div>
@@ -33,12 +41,12 @@ const CustomSelect = ({ label, name, control, options, disabled=false }: TProps)
                   disabled={disabled}
                   value={field.value ?? ""}
                   className={`w-full px-3 py-2 border text-gray-700 disabled:bg-gray-200 rounded-md appearance-none focus:outline-none ${
-                        error
-                          ? "border-red-500 focus:border-red-500"
-                          : "border-gray-300 focus:border-blue-500"
-                      }`}
+                    error
+                      ? "border-red-500 focus:border-red-500"
+                      : "border-gray-300 focus:border-blue-500"
+                  }`}
                 >
-                  <option value="">Select {label}</option>
+                  {blankOption && <option value="">Select {label}</option>}
                   {options.map((option, index) => (
                     <option key={index} value={option.value}>
                       {option.label}

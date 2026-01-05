@@ -21,7 +21,8 @@ interface InteractiveMapProps {
   onLocationSelect: (
     location: LatLngTuple,
     address?: string,
-    postalCode?: string
+    postalCode?: string,
+    city?: string
   ) => void;
 }
 
@@ -56,7 +57,7 @@ const InteractiveMap = ({ onLocationSelect }: InteractiveMapProps) => {
       const location: LatLngTuple = [lat, lng];
       const data = await reverseGeocode(lat, lng);
       const shortAddress = cleanAddress(data?.address || "");
-      onLocationSelect(location, shortAddress, data?.postalCode);
+      onLocationSelect(location, shortAddress, data?.postalCode, data?.city);
     },
   });
 
@@ -71,9 +72,16 @@ const reverseGeocode = async (lat: number, lon: number) => {
     const data = await res.json();
     const address = data?.display_name || "";
     const postalCode = data?.address?.postcode || "";
-    return { address, postalCode };
-  } catch {
-    return { address: "", postalCode: "" };
+    const city =
+      data?.address?.city ||
+      data?.address?.town ||
+      data?.address?.village ||
+      data?.address?.municipality ||
+      "";
+    return { address, postalCode, city };
+  } catch (error) {
+    console.error("Reverse geocoding error:", error);
+    return { address: "", postalCode: "", city: '' };
   }
 };
 

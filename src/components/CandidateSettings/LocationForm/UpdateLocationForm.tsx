@@ -1,50 +1,46 @@
 "use client";
-
-import { LatLngTuple } from "@/components/Location/LocationMap";
+import SubmitButton from "@/components/form/SubmitButton";
+import LocationMap, { LatLngTuple } from "@/components/Location/LocationMap";
+import { useUpdateCandidateProfileMutation } from "@/redux/features/user/userApi";
 import { useAppSelector } from "@/redux/hooks/hooks";
 import { locationSchema } from "@/schema/candidate.schema";
-import dynamic from "next/dynamic";
-// import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { CgSpinnerTwo } from "react-icons/cg";
 import { z } from "zod";
 
 type TFormValues = z.infer<typeof locationSchema>;
 
 const UpdateLocationForm = () => {
-  const isLoading = false;
   const { user } = useAppSelector((state) => state.user);
-  const coordinates = user?.locations?.coordinates ?? [0, 0];
+  const coordinates = user?.coordinates || [0,0];
   const initialLongitude = coordinates[0];
   const initialLatitude = coordinates[1];
-
-  
-  const LocationMap = dynamic(() => import("@/components/Location/LocationMap"), {
-    ssr: false, // only render on client
-  });
 
   const [selectedLocation, setSelectedLocation] = useState<LatLngTuple>([
     initialLatitude,
     initialLongitude,
   ]);
-  // const [address, setAddress] = useState<string>("");
-  // const [postalCode, setPostalCode] = useState<string>("");
 
-  // const [updateLocation, { isLoading }] = useUpdateCandidateLocationMutation();
+  const [updateProfile, { isLoading }] = useUpdateCandidateProfileMutation();
 
   const { handleSubmit, setValue, watch } = useForm({
+    resolver: zodResolver(locationSchema),
     defaultValues: {
       latitude: initialLatitude.toString(),
       longitude: initialLongitude.toString(),
-      address: "",
-      postalCode: "",
+      address: user?.address,
+      postalCode: user?.postalCode || "",
+      city: user?.city || ""
     },
   });
 
   // Watch latitude and longitude
   const latitude = watch("latitude");
   const longitude = watch("longitude");
+  const address = watch("address");
+  const city = watch("city");
+  const postalCode = watch("postalCode");
 
   // Update map when latitude/longitude change in form
   useEffect(() => {
@@ -61,7 +57,8 @@ const UpdateLocationForm = () => {
   const handleLocationSelect = (
     location: LatLngTuple,
     selectedAddress?: string,
-    selectedPostalCode?: string
+    selectedPostalCode?: string,
+    selectedCity?: string
   ) => {
     setSelectedLocation(location);
     // setAddress(selectedAddress ?? "");
@@ -71,11 +68,11 @@ const UpdateLocationForm = () => {
     setValue("longitude", location[1].toFixed(6));
     setValue("address", selectedAddress ?? "");
     setValue("postalCode", selectedPostalCode ?? "");
+    setValue("city", selectedCity ?? "");
   };
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
-    console.log(data)
-    // updateLocation(data);
+    updateProfile(data);
   };
 
   return (
@@ -84,48 +81,45 @@ const UpdateLocationForm = () => {
         Update Map Location
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <label className="block font-medium mb-1">Location address</label>
+          <input
+            type="text"
+            disabled
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none disabled:cursor-not-allowed"
+            value={address}
+            readOnly
+          />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block font-medium mb-1">Postal Code</label>
+            <input
+              type="text"
+              disabled
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none disabled:cursor-not-allowed"
+              value={postalCode}
+              readOnly
+            />
+          </div>
+          <div>
+            <label className="block font-medium mb-1">City</label>
+            <input
+              type="text"
+              disabled
+              className="w-full border border-gray-300 rounded px-3 py-2 disabled focus:outline-none disabled:cursor-not-allowed"
+              value={city}
+              readOnly
+            />
+          </div>
+        </div>
         <div className="order-1 lg:order-2 h-[350px] lg:h-[400px] mb-6">
           <LocationMap
             onLocationSelect={handleLocationSelect}
             selectedLocation={selectedLocation}
           />
         </div>
-
-        {/* Show Address */}
-        {/* <div>
-          <label className="block font-medium mb-1">Address</label>
-          <input
-            type="text"
-            className="w-full border rounded px-3 py-2"
-            value={address}
-            readOnly
-          />
-        </div> */}
-
-        {/* Show Postal Code */}
-        {/* <div>
-          <label className="block font-medium mb-1">Postal Code</label>
-          <input
-            type="text"
-            className="w-full border rounded px-3 py-2"
-            value={postalCode}
-            readOnly
-          />
-        </div> */}
-
-        <button
-          type="submit"
-          className="px-4 w-full md:w-64 md:justify-center py-2 flex gap-2 items-center bg-primary hover:bg-[#2b4773] text-white font-medium rounded-md focus:outline-none transition-colors cursor-pointer"
-        >
-          {isLoading ? (
-            <>
-              <CgSpinnerTwo className="animate-spin" fontSize={16} />
-              Processing...
-            </>
-          ) : (
-            "Save Changes"
-          )}
-        </button>
+        <SubmitButton isLoading={isLoading}> Save Changes </SubmitButton>
       </form>
     </div>
   );
