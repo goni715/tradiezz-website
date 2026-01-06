@@ -11,6 +11,17 @@ async function getSingleBlog(id: string) {
   const blog = data?.data || {};
   return blog;
 }
+ 
+
+// async function redirectUrl(id:string) {
+//   const res = await fetch(`http://localhost:9090/api/v1/url/redirect/${id}`, {
+//     cache: 'no-store'
+//   });
+
+//   const data = await res.json();
+//   const originalUrl = data?.data 
+//   redirect(originalUrl); 
+// }
 
 
 interface TProps {
@@ -22,7 +33,11 @@ interface TProps {
 
 const BlogDetailsPage = async ({ params }: TProps) => {
 const { id } = await params;
+//await redirectUrl(id);
 const blog = await getSingleBlog(id);
+
+
+
   return (
     <>
       <main className="min-h-full max-w-7xl mx-auto bg-white px-4 md:px-8 py-16 rounded-md">
