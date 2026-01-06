@@ -8,12 +8,14 @@ import { z } from "zod";
 import { SetProfileError } from "@/redux/features/auth/authSlice";
 import Error from "@/components/validation/FormError";
 import CustomSelect from "@/components/form/CustomSelect";
-import { educationOptions } from "@/data/job.options";
 import CustomDatePicker from "@/components/form/CustomDatePicker";
-import CustomTextArea from "@/components/form/CustomTextArea";
 import { candidateProfessionalSchema } from "@/schema/candidate.schema";
 import SubmitButton from "@/components/form/SubmitButton";
-import { candidateExperienceOptions } from "@/data/candidate.options";
+import {
+  candidateExperienceOptions,
+  workRateOptions,
+  workTypeOptions,
+} from "@/data/candidate.options";
 import { useEffect, useState } from "react";
 import { useGetCategoryDropDownQuery } from "@/redux/features/category/categoryApi";
 import { useGetSubCategoryDropDownByCategoryIdQuery } from "@/redux/features/subCategory/subCategoryApi";
@@ -31,7 +33,8 @@ const ProfessionalForm = () => {
     { label: string; value: string }[]
   >([]);
   useGetCategoryDropDownQuery(undefined);
-  const initialAvailableDate = user?.availableDate?.split('T')[0] as string || "";
+  const initialAvailableDate =
+    (user?.availableDate?.split("T")[0] as string) || "";
 
   // const [updateCandidateProfile, { isLoading }] =
   //   useUpdateCandidateProfileMutation();
@@ -40,7 +43,8 @@ const ProfessionalForm = () => {
     defaultValues: {
       categoryId: user.categoryId,
       subCategoryId: user.subCategoryId,
-      availableDate: initialAvailableDate
+      availableDate: initialAvailableDate,
+      workRate: user.workRate
     },
   });
 
@@ -65,8 +69,6 @@ const ProfessionalForm = () => {
       );
     }
   }, [subCategoryData, categoryId, setValue]);
-
-
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
     dispatch(SetProfileError(""));
@@ -117,17 +119,26 @@ const ProfessionalForm = () => {
                 blankOption={false}
                 disabled={subCategoryOptions.length === 0}
               />
+
               <CustomSelect
-                label="Education"
-                name="education"
+                label="Rate"
+                name="workRate"
                 control={control}
-                options={educationOptions}
+                options={workRateOptions}
+                placeholder="Select Rate"
               />
               <CustomSelect
                 label="Experience"
                 name="experience"
                 control={control}
                 options={candidateExperienceOptions}
+              />
+              <CustomSelect
+                label="Work Type"
+                name="workType"
+                control={control}
+                options={workTypeOptions}
+                placeholder="Select Work Type"
               />
               <CustomInput
                 label="Skills(multiple, comma separated)"
@@ -142,13 +153,6 @@ const ProfessionalForm = () => {
                 control={control}
                 placeholder="DD/MM/YYYY"
               />
-              <CustomTextArea
-                label="Career Objective"
-                name="careerObjective"
-                control={control}
-                placeholder="write here..."
-                rows={3}
-              /> 
               <SubmitButton isLoading={isLoading}> Save Changes </SubmitButton>
             </div>
           </form>

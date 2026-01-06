@@ -66,6 +66,20 @@ export const candidateProfessionalSchema = z.object({
     })
     .trim()
     .min(1, "Select sub category"),
+  workRate: z
+    .string({
+      invalid_type_error: "workRate must be a string",
+      required_error: "Select work rate",
+    })
+    .trim()
+    .min(1, "Select work rate"),
+  workType: z
+    .string({
+      invalid_type_error: "workRate must be a string",
+      required_error: "Select work type",
+    })
+    .trim()
+    .min(1, "Select work type"),
   // careerObjective: z
   //   .string({
   //     invalid_type_error: "Career Objective must be a string",
