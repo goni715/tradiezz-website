@@ -209,3 +209,32 @@ export type IMyJob = {
 
 
 
+
+export interface ISingleJob {
+  _id: string;
+  title: string;
+  jobType: TJobType
+  experience: TJobExperience;
+  rateType: TJobRateType;
+  startDate: string;  
+  endDate: string;    
+  deadline: string; 
+  minRange: number;
+  maxRange: number;
+  skills: string[];
+  benefits: string;
+  address: string;
+  postalCode: string;
+  employerName: string;
+  employerEmail: string;
+  employerPhone: string;
+  employerImg: string;
+  categoryId: string;
+  category: string;
+  status: "visible" | "hidden";
+  createdAt: string;
+  updatedAt: string; 
+};
+
+
+

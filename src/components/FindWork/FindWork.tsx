@@ -18,7 +18,7 @@ const FindWork = () => {
   const [pageSize, setPageSize] = useState<number>(9);
 
   const { data, isLoading, isError } = useGetJobsQuery([
-    { name: "searchTrams", value: searchQuery },
+    { name: "searchTerm", value: searchQuery },
     { name: "location", value: location },
     { name: "postalCode", value: postalCode },
     { name: "page", value: currentPage },
@@ -77,7 +77,6 @@ const FindWork = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search by job title, skills, keywords"
                   className="w-full h-12 px-4 text-sm text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 transition-all"
-                  required
                 />
               </div>
 
@@ -89,7 +88,6 @@ const FindWork = () => {
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="Location"
                   className="w-full h-12 px-4 text-sm text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 transition-all"
-                  required
                 />
               </div>
 
@@ -101,7 +99,6 @@ const FindWork = () => {
                   onChange={(e) => setPostalCode(e.target.value)}
                   placeholder="Postal code"
                   className="w-full h-12 px-4 text-sm text-gray-800 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 transition-all"
-                  required
                 />
               </div>
 

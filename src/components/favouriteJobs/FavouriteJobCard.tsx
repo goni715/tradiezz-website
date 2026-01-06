@@ -78,7 +78,7 @@ const JobCard: React.FC<TProps> = ({ job }) => {
       {/* Action */}
       <div className="border-t border-gray-100 bg-gray-50 p-4">
         <button
-          onClick={() => router.push(`/jobs/job-details/${job?._id}`)}
+          onClick={() => router.push(`/job-details/${job?._id}`)}
           className="w-full cursor-pointer rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors duration-300 hover:bg-primary/90 focus:outline-none"
         >
           View Details

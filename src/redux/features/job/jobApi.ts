@@ -5,7 +5,7 @@ import TagTypes from "@/constant/tagType.constant";
 import { apiSlice } from "../api/apiSlice";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
 import { IParam } from "@/types/global.type";
-import { SetRecentAppliedJobs, SetRecentJobs } from "./jobSlice";
+import { SetRecentJobs } from "./jobSlice";
 
 export const jobApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -80,9 +80,24 @@ export const jobApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    getSingleJob: builder.query({
+    getMySingleJob: builder.query({
       query: (id) => ({
         url: `/job/get-my-single-job/${id}`,
+        method: "GET",
+      }),
+      keepUnusedDataFor: 600,
+      providesTags: (result, error, arg) => [{ type: TagTypes.job, id: arg }],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch {
+          ErrorToast("Server error is occured");
+        }
+      },
+    }),
+    getSingleJob: builder.query({
+      query: (id) => ({
+        url: `/job/get-single-job/${id}`,
         method: "GET",
       }),
       keepUnusedDataFor: 600,
@@ -284,6 +299,7 @@ export const jobApi = apiSlice.injectEndpoints({
 export const {
   useGetEmployerJobsQuery,
   useCreateJobMutation,
+  useGetMySingleJobQuery,
   useGetSingleJobQuery,
   useUpdateJobMutation,
   useMakeActiveExpireJobMutation,
