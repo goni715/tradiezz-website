@@ -73,6 +73,13 @@ export const candidateProfessionalSchema = z.object({
     })
     .trim()
     .min(1, "Select work rate"),
+  experience: z
+    .string({
+      invalid_type_error: "experience must be a string",
+      required_error: "Select experience",
+    })
+    .trim()
+    .min(1, "Select experience"),
   workType: z
     .string({
       invalid_type_error: "workRate must be a string",
@@ -80,6 +87,15 @@ export const candidateProfessionalSchema = z.object({
     })
     .trim()
     .min(1, "Select work type"),
+  skills: z
+    .string({
+      invalid_type_error: "Skill must be string",
+      required_error: "Skills required",
+    })
+    .trim()
+    .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
+      message: "Please enter valid comma-separated skills",
+    }),
   // careerObjective: z
   //   .string({
   //     invalid_type_error: "Career Objective must be a string",
