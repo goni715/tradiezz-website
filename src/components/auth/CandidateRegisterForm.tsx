@@ -66,6 +66,7 @@ const CandidateRegisterForm = () => {
     getValues,
     setValue,
     watch,
+    setError,
     formState: { errors },
   } = useForm<TCandidateFormValues>({
     resolver: zodResolver(candidateRegisterSchema),
@@ -119,18 +120,33 @@ const CandidateRegisterForm = () => {
 
   const totalSteps = 5;
 
-  const nextStep = useCallback(async () => {
-    // Validate only the fields for the current step
-    const fieldsToValidate = stepFields[currentStep];
-    const isValid = await trigger(
-      fieldsToValidate as (keyof TCandidateFormValues)[],
-      { shouldFocus: true }
-    );
+const nextStep = useCallback(async () => {
+  const fieldsToValidate = stepFields[currentStep];
 
-    if (isValid) {
-      setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+  const isValid = await trigger(fieldsToValidate, {
+    shouldFocus: true,
+  });
+
+  // 🔴 STOP HERE if normal validation fails
+  if (!isValid) return;
+
+  // 🔥 STEP 1 password check
+  if (currentStep === 1) {
+    const password = getValues("password");
+    const confirmPassword = getValues("confirmPassword");
+
+    if (password !== confirmPassword) {
+      setError("confirmPassword", {
+        type: "manual",
+        message: "Passwords do not match",
+      });
+      return;
     }
-  }, [currentStep, trigger]);
+  }
+
+  setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+}, [currentStep, trigger, getValues, setError]);
+
 
   const prevStep = useCallback(() => {
     setCurrentStep((prev) => Math.max(prev - 1, 1));

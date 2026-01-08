@@ -407,9 +407,14 @@ export const candidateRegisterSchema = z
         }
       }),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        path: ["confirmPassword"],
+        message: "Passwords do not match",
+        code: z.ZodIssueCode.custom,
+      });
+    }
   });
 
 export type TCandidateFormValues = z.infer<typeof candidateRegisterSchema>;

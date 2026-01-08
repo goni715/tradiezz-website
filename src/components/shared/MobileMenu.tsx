@@ -1,6 +1,7 @@
 "use client";
 
-import { Bell, MessageCircleMore } from "lucide-react";
+import { logout } from "@/helper/SessionHelper";
+import useUserInfo from "@/hooks/useUserInfo";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
@@ -10,6 +11,7 @@ type TProps = {
 };
 
 const MobileMenu = ({ setIsMenuOpen }: TProps) => {
+  const userInfo = useUserInfo();
   const pathname = usePathname();
   const router = useRouter();
   const handleNavigate = (path: string) => {
@@ -40,7 +42,9 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
           <div
             onClick={() => handleNavigate("/find-candidates")}
             className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
-              pathname === "/find-candidates" ? "text-brand-color" : "text-primary"
+              pathname === "/find-candidates"
+                ? "text-brand-color"
+                : "text-primary"
             }`}
           >
             Find-Candidates
@@ -91,51 +95,68 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
             Contact
           </div>
           <div className="my-3 border-t border-white/20 pt-3">
-            {/* <div onClick={()=>handleNavigate("//dashboard/employer/post-job")} className="mt-2 block rounded-md bg-white px-3 py-2 text-center text-[#1a2c4e]">
-                Post A Job
-              </div> */}
-            <div
-              onClick={() => handleNavigate("/login")}
-              className="mt-2 cursor-pointer block rounded-md bg-primary px-3 py-2 text-center text-white"
-            >
-              Sign In
-            </div>
-            <div className="mt-4 flex items-center justify-between gap-2 px-3">
-              <div
-                onClick={() => handleNavigate("/")}
-                className="flex items-center gap-2"
-              >
-                <div className="h-8 w-8 rounded-full">
-                  <Image
-                    src="/images/avatar.png"
-                    alt="user"
-                    width={500}
-                    height={600}
-                  />
+            {userInfo?.userId ? (
+              <>
+                <div
+                  onClick={() => logout()}
+                  className="mt-2 w-full block rounded-md cursor-pointer border border-gray-300 px-3 py-2 text-center text-gray-600"
+                >
+                  Logout
                 </div>
-                <span className="text-sm">Andrew Ainsley</span>
-              </div>
-              <div className="flex gap-3">
+                <div className="mt-4 flex items-center justify-between gap-2 px-3">
+                  <div
+                    onClick={() => handleNavigate("/")}
+                    className="flex items-center gap-2"
+                  >
+                    <div className="h-8 w-8 rounded-full">
+                      <Image
+                        src={
+                          userInfo?.profileImg ||
+                          "/images/profile_placeholder.png"
+                        }
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src =
+                            "/images/profile_placeholder.png";
+                        }}
+                        alt="user"
+                        width={500}
+                        height={600}
+                        className="rounded-md"
+                      />
+                    </div>
+                    <span className="text-sm">{userInfo?.fullName}</span>
+                  </div>
+                  {/* <div className="flex gap-3">
                 <div
                 className="relative ml-auto cursor-pointer"
-                 onClick={() => handleNavigate("/dashboard/candidate/messages")}
-              >
+                onClick={() => handleNavigate("/dashboard/candidate/messages")}
+                >
                 <MessageCircleMore size={20} />
                 <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
-                  2
+                2
                 </span>
-              </div>
-              <div
+                </div>
+                <div
                 className="relative ml-auto cursor-pointer"
                 onClick={() => handleNavigate("/notifications")}
-              >
+                >
                 <Bell size={20} />
                 <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
-                  2
+                2
                 </span>
+                </div>
+                </div> */}
+                </div>
+              </>
+            ) : (
+              <div
+                onClick={() => handleNavigate("/login")}
+                className="mt-2 cursor-pointer block rounded-md bg-primary px-3 py-2 text-center text-white"
+              >
+                Sign In
               </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
