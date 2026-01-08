@@ -7,6 +7,8 @@ import getJobTypeColor from "@/utils/getJobTypeColor"
 import findLabel from "@/utils/findLabel"
 import { FaPoundSign } from "react-icons/fa"
 import { typeOptions } from "@/data/job.options"
+import useUserInfo from "@/hooks/useUserInfo"
+import ApplyJobModal from "../modal/application/ApplyJobModal"
 
 
 type TProps = {
@@ -14,7 +16,8 @@ type TProps = {
 }
 
 const JobDetails = ( { job } : TProps) => {
-  const isDeadlineSoon = new Date(job.deadline) < new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+  const isDeadlineSoon = new Date(job.deadline) < new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+  const userInfo = useUserInfo();
 
   return (
     <div className="min-h-full bg-gray-50 rounded-md">
@@ -26,12 +29,12 @@ const JobDetails = ( { job } : TProps) => {
               <p className="text-muted-foreground text-lg">{job.category}</p>
             </div>
             <div className="flex gap-2">
-              {/* <Badge variant="outline">{formatJobType(job.jobType)}</Badge> */}
               <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${getJobTypeColor(job.jobType)}`}
+                className={`px-3 py-2 rounded-full text-xs font-medium ${getJobTypeColor(job.jobType)}`}
               >
                 {findLabel(typeOptions, job.jobType)}
               </span>
+              {userInfo?.userId && userInfo.role==="candidate" && <ApplyJobModal jobId={job._id}/>}
             </div>
           </div>
         </div>

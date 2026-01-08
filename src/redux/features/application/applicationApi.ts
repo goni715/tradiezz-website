@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
 import TagTypes from "@/constant/tagType.constant";
 import { apiSlice } from "../api/apiSlice";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
@@ -77,9 +76,9 @@ export const applicationApi = apiSlice.injectEndpoints({
         }
       },
     }),
-      applyJob: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `/jobs/apply/${id}`,
+    applyJob: builder.mutation({
+      query: (data) => ({
+        url: `/application/apply-job`,
         method: "POST",
         body: data,
       }),
@@ -139,5 +138,6 @@ export const applicationApi = apiSlice.injectEndpoints({
 export const {
   useGetAppliedJobsQuery,
   useGetApplicationsQuery,
-  useGetAppliedJobIdsQuery
+  useGetAppliedJobIdsQuery,
+  useApplyJobMutation
 } = applicationApi;

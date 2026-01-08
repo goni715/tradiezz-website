@@ -15,6 +15,7 @@ const Navbar = () => {
   const userInfo = useUserInfo();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  
 
 
   return (

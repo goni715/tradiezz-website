@@ -3,9 +3,10 @@
 
 import TagTypes from "@/constant/tagType.constant";
 import { apiSlice } from "../api/apiSlice";
-import { SetUser } from "./userSllice";
+import { SetIsProfileUpdated, SetUser } from "./userSllice";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
 import { SetProfileError } from "../auth/authSlice";
+import { setToken } from "@/helper/SessionHelper";
 
 export const userApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -63,6 +64,11 @@ export const userApi = apiSlice.injectEndpoints({
       async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
         try {
           await queryFulfilled;
+          const res = await queryFulfilled;
+          const token = res?.data?.data?.accessToken;
+          localStorage.clear();
+          setToken(token);
+          dispatch(SetIsProfileUpdated(true));
           SuccessToast("Update Success");
         } catch (err: any) {
           const message = err?.error?.data?.message;
@@ -212,5 +218,5 @@ export const {
   useAddWorkExperienceMutation,
   useRemoveWorkExperienceMutation,
   useUpdateWorkExperienceMutation,
-  useUpdatePrivacyMutation
+  useUpdatePrivacyMutation,
 } = userApi;
