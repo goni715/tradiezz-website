@@ -6,7 +6,9 @@ import { apiSlice } from "../api/apiSlice";
 import { SetIsProfileUpdated, SetUser } from "./userSllice";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
 import { SetProfileError } from "../auth/authSlice";
-import { setToken } from "@/helper/SessionHelper";
+import { setToken, setUserDetails } from "@/helper/SessionHelper";
+import { jwtDecode } from "jwt-decode";
+import { IAuthUser } from "@/types/global.type";
 
 export const userApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -66,10 +68,11 @@ export const userApi = apiSlice.injectEndpoints({
           await queryFulfilled;
           const res = await queryFulfilled;
           const token = res?.data?.data?.accessToken;
-          localStorage.clear();
-          setToken(token);
-          dispatch(SetIsProfileUpdated(true));
+          if (token && token.split(".").length === 3) {
+            setToken(token);
+          }
           SuccessToast("Update Success");
+          dispatch(SetIsProfileUpdated(true));
         } catch (err: any) {
           const message = err?.error?.data?.message;
           dispatch(SetProfileError(message));

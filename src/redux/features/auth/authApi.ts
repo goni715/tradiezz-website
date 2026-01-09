@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getAuthId, setEmail, setOtp, setToken, setVerifyEmail } from "@/helper/SessionHelper";
+import { getAuthId, setEmail, setOtp, setToken, setUserDetails, setVerifyEmail } from "@/helper/SessionHelper";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
 import { SetChangePasswordError, SetForgotError, SetLoginError, SetRegisterError, SetResetPasswordError, SetVerifyAccountError, SetVerifyAccountOtpError, SetVerifyOtpError } from "./authSlice";
 import { apiSlice } from "../api/apiSlice";
+import { jwtDecode } from "jwt-decode";
+import { IAuthUser } from "@/types/global.type";
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -60,7 +62,13 @@ export const authApi = apiSlice.injectEndpoints({
         try {
           const res = await queryFulfilled;
           const token = res?.data?.data?.accessToken;
+          const { fullName, email, profileImg } = jwtDecode(token) as IAuthUser;
           setToken(token);
+          setUserDetails({
+            fullName,
+            email,
+            profileImg
+          })
           SuccessToast("Login Success");
           setTimeout(() => {
             window.location.href = "/";

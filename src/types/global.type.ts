@@ -1,12 +1,9 @@
-
-
 export interface ApiError {
   status: number;
   data?: {
     message?: string;
   };
 }
-
 
 export type IAuthUser = {
   userId: string;
@@ -28,11 +25,16 @@ export interface IMeta {
   total: number;
   totalPage: number;
 }
-  
+
 export type TOption = {
   value: string;
   label: string;
-}
+};
 
+export type TProfile = {
+  fullName: string;
+  email: string;
+  profileImg: string;
+};
 
-export type TVisibility = 'visible' | 'hidden';
+export type TVisibility = "visible" | "hidden";

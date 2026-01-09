@@ -1,9 +1,13 @@
-import { IAuthUser } from "@/types/global.type";
+import { IAuthUser, TProfile } from "@/types/global.type";
 import { jwtDecode } from "jwt-decode";
 import { SuccessToast } from "./ValidationHelper";
 
 class SessionHelper {
   setToken(token: string) {
+    if (!token || token.split(".").length !== 3) {
+      return;
+    }
+
     localStorage.setItem("token", token);
   }
 
@@ -33,6 +37,18 @@ class SessionHelper {
     } else {
       return false;
     }
+  }
+
+  setUserDetails(user: TProfile) {
+    localStorage.setItem("user", JSON.stringify(user));
+  }
+
+  getUserDetails() {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const user = localStorage.getItem("user");
+      return user && JSON.parse(user);
+    }
+    return null;
   }
 
   setEmail(email: string) {
@@ -90,4 +106,6 @@ export const {
   isLoggedIn,
   setAuthId,
   getAuthId,
+  setUserDetails,
+  getUserDetails,
 } = new SessionHelper();
