@@ -33,7 +33,9 @@ const TagTypes = {
    categoryDropDown: "CategoryDropDown",
    subCategoryDropDown: "CategoryDropDown",
    blogCategoryDropDown: "BlogCategoryDropDown",
-   plans: "Plans"
+   plans: "Plans",
+   employerStats: "EmployerStats",
+   candidateStats: "CandidateStats"
 }
 
 export default TagTypes;

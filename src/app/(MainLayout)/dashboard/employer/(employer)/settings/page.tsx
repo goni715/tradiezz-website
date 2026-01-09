@@ -1,22 +1,38 @@
-"use client"
+"use client";
 
-import EmployerTabs from "@/components/EmployerSettings/EmployerTabs";
-
+import ServerErrorCard from "@/components/card/ServerErrorCard";
+import EmployerSettings from "@/components/EmployerSettings/EmployerSettings";
+import CandidateOverviewLoading from "@/components/loader/CandidateOverviewLoading";
+import { useGetMeQuery } from "@/redux/features/user/userApi";
+import { SetIsProfileUpdated, SetUser } from "@/redux/features/user/userSllice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { useEffect } from "react";
 
 const EmployerSettingsPage = () => {
-  return (
-    <>
-      {/* Main Content */}
-      <main className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-6">
-            Profile
-          </h1>
-          <EmployerTabs/>
-        </div>
-      </main>
-    </>
-  );
+  const dispatch = useAppDispatch();
+  const { data, isLoading, isError } = useGetMeQuery(undefined);
+  const { isProfileUpdated } = useAppSelector((state) => state.user);
+
+  useEffect(() => {
+    if (isProfileUpdated) {
+      dispatch(SetUser(data?.data));
+      dispatch(SetIsProfileUpdated(false));
+    }
+  }, [isProfileUpdated, dispatch, data]);
+
+  if (isLoading) {
+    return <CandidateOverviewLoading />;
+  }
+
+  if (!isLoading && data.data) {
+    return <EmployerSettings />;
+  }
+
+  if (!isLoading && isError) {
+    return <ServerErrorCard />;
+  }
+
+  return null;
 };
 
 export default EmployerSettingsPage;

@@ -3,7 +3,7 @@
 
 import TagTypes from "@/constant/tagType.constant";
 import { apiSlice } from "../api/apiSlice";
-import { SetUser } from "./userSllice";
+import { SetIsProfileUpdated, SetUser } from "./userSllice";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
 import { SetProfileError } from "../auth/authSlice";
 import { setToken } from "@/helper/SessionHelper";
@@ -69,6 +69,7 @@ export const userApi = apiSlice.injectEndpoints({
           if (token && token.split(".").length === 3) {
             setToken(token);
           }
+          dispatch(SetIsProfileUpdated(true))
           SuccessToast("Update Success");
         } catch (err: any) {
           const message = err?.error?.data?.message;

@@ -1,20 +1,26 @@
 "use client";
 import { Button, Modal } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CgSpinnerTwo } from "react-icons/cg";
 import { useApplyJobMutation } from "@/redux/features/application/applicationApi";
 
 type TProps = {
-    jobId: string;
-}
+  jobId: string;
+};
 const ApplyJobModal = ({ jobId }: TProps) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [applyJob, { isLoading }] = useApplyJobMutation();
+  const [applyJob, { isLoading, isSuccess }] = useApplyJobMutation();
+
+  useEffect(() => {
+    if (!isLoading) {
+      setModalOpen(false);
+    }
+  }, [isLoading, isSuccess]);
 
   const handleClick = () => {
     applyJob({
-        jobId
-    })
+      jobId,
+    });
   };
 
   return (

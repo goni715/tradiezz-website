@@ -7,7 +7,6 @@ import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
 import { SetCandidateOverview } from "./candidateSlice";
 import { IParam } from "@/types/global.type";
 
-
 export const candidateApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCandidateOverview: builder.query({
@@ -17,16 +16,16 @@ export const candidateApi = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 600,
       providesTags: [TagTypes.candidateOverview],
-      async onQueryStarted(_arg, { queryFulfilled, dispatch}) {
+      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
         try {
           const res = await queryFulfilled;
           const data = res?.data?.data;
-          dispatch(SetCandidateOverview(data))
-        } catch (err:any) {
-         ErrorToast("Server error is occured");
+          dispatch(SetCandidateOverview(data));
+        } catch (err: any) {
+          ErrorToast("Server error is occured");
         }
       },
-    }), 
+    }),
     getFindCandidates: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
@@ -49,18 +48,20 @@ export const candidateApi = apiSlice.injectEndpoints({
     }),
     getSingleCandidate: builder.query({
       query: (id) => ({
-        url: `/jobs/get_user_profile_details/${id}`,
+        url: `/user/get-single-candidate/${id}`,
         method: "GET",
       }),
       keepUnusedDataFor: 600,
-      providesTags: (result, error, arg) =>[ {type: TagTypes.candidate, id:arg} ],
-      async onQueryStarted(_arg, { queryFulfilled}) {
-        try {
-          await queryFulfilled;
-        } catch (err:any) {
-         ErrorToast("Server error is occured");
-        }
-      },
+      providesTags: (result, error, arg) => [
+        { type: TagTypes.candidate, id: arg },
+      ],
+      // async onQueryStarted(_arg, { queryFulfilled }) {
+      //   try {
+      //     await queryFulfilled;
+      //   } catch (err: any) {
+      //     ErrorToast("Server error is occured");
+      //   }
+      // },
     }),
     getFavouriteCandidates: builder.query({
       query: (args) => {
@@ -86,11 +87,15 @@ export const candidateApi = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `/favorite-candidate/add-remove-favorite-candidate`,
         method: "POST",
-        body: data
+        body: data,
       }),
       invalidatesTags: (result, error, arg) => {
         if (result?.success) {
-          return [TagTypes.candidates, TagTypes.favouriteCandidates, {type: TagTypes.candidate, id: arg}];
+          return [
+            TagTypes.candidates,
+            TagTypes.favouriteCandidates,
+            { type: TagTypes.candidate, id: arg },
+          ];
         }
         return [];
       },
@@ -115,7 +120,7 @@ export const candidateApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => {
         if (result?.success) {
-          return [TagTypes.candidates, {type: TagTypes.candidate, id: arg}];
+          return [TagTypes.candidates, { type: TagTypes.candidate, id: arg }];
         }
         return [];
       },
@@ -124,9 +129,9 @@ export const candidateApi = apiSlice.injectEndpoints({
           const res = await queryFulfilled;
           const msg = res?.data?.message;
           SuccessToast(msg);
-        } catch (err:any) {
+        } catch (err: any) {
           const message = err?.error?.data?.message;
-          ErrorToast(message)
+          ErrorToast(message);
         }
       },
     }),
@@ -134,11 +139,15 @@ export const candidateApi = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `/auth/candidate_resume_upload`,
         method: "PATCH",
-        body: data
+        body: data,
       }),
       invalidatesTags: (result, error, arg) => {
         if (result?.success) {
-          return [TagTypes.candidates, TagTypes.favouriteCandidates, {type: TagTypes.candidate, id: arg}];
+          return [
+            TagTypes.candidates,
+            TagTypes.favouriteCandidates,
+            { type: TagTypes.candidate, id: arg },
+          ];
         }
         return [];
       },
@@ -147,14 +156,21 @@ export const candidateApi = apiSlice.injectEndpoints({
           const res = await queryFulfilled;
           const msg = res?.data?.message;
           SuccessToast(msg);
-        } catch (err:any) {
+        } catch (err: any) {
           const message = err?.error?.data?.message;
-          ErrorToast(message)
+          ErrorToast(message);
         }
       },
     }),
   }),
 });
 
-
-export const { useGetCandidateOverviewQuery, useGetFindCandidatesQuery, useGetSingleCandidateQuery, useAddRemoveFavoriteCandidateMutation, useSendAccessRequestMutation, useGetFavouriteCandidatesQuery, useUploadCVMutation } = candidateApi;
+export const {
+  useGetCandidateOverviewQuery,
+  useGetFindCandidatesQuery,
+  useGetSingleCandidateQuery,
+  useAddRemoveFavoriteCandidateMutation,
+  useSendAccessRequestMutation,
+  useGetFavouriteCandidatesQuery,
+  useUploadCVMutation,
+} = candidateApi;

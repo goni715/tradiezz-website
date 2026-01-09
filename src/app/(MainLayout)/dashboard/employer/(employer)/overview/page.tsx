@@ -3,29 +3,29 @@
 import ServerErrorCard from "@/components/card/ServerErrorCard";
 import EmployerOverview from "@/components/employerOverview/EmployerOverview";
 import OverviewLoading from "@/components/loader/OverviewLoading";
+import { useGetEmployerStatsQuery } from "@/redux/features/dashboard/dashboardApi";
 import { useGetEmployerJobsQuery } from "@/redux/features/job/jobApi";
-import { useAppSelector } from "@/redux/hooks/hooks";
 
 
 const EmployerOverviewPage = () => {
-  const { overview } = useAppSelector((state) => state.candidate);
-  //const { isLoading, isError} = useGetEmployerOverviewQuery(undefined);
+  const { isLoading, data: statsData,  isError} = useGetEmployerStatsQuery(undefined);
   const { data, isLoading:jobLoading, isError:jobError } = useGetEmployerJobsQuery([
     { name: "page", value: 1 },
     { name: "limit", value: 6 },
   ]);
-
+  
+  const stats = statsData?.data;
   const jobs = data?.data || [];
 
-  if (jobLoading) {
+  if (isLoading || jobLoading) {
     return <OverviewLoading/>
   }
 
-  if (overview && data) {
-    return <EmployerOverview jobs={jobs}/>
+  if (!isLoading && !jobLoading && statsData && data) {
+    return <EmployerOverview jobs={jobs} stats={stats}/>
   }
   
-   if(!jobLoading && jobError){
+   if(!isLoading &&!jobLoading && isError && jobError){
     return <ServerErrorCard/>
   }
 }

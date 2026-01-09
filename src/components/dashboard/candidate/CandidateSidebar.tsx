@@ -8,7 +8,7 @@ const CandidateSidebar = () =>{
     <aside className="w-full py-6 border-r border-gray-200 bg-white md:w-64 lg:w-72">
         <div className="px-4 mb-6">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
-            Candidate Dashboard
+            Job Seeker Dashboard
           </h2>
         </div>
 

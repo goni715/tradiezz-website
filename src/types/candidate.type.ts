@@ -80,3 +80,32 @@ export interface ICandidate {
   totalReview: number;
   isFavorite: boolean;
 }
+
+export type TWorkRate = 'per_hour' | 'per_day' | 'per_job';
+export type TWorkType = 'full_time' | 'part_time' | 'gig' | 'evenings_weekends';
+export type TEmploymentType = 'self_employed' | 'seeking_employed' | 'both';
+export type TExperience = 'entry' | 'mid' | 'senior' | 'expert';
+
+export interface ISingleCandidate {
+  userId: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  profileImg: string;
+  workRate: TWorkRate;
+  workType: TWorkType;
+  availableDate: string; // ISO date string
+  employmentType: TEmploymentType;
+  skills: string[];
+  experience: TExperience;
+  dateOfBirth: string; // ISO date string
+  category: string;
+  subCategory: string;
+  address: string;
+  coordinates: [number, number]; // [longitude, latitude]
+  postalCode: string;
+  city: string;
+  ratings: number;
+  totalReview: number;
+  description: string; // HTML string
+};
