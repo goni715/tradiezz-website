@@ -3,12 +3,10 @@
 
 import TagTypes from "@/constant/tagType.constant";
 import { apiSlice } from "../api/apiSlice";
-import { SetIsProfileUpdated, SetUser } from "./userSllice";
+import { SetUser } from "./userSllice";
 import { ErrorToast, SuccessToast } from "@/helper/ValidationHelper";
 import { SetProfileError } from "../auth/authSlice";
-import { setToken, setUserDetails } from "@/helper/SessionHelper";
-import { jwtDecode } from "jwt-decode";
-import { IAuthUser } from "@/types/global.type";
+import { setToken } from "@/helper/SessionHelper";
 
 export const userApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -72,7 +70,6 @@ export const userApi = apiSlice.injectEndpoints({
             setToken(token);
           }
           SuccessToast("Update Success");
-          dispatch(SetIsProfileUpdated(true));
         } catch (err: any) {
           const message = err?.error?.data?.message;
           dispatch(SetProfileError(message));
