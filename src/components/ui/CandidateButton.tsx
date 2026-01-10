@@ -6,7 +6,7 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   onClick?: () => void;
-  disabled: boolean
+  disabled?: boolean
 }
 
 const CandidateButton: React.FC<ButtonProps> = ({
@@ -15,7 +15,7 @@ const CandidateButton: React.FC<ButtonProps> = ({
   size = 'md',
   className = '',
   onClick,
-  disabled
+  disabled=false
 }) => {
   const baseStyles = 'font-medium rounded-md transition-all cursor-pointer duration-200 inline-flex items-center justify-center';
   

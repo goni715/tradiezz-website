@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import findLabel from "@/utils/findLabel";
 import { candidateExperienceOptions } from "@/data/candidate.options";
 import { useAddRemoveFavoriteCandidateMutation } from "@/redux/features/candidate/candidateApi";
+import { useSendRequestMutation } from "@/redux/features/user/userApi";
 
 interface TProps {
   candidate: ICandidate;
@@ -18,9 +19,9 @@ interface TProps {
 const CandidateCard: React.FC<TProps> = ({ candidate, viewMode }) => {
   const router = useRouter();
   const imageSrc = candidate.profileImg || "/images/profile_placeholder.png";
-
   const [isFavorite, setIsFavorite] = useState(false);
   const [addRemoveFavoriteCandidate] = useAddRemoveFavoriteCandidateMutation();
+  const [sendRequest, { isLoading }] = useSendRequestMutation();
 
   useEffect(() => {
     setIsFavorite(candidate?.isFavorite);
@@ -93,9 +94,11 @@ const CandidateCard: React.FC<TProps> = ({ candidate, viewMode }) => {
         <CandidateButton
           size="sm"
           variant="outline"
-          disabled={candidate.isPrivate}
           onClick={() => {
-            if (candidate.isPrivate) return;
+            if (candidate.isPrivate) {
+              sendRequest(candidate.userId);
+              return;
+            }
             router.push(`/find-candidates/details/${candidate.userId}`);
           }}
           className={`${
@@ -104,7 +107,11 @@ const CandidateCard: React.FC<TProps> = ({ candidate, viewMode }) => {
               : "hover:bg-yellow-500 hover:text-black"
           }`}
         >
-          {candidate?.isPrivate ? "Send Request" : "View Profile"}
+          {candidate?.isPrivate
+            ? isLoading
+              ? "Sending..."
+              : "Send Request"
+            : "View Profile"}
         </CandidateButton>
       </div>
     );
@@ -139,7 +146,7 @@ const CandidateCard: React.FC<TProps> = ({ candidate, viewMode }) => {
       </div>
 
       {/* Content */}
-      <div className="mt-3 flex-1">
+      <div className="mt-3 flex-1 mb-2">
         <h3 className="text-sm font-semibold text-gray-900">
           {candidate.fullName}
         </h3>
@@ -154,18 +161,24 @@ const CandidateCard: React.FC<TProps> = ({ candidate, viewMode }) => {
       <CandidateButton
         size="sm"
         variant="outline"
-        disabled={candidate.isPrivate}
         onClick={() => {
-          if (candidate.isPrivate) return;
+          if (candidate.isPrivate) {
+            sendRequest(candidate.userId);
+            return;
+          }
           router.push(`/find-candidates/details/${candidate.userId}`);
         }}
         className={`${
           candidate.isPrivate
-            ? "bg-blue-600 text-white hover:bg-blue-700 border-blue-600"
+            ? "bg-blue-600 text-white hover:bg-blue-700 border-blue-600 hover:text-black"
             : "hover:bg-yellow-500 hover:text-black"
         }`}
       >
-        {candidate?.isPrivate ? "Send Request" : "View Profile"}
+        {candidate?.isPrivate
+          ? isLoading
+            ? "Sending..."
+            : "Send Request"
+          : "View Profile"}
       </CandidateButton>
     </div>
   );

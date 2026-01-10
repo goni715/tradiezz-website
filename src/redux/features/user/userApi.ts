@@ -69,7 +69,7 @@ export const userApi = apiSlice.injectEndpoints({
           if (token && token.split(".").length === 3) {
             setToken(token);
           }
-          dispatch(SetIsProfileUpdated(true))
+          dispatch(SetIsProfileUpdated(true));
           SuccessToast("Update Success");
         } catch (err: any) {
           const message = err?.error?.data?.message;
@@ -207,6 +207,26 @@ export const userApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    sendRequest: builder.mutation({
+      query: (id: string) => ({
+        url: `/user/send-request/${id}`,
+        method: "PATCH",
+      }),
+      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
+        try {
+          await queryFulfilled;
+          SuccessToast("Request sent successfully.");
+        } catch (err: any) {
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            ErrorToast("Something Went Wrong");
+          } else {
+            ErrorToast(message);
+          }
+        }
+      },
+    }),
   }),
 });
 
@@ -220,4 +240,5 @@ export const {
   useRemoveWorkExperienceMutation,
   useUpdateWorkExperienceMutation,
   useUpdatePrivacyMutation,
+  useSendRequestMutation
 } = userApi;
