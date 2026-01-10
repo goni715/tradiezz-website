@@ -39,49 +39,47 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
           >
             Find Work
           </div>
+          {userInfo && userInfo?.role === "employer" ? (
+            <>
+              <div
+                onClick={() => handleNavigate("/find-candidates")}
+                className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
+                  pathname === "/find-candidates"
+                    ? "text-brand-color"
+                    : "text-primary"
+                }`}
+              >
+                Find-Skilled-People
+              </div>
+              <div
+                onClick={() => handleNavigate("/dashboard/employer/overview")}
+                className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
+                  pathname === "/dashboard/employer/overview"
+                    ? "text-brand-color"
+                    : "text-primary"
+                }`}
+              >
+                Dashboard
+              </div>
+            </>
+          ) : (
+            <>
+              <div
+                onClick={() => handleNavigate("/dashboard/candidate/overview")}
+                className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
+                  pathname === "/dashboard/candidate/overview"
+                    ? "text-brand-color"
+                    : "text-primary"
+                }`}
+              >
+                Dashboard
+              </div>
+            </>
+          )}
           <div
-            onClick={() => handleNavigate("/find-candidates")}
+            onClick={() => handleNavigate("/blogs")}
             className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
-              pathname === "/find-candidates"
-                ? "text-brand-color"
-                : "text-primary"
-            }`}
-          >
-            Find-Candidates
-          </div>
-          <div
-            onClick={() => handleNavigate("/dashboard/candidate/overview")}
-            className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
-              pathname === "/dashboard/candidate/overview"
-                ? "text-brand-color"
-                : "text-primary"
-            }`}
-          >
-            Candidate-Dashboard
-          </div>
-          <div
-            onClick={() => handleNavigate("/dashboard/employer/overview")}
-            className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
-              pathname === "/dashboard/employer/overview"
-                ? "text-brand-color"
-                : "text-primary"
-            }`}
-          >
-            Employer-Dashboard
-          </div>
-          {/* <Link href="/employers" className="block rounded-md px-3 py-2 hover:bg-white/10">
-              Employers
-            </Link> */}
-          {/* <button onClick={()=>handleNavigate("/")} className="block rounded-md px-3 py-2 hover:bg-white/10">
-              Candidates
-            </button> */}
-          {/* <button href="/pricing" className="block rounded-md px-3 py-2 hover:bg-white/10">
-              Pricing Plans
-            </button> */}
-          <div
-            onClick={() => handleNavigate("/blog-list")}
-            className={`block rounded-md px-3 py-2 hover:bg-white/10 cursor-pointer ${
-              pathname === "/blog-list" ? "text-brand-color" : "text-primary"
+              pathname === "/blogs" ? "text-brand-color" : "text-primary"
             }`}
           >
             Blogs
