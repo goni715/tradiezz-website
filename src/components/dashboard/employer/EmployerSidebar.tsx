@@ -48,6 +48,11 @@ const EmployerSidebar = () => {
             icon={<BriefcaseBusiness className="h-5 w-5" />}
             label="My Jobs"
           />
+          <SidebarLink
+            href="/dashboard/employer/applications"
+            icon={<BriefcaseBusiness className="h-5 w-5" />}
+            label="Applications"
+          />
            <SidebarLink
             href="/dashboard/employer/messages"
             icon={<MessageSquareMore className="h-5 w-5" />}

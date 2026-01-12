@@ -11,7 +11,6 @@ import { useState } from "react";
 import EditProfilePic from "./EditProfilePic";
 import { candidatePersonalSchema } from "@/schema/candidate.schema";
 import SubmitButton from "@/components/form/SubmitButton";
-import CustomDatePicker from "@/components/form/CustomDatePicker";
 import CustomQuilEditor from "@/components/form/CustomQuilEditor";
 import { WarningToast } from "@/helper/ValidationHelper";
 import { useUpdateCandidateProfileMutation } from "@/redux/features/user/userApi";
@@ -26,7 +25,6 @@ const PersonalForm = () => {
   const [updateCandidateProfile, { isLoading }] =
     useUpdateCandidateProfileMutation();
 
-  const initialDateOfBirth = user?.dateOfBirth.split('T')[0] as string || "";
   const { handleSubmit, control } = useForm({
     resolver: zodResolver(candidatePersonalSchema),
     defaultValues: {
@@ -34,7 +32,6 @@ const PersonalForm = () => {
       email: user?.email,
       phone: user?.phone as string,
       description: user?.description as string,
-      dateOfBirth: initialDateOfBirth
     },
   });
 
@@ -46,7 +43,6 @@ const PersonalForm = () => {
     if (
       user.fullName === data.fullName &&
       user.phone === data.phone &&
-      initialDateOfBirth === data.dateOfBirth &&
       user.description === data.description &&
       !file
     ) {
@@ -61,10 +57,6 @@ const PersonalForm = () => {
     //check phone
     if (user.phone !== data.phone) {
       formData.append("phone", data.phone);
-    }
-    //check birth date
-    if (initialDateOfBirth !== data.dateOfBirth) {
-      formData.append("dateOfBirth", data.dateOfBirth);
     }
     //check description
     if (user.description !== data.description) {
@@ -117,11 +109,6 @@ const PersonalForm = () => {
                 type="text"
                 control={control}
                 placeholder="Enter phone number"
-              />
-              <CustomDatePicker
-                label="Birth Date"
-                name="dateOfBirth"
-                control={control}
               />
               <CustomQuilEditor
                 label="Description"

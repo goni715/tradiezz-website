@@ -1,6 +1,6 @@
 "use client";
 
-import { candidateExperienceOptions, employmentTypeOptions, workRateOptions } from "@/data/candidate.options";
+import { candidateExperienceOptions, employmentTypeOptions, workRateOptions, workTypeOptions } from "@/data/candidate.options";
 import { ISingleCandidate } from "@/types/candidate.type";
 import findLabel from "@/utils/findLabel";
 import Image from "next/image";
@@ -135,7 +135,7 @@ const CandidateDetails = ({ candidateData }: TProps) => {
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
                   <p className="text-xs text-gray-600 uppercase font-semibold mb-1">Work Type</p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {findLabel(candidateExperienceOptions, candidateData?.workType)}
+                    {findLabel(workTypeOptions, candidateData?.workType)}
                   </p>
                 </div>
               </div>

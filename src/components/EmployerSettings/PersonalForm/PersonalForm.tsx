@@ -9,25 +9,24 @@ import { SetProfileError } from "@/redux/features/auth/authSlice";
 import Error from "@/components/validation/FormError";
 import { useState } from "react";
 import EditProfilePic from "./EditProfilePic";
-import { candidatePersonalSchema } from "@/schema/candidate.schema";
 import SubmitButton from "@/components/form/SubmitButton";
 import CustomQuilEditor from "@/components/form/CustomQuilEditor";
 import { WarningToast } from "@/helper/ValidationHelper";
-import { useUpdateCandidateProfileMutation } from "@/redux/features/user/userApi";
+import { useUpdateEmployerProfileMutation } from "@/redux/features/user/userApi";
+import { employerPersonalSchema } from "@/schema/employer.schema";
 
-type TFormValues = z.infer<typeof candidatePersonalSchema>;
+type TFormValues = z.infer<typeof employerPersonalSchema>;
 
 const PersonalForm = () => {
   const [file, setFile] = useState<File | null>(null)
   const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const { ProfileError } = useAppSelector((state) => state.auth);
-  const [updateCandidateProfile, { isLoading }] =
-    useUpdateCandidateProfileMutation();
+  const [updateProfile, { isLoading }] =
+    useUpdateEmployerProfileMutation();
 
-  //const initialDateOfBirth = user?.dateOfBirth.split('T')[0] as string || "";
   const { handleSubmit, control } = useForm({
-    resolver: zodResolver(candidatePersonalSchema),
+    resolver: zodResolver(employerPersonalSchema),
     defaultValues: {
       fullName: user?.fullName as string,
       email: user?.email,
@@ -73,7 +72,7 @@ const PersonalForm = () => {
    //const formObject = Object.fromEntries(formData.entries());
    //console.log(formObject);
 
-    updateCandidateProfile(formData)
+    updateProfile(formData)
   };
 
   return (

@@ -1,11 +1,12 @@
-import ApplicationList from "@/components/dashboard/employer/applications/ApplicationList"
+import ApplicationDetails from '@/components/applicationDetails/ApplicationDetails'
+import React from 'react'
 
-const ApplicationsPage = () => {
+const ApplicationDetailsPage = () => {
   return (
     <>
-     <ApplicationList/>
+      <ApplicationDetails/>
     </>
   )
 }
 
-export default ApplicationsPage;
+export default ApplicationDetailsPage

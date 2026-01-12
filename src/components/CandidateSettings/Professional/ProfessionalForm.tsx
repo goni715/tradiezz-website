@@ -38,7 +38,6 @@ const ProfessionalForm = () => {
   useGetCategoryDropDownQuery(undefined);
   const initialAvailableDate =
     (user?.availableDate?.split("T")[0] as string) || "";
-
   const [updateProfile, { isLoading }] = useUpdateCandidateProfileMutation();
   const { handleSubmit, control, watch, setValue } = useForm({
     resolver: zodResolver(candidateProfessionalSchema),
@@ -49,6 +48,8 @@ const ProfessionalForm = () => {
       workRate: user.workRate,
       workType: user.workType,
       experience: user.experience,
+      title: user?.title?.length > 0 ? user?.title.join(", ") : "",
+      jobSeekingTitle: user?.jobSeekingTitle?.length > 0 ? user?.jobSeekingTitle.join(", ") : "",
       skills: user?.skills?.length > 0 ? user?.skills.join(", ") : "",
     },
   });
@@ -105,6 +106,16 @@ const ProfessionalForm = () => {
     if (!checkEqualArray(user.skills, currentSkills)) {
       finalValues.skills = currentSkills;
     }
+    //check title
+    const currentTitle = data.title?.split(",").map((s) => s.trim());
+    if (!checkEqualArray(user.title, currentTitle)) {
+      finalValues.title = currentTitle;
+    }
+    //check jobSeekingTitle
+    const currentJobSeekingTitle = data.jobSeekingTitle?.split(",").map((s) => s.trim());
+    if (!checkEqualArray(user.jobSeekingTitle, currentJobSeekingTitle)) {
+      finalValues.jobSeekingTitle = currentJobSeekingTitle;
+    }
 
     if (Object.keys(finalValues).length === 0) {
       WarningToast("No changes detected");
@@ -126,20 +137,20 @@ const ProfessionalForm = () => {
             className="bg-white rounded-lg mt-4"
           >
             <div className="space-y-4">
-              {/* <CustomInput
-                label="Job Title(multiple, comma separated)"
-                name="job_title"
+              <CustomInput
+                label="Title(multiple, comma separated)"
+                name="title"
                 type="text"
                 control={control}
                 placeholder="e.g.Manufacturing Associate, Process Technician"
               />
               <CustomInput
                 label="Job Seeking Title(multiple, comma separated)"
-                name="job_seeking"
+                name="jobSeekingTitle"
                 type="text"
                 control={control}
                 placeholder="Enter title"
-              /> */}
+              />
               {/* <CustomSelect
                 label="Category"
                 name="categoryId"

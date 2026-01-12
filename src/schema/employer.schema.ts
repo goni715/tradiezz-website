@@ -3,18 +3,23 @@ import { fullNameRegex, ukPhoneRegex } from "./auth.schema";
 import { isEditorContentEmpty } from "./job.schema";
 
 export const employerPersonalSchema = z.object({
-  name: z
+  fullName: z
     .string({
       invalid_type_error: "Name must be string",
-      required_error: "Name is required",
+      required_error: "Full Name is required",
     })
     .trim()
-    .min(1, "Name is required")
+    .min(1, "Full Name is required")
     .regex(fullNameRegex, {
       message:
-        "Name can only contain letters, spaces, apostrophes, hyphens, and dots.",
+        "Full Name can only contain letters, spaces, apostrophes, hyphens, and dots.",
     }),
-  phone_number: z
+  email: z
+    .string({ required_error: "Email is required" })
+    .min(1, "Email is required")
+    .email("Please enter a valid email address")
+    .optional(),
+  phone: z
     .string({
       invalid_type_error: "Phone Number must be string",
       required_error: "Phone number is required",
@@ -24,14 +29,7 @@ export const employerPersonalSchema = z.object({
     .regex(ukPhoneRegex, {
       message: "Enter a valid UK phone number",
     }),
-  address: z
-    .string({
-      invalid_type_error: "Address must be string",
-      required_error: "Address is required",
-    })
-    .trim()
-    .min(1, "Address is required"),
-  details: z.preprocess(
+  description: z.preprocess(
     (val) => {
       if (typeof val === "string" && isEditorContentEmpty(val)) {
         return ""; // force fail if visually empty
@@ -46,6 +44,7 @@ export const employerPersonalSchema = z.object({
       .min(1, "Description is required")
   ),
 });
+
 
 export const companySchema = z.object({
   name: z

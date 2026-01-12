@@ -29,12 +29,6 @@ export const candidatePersonalSchema = z.object({
     .regex(ukPhoneRegex, {
       message: "Enter a valid UK phone number",
     }),
-  dateOfBirth: z
-    .string({
-      required_error: "Select date of birth",
-    })
-    .trim()
-    .min(1, "Select date of birth"),
   description: z.preprocess(
     (val) => {
       if (typeof val === "string" && isEditorContentEmpty(val)) {
@@ -52,6 +46,24 @@ export const candidatePersonalSchema = z.object({
 });
 
 export const candidateProfessionalSchema = z.object({
+  title: z
+    .string({
+      invalid_type_error: "Title must be string",
+      required_error: "At least one title required",
+    })
+    .trim()
+    .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
+      message: "Please enter valid comma-separated title",
+    }),
+  jobSeekingTitle: z
+    .string({
+      invalid_type_error: "Job Seeking Title must be string",
+      required_error: "At least one job seeking title required",
+    })
+    .trim()
+    .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
+      message: "Please enter valid comma-separated job seeking title",
+    }),
   categoryId: z
     .string({
       invalid_type_error: "subCategoryId must be a string",
@@ -329,6 +341,24 @@ export const candidateRegisterSchema = z
     confirmPassword: z.string().min(1, "Confirm Password is required"),
 
     // Step 2: Category Selection
+    title: z
+      .string({
+        invalid_type_error: "Title must be string",
+        required_error: "At least one title required",
+      })
+      .trim()
+      .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
+        message: "Please enter valid comma-separated title",
+      }),
+    jobSeekingTitle: z
+      .string({
+        invalid_type_error: "Job Seeking Title must be string",
+        required_error: "At least one job seeking title required",
+      })
+      .trim()
+      .regex(/^([^,\n]+)(,\s*[^,\n]+)*$/, {
+        message: "Please enter valid comma-separated job seeking title",
+      }),
     categoryId: z.string().min(1, "Category is required"),
     subCategoryId: z.string().min(1, "Sub-category is required"),
     workRate: z.string().min(1, "Rate is required"),
@@ -375,37 +405,37 @@ export const candidateRegisterSchema = z
     // Step 4: Skills & Experience
     skills: z.array(z.string()).min(1, "At least one skill is required"),
     experience: z.string().min(1, "Experience is required"),
-    dateOfBirth: z
-      .string({
-        required_error: "Select Date of Birth",
-        invalid_type_error: "dateOfBirth must be string value",
-      })
-      .trim()
-      .min(1, { message: "Select Date of Birth" })
-      .superRefine((date, ctx) => {
-        const formatRegex = /^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+    // dateOfBirth: z
+    //   .string({
+    //     required_error: "Select Date of Birth",
+    //     invalid_type_error: "dateOfBirth must be string value",
+    //   })
+    //   .trim()
+    //   .min(1, { message: "Select Date of Birth" })
+    //   .superRefine((date, ctx) => {
+    //     const formatRegex = /^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
-        // 1️⃣ Validate format first
-        if (!formatRegex.test(date)) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "dateOfBirth must be 'YYYY-MM-DD' format",
-          });
-          return; // stop further checks
-        }
-        // 2️⃣ Parse date and check future
-        const inputDate = new Date(date + "T00:00:00"); // consistent local date
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        inputDate.setHours(0, 0, 0, 0);
+    //     // 1️⃣ Validate format first
+    //     if (!formatRegex.test(date)) {
+    //       ctx.addIssue({
+    //         code: z.ZodIssueCode.custom,
+    //         message: "dateOfBirth must be 'YYYY-MM-DD' format",
+    //       });
+    //       return; // stop further checks
+    //     }
+    //     // 2️⃣ Parse date and check future
+    //     const inputDate = new Date(date + "T00:00:00"); // consistent local date
+    //     const today = new Date();
+    //     today.setHours(0, 0, 0, 0);
+    //     inputDate.setHours(0, 0, 0, 0);
 
-        if (inputDate > today) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Date Of Birth must be old date",
-          });
-        }
-      }),
+    //     if (inputDate > today) {
+    //       ctx.addIssue({
+    //         code: z.ZodIssueCode.custom,
+    //         message: "Date Of Birth must be old date",
+    //       });
+    //     }
+    //   }),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {

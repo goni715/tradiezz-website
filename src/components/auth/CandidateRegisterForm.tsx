@@ -35,10 +35,11 @@ const MapSelector = dynamic(() => import("@/components/Location/MapSelector"), {
 const stepFields: Record<number, (keyof TCandidateFormValues)[]> = {
   1: ["fullName", "email", "phone", "password", "confirmPassword"],
   2: [
+    "title",
+    "jobSeekingTitle",
     "categoryId",
     "subCategoryId",
     "workRate",
-    "dateOfBirth",
     "availableDate",
     "workType",
     "employmentType",
@@ -75,10 +76,11 @@ const CandidateRegisterForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      title: "",
+      jobSeekingTitle: "",
       categoryId: "",
       subCategoryId: "",
       workRate: "",
-      dateOfBirth: "",
       availableDate: "",
       workType: "",
       employmentType: "",
@@ -88,6 +90,7 @@ const CandidateRegisterForm = () => {
     },
     mode: "onBlur",
   });
+
 
   // Watch necessary fields
   const categoryId = watch("categoryId");
@@ -120,33 +123,32 @@ const CandidateRegisterForm = () => {
 
   const totalSteps = 5;
 
-const nextStep = useCallback(async () => {
-  const fieldsToValidate = stepFields[currentStep];
+  const nextStep = useCallback(async () => {
+    const fieldsToValidate = stepFields[currentStep];
 
-  const isValid = await trigger(fieldsToValidate, {
-    shouldFocus: true,
-  });
+    const isValid = await trigger(fieldsToValidate, {
+      shouldFocus: true,
+    });
 
-  // 🔴 STOP HERE if normal validation fails
-  if (!isValid) return;
+    // 🔴 STOP HERE if normal validation fails
+    if (!isValid) return;
 
-  // 🔥 STEP 1 password check
-  if (currentStep === 1) {
-    const password = getValues("password");
-    const confirmPassword = getValues("confirmPassword");
+    // 🔥 STEP 1 password check
+    if (currentStep === 1) {
+      const password = getValues("password");
+      const confirmPassword = getValues("confirmPassword");
 
-    if (password !== confirmPassword) {
-      setError("confirmPassword", {
-        type: "manual",
-        message: "Passwords do not match",
-      });
-      return;
+      if (password !== confirmPassword) {
+        setError("confirmPassword", {
+          type: "manual",
+          message: "Passwords do not match",
+        });
+        return;
+      }
     }
-  }
 
-  setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
-}, [currentStep, trigger, getValues, setError]);
-
+    setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+  }, [currentStep, trigger, getValues, setError]);
 
   const prevStep = useCallback(() => {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
@@ -161,12 +163,14 @@ const nextStep = useCallback(async () => {
 
   const onSubmit: SubmitHandler<TCandidateFormValues> = (data) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { location, categoryId, ...rest } = data;
+    const { location, categoryId, title, jobSeekingTitle, ...rest } = data;
     const finalValues = {
       ...rest,
       longitude: location.lng,
       latitude: location.lat,
       address: location.address,
+      title: title.split(",").map((t) => t.trim()),
+      jobSeekingTitle: jobSeekingTitle.split(",").map((s) => s.trim()),
       city: location.city,
       postalCode: location.postalCode,
     };
@@ -282,6 +286,21 @@ const nextStep = useCallback(async () => {
           {/* Step 2: Category Selection */}
           {currentStep === 2 && (
             <div className="space-y-6">
+              <CustomInput
+                label="Title(multiple, comma separated)"
+                name="title"
+                type="text"
+                control={control}
+                placeholder="e.g.Manufacturing Associate, Process Technician"
+              />
+
+              <CustomInput
+                label="Job Seeking Title(multiple, comma separated)"
+                name="jobSeekingTitle"
+                type="text"
+                control={control}
+                placeholder="Enter title"
+              />
               <CustomSelect
                 label="Category"
                 name="categoryId"
@@ -306,13 +325,6 @@ const nextStep = useCallback(async () => {
                 control={control}
                 options={workRateOptions}
                 placeholder="Select Rate"
-              />
-
-              {/* Availability uses a text input with type="date" */}
-              <CustomDatePicker
-                label="Birth Date"
-                name="dateOfBirth"
-                control={control}
               />
               <CustomDatePicker
                 label="Available Date"

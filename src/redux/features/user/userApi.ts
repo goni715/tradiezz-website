@@ -29,7 +29,7 @@ export const userApi = apiSlice.injectEndpoints({
     }),
     updateEmployerProfile: builder.mutation({
       query: (data) => ({
-        url: `/auth/employer/edit-profile`,
+        url: `/user/update-employer-profile`,
         method: "PATCH",
         body: data,
       }),
