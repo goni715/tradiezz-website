@@ -27,10 +27,10 @@ export default function BlogDetailHeader({ blog }: BlogDetailHeaderProps) {
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-6 text-black">{blog.title}</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-6 text-white">{blog.title}</h1>
 
           {/* Metadata */}
-          <div className="flex flex-wrap gap-4 sm:gap-6 text-sm sm:text-base text-gray-700">
+          <div className="flex flex-wrap gap-4 sm:gap-6 text-sm sm:text-base">
             {/* Date */}
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 text-cyan-400" />
@@ -45,8 +45,8 @@ export default function BlogDetailHeader({ blog }: BlogDetailHeaderProps) {
 
             {/* Last Updated */}
             {blog.updatedAt !== blog.createdAt && (
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
-                <span>Updated {moment(blog.updatedAt).format('LL')}</span>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-cyan-400">
+                Updated <span className="text-white">{moment(blog.updatedAt).format('LL')} </span>
               </div>
             )}
           </div>

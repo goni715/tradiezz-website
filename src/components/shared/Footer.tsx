@@ -10,8 +10,8 @@ const Footer = () => {
             <Image src="/images/logo_footer.png" alt="Tradieez Logo" className="h-10 w-16" width={600} height={600}/>
             {/* <span className="text-xl font-bold">Tradieez</span> */}
           </div>
-          <p>Call now: <a href="tel:3195550115" className="text-blue-400 font-medium">(319) 555-0115</a></p>
-          <p>6391 Elgin St. Celina, Delaware 10299, New York</p>
+          <p>Email: <span className="text-blue-400 font-medium">hello@tradieez.com</span></p>
+          <p>24-26 Regent Place Regent Place, Birmingham, England, B1 3NJ </p>
         </div>
 
         {/* Quick Links */}

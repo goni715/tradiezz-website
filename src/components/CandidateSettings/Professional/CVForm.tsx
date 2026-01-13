@@ -22,7 +22,7 @@ const CVForm = () => {
   
   return (
     <>
-      <div className="bg-white rounded-lg p-6 shdow-lg mb-4">
+      <div className="bg-white rounded-lg p-6 shdow-lg mb-8">
         <h1 className="text-lg font-semibold text-gray-900">Your CV/Resume</h1>
 
         <div className="p-4">
