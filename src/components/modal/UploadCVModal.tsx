@@ -1,74 +1,57 @@
 "use client";
+
 import { Modal } from "antd";
-import { useRef, useState } from "react";
-import {
-  AlertCircle,
-  Check,
-  File,
-  Plus,
-  Trash2,
-  Upload,
-} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { AlertCircle, Check, File, Plus, Trash2, Upload } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CgSpinnerTwo } from "react-icons/cg";
 import { applyJobSchema } from "@/schema/job.schema";
+import { useUploadCVMutation } from "@/redux/features/user/userApi";
 
 type TFormValues = z.infer<typeof applyJobSchema>;
 
 type TProps = {
   title: string;
-}
+};
 
 const UploadCVModal = ({ title }: TProps) => {
-  const isLoading = false;
-  //const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+  const [uploadCV, { isLoading, isSuccess }] = useUploadCVMutation();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // const [uploadCV, { isLoading, isSuccess }] =
-    //   useUploadCVMutation();
-    const {
-      handleSubmit,
-      setValue,
-      clearErrors,
-      setError,
-      formState: { errors },
-    } = useForm<TFormValues>({
-      resolver: zodResolver(applyJobSchema),
-    });
+  const {
+    handleSubmit,
+    setValue,
+    clearErrors,
+    setError,
+    formState: { errors },
+  } = useForm<TFormValues>({
+    resolver: zodResolver(applyJobSchema),
+  });
 
-
-
-
-
-
+  /* ===================== FILE HANDLERS ===================== */
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
     if (selectedFile) {
       validateAndSetFile(selectedFile);
-      setValue("icon", "This is icon");
-      clearErrors("icon");
     }
   };
 
   const validateAndSetFile = (selectedFile: File) => {
-    const allowedTypes = [
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
+    const allowedTypes = ["application/pdf"];
 
     if (allowedTypes.includes(selectedFile.type)) {
       setFile(selectedFile);
-      setValue("icon", "This is icon")
+      setValue("icon", "pdf");
       clearErrors("icon");
       setUploadStatus("success");
     } else {
@@ -86,14 +69,11 @@ const UploadCVModal = ({ title }: TProps) => {
 
   const handleDragLeave = () => {
     setIsDragging(false);
-    setValue("icon", "This is icon")
-    clearErrors("icon");
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    setValue("icon", "This is icon")
 
     const droppedFile = e.dataTransfer.files?.[0];
     if (droppedFile) {
@@ -107,8 +87,9 @@ const UploadCVModal = ({ title }: TProps) => {
     setValue("icon", "");
     setError("icon", {
       type: "manual",
-      message: "Please upload a resume",
+      message: "Please upload a PDF resume",
     });
+
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -119,37 +100,29 @@ const UploadCVModal = ({ title }: TProps) => {
   };
 
   const getFileSize = (size: number) => {
-    if (size < 1024) {
-      return `${size} bytes`;
-    } else if (size < 1024 * 1024) {
-      return `${(size / 1024).toFixed(1)} KB`;
-    } else {
-      return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+    if (size < 1024) return `${size} bytes`;
+    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  useEffect(() => {
+    if (!isLoading && isSuccess) {
+      setModalOpen(false);
     }
-  };
+  }, [isLoading, isSuccess]);
 
+  /* ===================== SUBMIT ===================== */
 
+  const onSubmit: SubmitHandler<TFormValues> = () => {
+    if (!file) return;
 
-
-
-  //  useEffect(() => {
-  //    if (!isLoading && isSuccess) {
-  //      setFile(null);
-  //      setValue("icon", "");
-  //      clearErrors("icon");
-  //      setModalOpen(false);
-  //    }
-  //  }, [isSuccess, router, isLoading, setFile, setValue, setModalOpen, clearErrors]);
-
-
-   const onSubmit: SubmitHandler<TFormValues> = () => {
     const formData = new FormData();
-    formData.append("resume", file as File);
-    //uploadCV(formData);
+    formData.append("cv", file);
+
+    uploadCV(formData);
   };
 
-
-
+  /* ===================== UI ===================== */
 
   return (
     <>
@@ -178,18 +151,18 @@ const UploadCVModal = ({ title }: TProps) => {
         centered
       >
         <div className="p-6">
-          <h2 className="text-2xl font-medium text-gray-900 mb-6">Upload CV</h2>
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">
+            Upload CV (PDF only)
+          </h2>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* CV Upload */}
             <div className="mb-4">
-            
               <input
                 type="file"
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 className="hidden"
-                accept=".pdf,.doc,.docx"
+                accept=".pdf"
               />
 
               {!file ? (
@@ -198,7 +171,7 @@ const UploadCVModal = ({ title }: TProps) => {
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
-                  className={`border-2 border-dashed rounded-lg p-6 transition-all duration-200 cursor-pointer group
+                  className={`border-2 border-dashed rounded-lg p-6 cursor-pointer transition-all
                     ${
                       isDragging
                         ? "border-blue-500 bg-blue-50"
@@ -209,25 +182,21 @@ const UploadCVModal = ({ title }: TProps) => {
                     }
                   `}
                 >
-                  <div className="flex flex-col items-center justify-center text-center">
+                  <div className="flex flex-col items-center text-center">
                     {uploadStatus === "error" ? (
                       <>
-                        <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-3">
-                          <AlertCircle className="h-6 w-6 text-red-500" />
-                        </div>
-                        <p className="text-sm font-medium text-red-600 mb-1">
+                        <AlertCircle className="h-6 w-6 text-red-500 mb-2" />
+                        <p className="text-sm font-medium text-red-600">
                           Invalid file format
                         </p>
                         <p className="text-xs text-gray-500">
-                          Please upload a PDF or Word document
+                          Please upload a PDF file
                         </p>
                       </>
                     ) : (
                       <>
-                        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
-                          <Upload className="h-6 w-6 text-blue-600" />
-                        </div>
-                        <p className="text-sm font-medium text-gray-700 mb-1 group-hover:text-blue-600 transition-colors">
+                        <Upload className="h-6 w-6 text-blue-600 mb-2" />
+                        <p className="text-sm font-medium text-gray-700">
                           Drag and drop your CV here
                         </p>
                         <p className="text-xs text-gray-500">
@@ -237,7 +206,7 @@ const UploadCVModal = ({ title }: TProps) => {
                           </span>
                         </p>
                         <p className="text-xs text-gray-400 mt-2">
-                          PDF or Word documents only (max 5MB)
+                          PDF files only (max 5MB)
                         </p>
                       </>
                     )}
@@ -246,57 +215,51 @@ const UploadCVModal = ({ title }: TProps) => {
               ) : (
                 <div className="border rounded-lg p-4 bg-blue-50 border-blue-200">
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                      <File className="h-5 w-5 text-blue-600" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">
+                    <File className="h-5 w-5 text-blue-600 mr-3" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium truncate">
                         {file.name}
                       </p>
                       <p className="text-xs text-gray-500">
                         {getFileSize(file.size)}
                       </p>
                     </div>
-                    <div className="flex items-center">
-                      <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-2">
-                        <Check className="h-3 w-3 text-green-600" />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={removeFile}
-                        className="text-red-500 hover:text-red-500 transition-colors cursor-pointer"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </button>
-                    </div>
+                    <Check className="h-4 w-4 text-green-600 mr-2" />
+                    <button
+                      type="button"
+                      onClick={removeFile}
+                      className="text-red-500 hover:text-red-600"
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </button>
                   </div>
                 </div>
               )}
 
               {errors?.icon && (
                 <p className="mt-1 text-sm text-red-500">
-                  {errors?.icon?.message}
+                  {errors.icon.message}
                 </p>
               )}
             </div>
 
-            {/* Action buttons */}
-            <div className="flex flex-col md:flex-row items-center gap-2">
+            <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}
-                className="px-6 py-2.5 w-full bg-gray-100 border cursor-pointer border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-200 transition-colors"
+                className="w-full px-6 py-2.5 bg-gray-100 border border-gray-300 rounded-md"
               >
                 Cancel
               </button>
+
               <button
                 type="submit"
                 disabled={isLoading}
-                className="px-6 w-full py-2.5 bg-primary hover:bg-[#2b4773] cursor-pointer text-white font-medium rounded-md transition-colors flex items-center justify-center gap-x-2"
+                className="w-full px-6 py-2.5 bg-primary text-white rounded-md flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <>
-                    <CgSpinnerTwo className="animate-spin" fontSize={16} />
+                    <CgSpinnerTwo className="animate-spin" />
                     Processing...
                   </>
                 ) : (

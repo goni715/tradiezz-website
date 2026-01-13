@@ -11,7 +11,7 @@ const CVForm = () => {
   
   const handleDownload = () => {
     const link = document.createElement("a")
-    link.href = user?.resume as string;
+    link.href = user?.cv as string;
     link.download = "document.pdf"
     link.target = "_blank"
     document.body.appendChild(link)
@@ -22,14 +22,13 @@ const CVForm = () => {
   
   return (
     <>
-      <div className="bg-white rounded-lg p-6 shdow-md">
+      <div className="bg-white rounded-lg p-6 shdow-lg mb-4">
         <h1 className="text-lg font-semibold text-gray-900">Your CV/Resume</h1>
 
         <div className="p-4">
           {
-            user?.resume && (
+            user?.cv && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-            {/* Resume Item */}
             <div className="bg-gray-50 border border-gray-200 p-3 rounded-lg relative">
               <div className="flex items-center justify-center">
                 <div>
@@ -48,7 +47,7 @@ const CVForm = () => {
           }
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            <UploadCVModal title={user?.resume ? "Update" : "Add"}/>
+            <UploadCVModal title={user?.cv ? "Update" : "Add"}/>
           </div>
         </div>
       </div>

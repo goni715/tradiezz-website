@@ -9,6 +9,7 @@ import PersonalForm from "../CandidateSettings/Personal/PersonalForm";
 import ProfessionalForm from "../CandidateSettings/Professional/ProfessionalForm";
 // import OverviewHeader from "./OverviewHeader";
 import OverviewStats from "./OverviewStats";
+import CVForm from "../CandidateSettings/Professional/CVForm";
 // import ProfileCompletion from "./ProfileCompletion";
 // import RecentlyApplied from "./RecentlyApplied";
 
@@ -29,6 +30,7 @@ const CandidateOverview = ( { stats } : TProps) => {
           <PersonalForm/>
           <UpdateLocationForm/>
           <ProfessionalForm/>
+          <CVForm/>
           <PrivacySettings/>
           <ChangePasswordForm/>
           <DeleteCandidateAccount/>

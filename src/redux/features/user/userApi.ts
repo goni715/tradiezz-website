@@ -77,6 +77,34 @@ export const userApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    uploadCV: builder.mutation({
+      query: (data) => ({
+        url: `/user/upload-cv`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: (result) => {
+        if (result?.success) {
+          return [TagTypes.me];
+        }
+        return [];
+      },
+      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
+        try {
+          await queryFulfilled;
+          const res = await queryFulfilled;
+          const token = res?.data?.data?.accessToken;
+          if (token && token.split(".").length === 3) {
+            setToken(token);
+          }
+          dispatch(SetIsProfileUpdated(true));
+          SuccessToast("Update Success");
+        } catch (err: any) {
+          const message = err?.error?.data?.message;
+          dispatch(SetProfileError(message));
+        }
+      },
+    }),
     updatePrivacy: builder.mutation({
       query: (data) => ({
         url: `/user/update-candidate-profile`,
@@ -240,5 +268,6 @@ export const {
   useRemoveWorkExperienceMutation,
   useUpdateWorkExperienceMutation,
   useUpdatePrivacyMutation,
-  useSendRequestMutation
+  useSendRequestMutation,
+  useUploadCVMutation
 } = userApi;

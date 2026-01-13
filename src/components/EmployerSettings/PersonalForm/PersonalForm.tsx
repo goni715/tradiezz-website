@@ -35,7 +35,6 @@ const PersonalForm = () => {
     },
   });
 
-  console.log(user);
 
 
   const onSubmit: SubmitHandler<TFormValues> = (data) => {
