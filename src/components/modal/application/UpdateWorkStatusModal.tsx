@@ -7,54 +7,64 @@ import { FiEdit } from "react-icons/fi";
 import CustomSelect from "../../form/CustomSelect";
 import SubmitButton from "../../form/SubmitButton";
 import { useUpdateApplicationMutation } from "@/redux/features/application/applicationApi";
-import { applicationStatusOptions } from "@/data/application.data";
-import { applicationStatusSchema } from "@/schema/application.schema";
-import { TApplicationStatus } from "@/types/application.type";
+import { workStatusOptions } from "@/data/application.data";
+import { workStatusSchema } from "@/schema/application.schema";
+import { TWorkStatus } from "@/types/application.type";
+import { CheckCircle2, Clock, Loader, PauseCircle } from "lucide-react";
 
-type TFormValues = z.infer<typeof applicationStatusSchema>;
+type TFormValues = z.infer<typeof workStatusSchema>;
 
-type TProps = {
-  applicationId: string;
-  status: TApplicationStatus;
-};
-
-const statusColors = {
-  applied: {
+export const workStatusColors: Record<
+  "pending" | "running" | "stopped" | "completed",
+  {
+    bg: string;
+    text: string;
+    border: string;
+  }
+> = {
+  pending: {
+    bg: "bg-yellow-50",
+    text: "text-yellow-700",
+    border: "border-yellow-200",
+  },
+  running: {
     bg: "bg-blue-50",
     text: "text-blue-700",
     border: "border-blue-200",
   },
-  shortlisted: {
-    bg: "bg-indigo-50",
-    text: "text-indigo-700",
-    border: "border-indigo-200",
-  },
-  accepted: {
-    bg: "bg-green-50",
-    text: "text-green-700",
-    border: "border-green-200",
-  },
-  rejected: {
+  stopped: {
     bg: "bg-red-50",
     text: "text-red-700",
     border: "border-red-200",
   },
-  cancelled: {
-    bg: "bg-gray-50",
-    text: "text-gray-600",
-    border: "border-gray-200",
+  completed: {
+    bg: "bg-green-50",
+    text: "text-green-700",
+    border: "border-green-200",
   },
 };
 
-const UpdateWorkStatusModal = ({ applicationId, status }: TProps) => {
+const workStatusIcons = {
+  pending: <Clock className="w-4 h-4 text-yellow-500" />,
+  running: <Loader className="w-4 h-4 animate-spin text-blue-500" />,
+  stopped: <PauseCircle className="w-4 h-4 text-red-500" />,
+  completed: <CheckCircle2 className="w-4 h-4 text-green-500" />,
+};
+
+type TProps = {
+  applicationId: string;
+  workStatus: TWorkStatus;
+};
+
+const UpdateWorkStatusModal = ({ applicationId, workStatus }: TProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [changeStatus, { isLoading, isSuccess }] =
     useUpdateApplicationMutation();
   const { handleSubmit, control } = useForm<TFormValues>({
-    resolver: zodResolver(applicationStatusSchema),
+    resolver: zodResolver(workStatusSchema),
     defaultValues: {
-      status,
-    },
+      workStatus
+    }
   });
 
   //if success
@@ -73,14 +83,15 @@ const UpdateWorkStatusModal = ({ applicationId, status }: TProps) => {
 
   return (
     <>
-      <div
-        onClick={()=> setModalOpen(true)}
-        className={`px-3 py-2 flex items-center gap-2 cursor-pointer rounded-full text-sm font-medium border ${statusColors[status].bg} ${statusColors[status].text} ${statusColors[status].border}`}
+      <button
+        onClick={() => setModalOpen(true)}
+        className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full text-sm font-medium border transition-all ${workStatusColors[workStatus].bg} ${workStatusColors[workStatus].text} ${workStatusColors[workStatus].border} hover:shadow-md`}
       >
-        <span className="capitalize">{status}</span>
+        {workStatusIcons[workStatus]}
+        <span className="capitalize">{workStatus}</span>
         <FiEdit className="w-4 h-4 opacity-60 hover:opacity-100" />
-      </div>
-      
+      </button>
+
       <Modal
         open={modalOpen}
         onCancel={() => {
@@ -98,9 +109,9 @@ const UpdateWorkStatusModal = ({ applicationId, status }: TProps) => {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <CustomSelect
                   label="Status"
-                  name="status"
+                  name="workStatus"
                   control={control}
-                  options={applicationStatusOptions}
+                  options={workStatusOptions}
                   blankOption={false}
                 />
                 <SubmitButton isLoading={isLoading}>Save Change</SubmitButton>

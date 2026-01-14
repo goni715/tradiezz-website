@@ -7,3 +7,11 @@ export const applicationStatusSchema = z.object({
     })
     .min(1, "Select status")
 });
+
+export const workStatusSchema = z.object({
+  workStatus: z
+    .string({
+      required_error: "Select Status"
+    })
+    .min(1, "Select status")
+});

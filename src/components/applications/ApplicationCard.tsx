@@ -5,13 +5,9 @@ import {
   Mail,
   FileText,
   Calendar,
-  CheckCircle2,
-  Clock,
-  Loader,
-  PauseCircle,
 } from "lucide-react";
-import { FiEdit } from "react-icons/fi";
 import UpdateApplicationStatusModal from "../modal/application/UpdateApplicationStatusModal";
+import UpdateWorkStatusModal from "../modal/application/UpdateWorkStatusModal";
 
 
 
@@ -96,16 +92,7 @@ const ApplicationCard = ({ application }: TProps) => {
           <span className="text-sm text-gray-600">
             Work Status:{" "}
           </span>
-           <button
-              // onClick={() => setShowWorkStatusDropdown(!showWorkStatusDropdown)}
-              className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full text-sm font-medium border transition-all ${
-                workStatusColors[workStatus].bg
-              } ${workStatusColors[workStatus].text} ${workStatusColors[workStatus].border} hover:shadow-md`}
-            >
-              {workStatusIcons[workStatus]}
-              <span>{workStatus.charAt(0).toUpperCase() + workStatus.slice(1)}</span>
-              <FiEdit className="w-4 h-4 opacity-60 hover:opacity-100" />
-            </button>
+          <UpdateWorkStatusModal workStatus={workStatus} applicationId={_id}/>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
