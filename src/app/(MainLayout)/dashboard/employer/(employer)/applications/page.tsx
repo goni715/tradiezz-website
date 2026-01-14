@@ -13,7 +13,7 @@ const ApplicationsPage = () => {
   const [status, setStatus] = useState("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(9);
-  const { data, isLoading, isFetching, isError } = useGetApplicationsQuery([
+  const { data, isLoading, isError } = useGetApplicationsQuery([
     { name: 'page', value: currentPage },
     { name: 'limit', value: 9 },
     { name: 'searchTerm', value: searchTerm },
@@ -27,11 +27,11 @@ const ApplicationsPage = () => {
 
 
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     content = <MyJobsLoading />
   }
 
-  if (!isLoading && !isFetching && !isError && applications?.length === 0) {
+  if (!isLoading && !isError && applications?.length === 0) {
     content = (
       <>
         <div className="text-center py-12">
@@ -49,7 +49,7 @@ const ApplicationsPage = () => {
     )
   }
 
-  if (!isLoading && !isFetching && !isError && applications?.length > 0) {
+  if (!isLoading && !isError && applications?.length > 0) {
     content = (
       <>
         <ApplicationList applications={applications} />

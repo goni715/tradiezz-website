@@ -46,7 +46,7 @@ const statusColors = {
   },
 };
 
-const UpdateApplicationStatusModal = ({ applicationId, status }: TProps) => {
+const UpdateWorkStatusModal = ({ applicationId, status }: TProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [changeStatus, { isLoading, isSuccess }] =
     useUpdateApplicationMutation();
@@ -113,4 +113,4 @@ const UpdateApplicationStatusModal = ({ applicationId, status }: TProps) => {
   );
 };
 
-export default UpdateApplicationStatusModal;
+export default UpdateWorkStatusModal;

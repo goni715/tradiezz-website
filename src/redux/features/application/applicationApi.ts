@@ -160,15 +160,15 @@ export const applicationApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    changeCategoryStatus: builder.mutation({
+    updateApplication: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/category/update-category/${id}`,
+        url: `/application/update-application/${id}`,
         method: "PATCH",
         body: data,
       }),
       invalidatesTags: (result) => {
         if (result?.success) {
-          return [TagTypes.categories, TagTypes.categoryDropDown];
+          return [TagTypes.applications, TagTypes.applicationsByJobId];
         }
         return [];
       },
@@ -196,4 +196,5 @@ export const {
   useGetApplicationsByJobIdQuery,
   useGetAppliedJobIdsQuery,
   useApplyJobMutation,
+  useUpdateApplicationMutation
 } = applicationApi;

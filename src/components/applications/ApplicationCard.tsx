@@ -11,72 +11,9 @@ import {
   PauseCircle,
 } from "lucide-react";
 import { FiEdit } from "react-icons/fi";
-
-const statusColors = {
-  applied: {
-    bg: "bg-blue-50",
-    text: "text-blue-700",
-    border: "border-blue-200",
-  },
-  shortlisted: {
-    bg: "bg-indigo-50",
-    text: "text-indigo-700",
-    border: "border-indigo-200",
-  },
-  accepted: {
-    bg: "bg-green-50",
-    text: "text-green-700",
-    border: "border-green-200",
-  },
-  rejected: {
-    bg: "bg-red-50",
-    text: "text-red-700",
-    border: "border-red-200",
-  },
-  cancelled: {
-    bg: "bg-gray-50",
-    text: "text-gray-600",
-    border: "border-gray-200",
-  },
-};
-
-export const workStatusColors: Record<
-  "pending" | "running" | "stopped" | "completed",
-  {
-    bg: string;
-    text: string;
-    border: string;
-  }
-> = {
-  pending: {
-    bg: "bg-yellow-50",
-    text: "text-yellow-700",
-    border: "border-yellow-200",
-  },
-  running: {
-    bg: "bg-blue-50",
-    text: "text-blue-700",
-    border: "border-blue-200",
-  },
-  stopped: {
-    bg: "bg-red-50",
-    text: "text-red-700",
-    border: "border-red-200",
-  },
-  completed: {
-    bg: "bg-green-50",
-    text: "text-green-700",
-    border: "border-green-200",
-  },
-};
+import UpdateApplicationStatusModal from "../modal/application/UpdateApplicationStatusModal";
 
 
-const workStatusIcons = {
-  pending: <Clock className="w-4 h-4 text-yellow-500" />,
-  running: <Loader className="w-4 h-4 animate-spin text-blue-500" />,
-  stopped: <PauseCircle className="w-4 h-4 text-red-500" />,
-  completed: <CheckCircle2 className="w-4 h-4 text-green-500" />,
-};
 
 type TProps = {
   application: IApplication;
@@ -84,14 +21,15 @@ type TProps = {
 
 const ApplicationCard = ({ application }: TProps) => {
   const {
+    _id,
     title,
     category,
     candidateName,
     candidateEmail,
     candidateCV,
-    status,
     workStatus,
     createdAt,
+    status
   } = application;
 
   const handleViewCV = () => {
@@ -126,12 +64,7 @@ const ApplicationCard = ({ application }: TProps) => {
         </div>
 
         {/* Status Badge */}
-        <div
-          className={`px-3 py-2 flex items-center gap-2 cursor-pointer rounded-full text-sm font-medium border ${statusColors[status].bg} ${statusColors[status].text} ${statusColors[status].border}`}
-        >
-          <span className="capitalize">{status}</span>
-          <FiEdit  className="w-4 h-4 opacity-60 hover:opacity-100" />
-        </div>
+        <UpdateApplicationStatusModal status={status} applicationId={_id}/>
       </div>
 
       {/* Contact Information */}
@@ -160,12 +93,8 @@ const ApplicationCard = ({ application }: TProps) => {
       {/* Footer Section with Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-6">
         <div className="flex items-center gap-2">
-          {/* {workStatusIcons[workStatus]} */}
           <span className="text-sm text-gray-600">
             Work Status:{" "}
-            {/* <span className="font-medium text-gray-900 capitalize">
-              {workStatus}
-            </span> */}
           </span>
            <button
               // onClick={() => setShowWorkStatusDropdown(!showWorkStatusDropdown)}
