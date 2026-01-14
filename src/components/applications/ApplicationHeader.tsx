@@ -1,7 +1,7 @@
 import { IMeta } from "@/types/global.type";
-import { Search } from "lucide-react";
+//import { Search } from "lucide-react";
 import React from "react";
-import { useDebouncedCallback } from "use-debounce";
+//import { useDebouncedCallback } from "use-debounce";
 
 type TProps = {
   meta: IMeta;
@@ -13,29 +13,28 @@ type TProps = {
 
 const ApplicationHeader = ({
   meta,
-  setCurrentPage,
-  setSearchTerm,
-  status,
-  setStatus,
+  // setCurrentPage,
+  // setSearchTerm,
+  // status,
+  // setStatus,
 }: TProps) => {
     
-  const handleSearch = useDebouncedCallback((term: string) => {
-    setSearchTerm(term);
-    setCurrentPage(1);
-  }, 300);
+  // const handleSearch = useDebouncedCallback((term: string) => {
+  //   setSearchTerm(term);
+  //   setCurrentPage(1);
+  // }, 300);
 
   return (
     <>
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">My Jobs</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Applications</h1>
             <p className="text-gray-600 mt-1">
-              (Total: {meta.total || 0} jobs)
+              (Total: {meta.total || 0})
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4">
-            {/* Search */}
+          {/* <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
@@ -46,7 +45,6 @@ const ApplicationHeader = ({
               />
             </div>
 
-            {/* Status Filter */}
             <select
               value={status}
               onChange={(e) => {
@@ -62,7 +60,7 @@ const ApplicationHeader = ({
               <option value="visible">Visible</option>
               <option value="hidden">Hidden</option>
             </select>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

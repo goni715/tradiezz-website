@@ -1,9 +1,9 @@
 "use client";
+import ApplicationHeader from "@/components/applications/ApplicationHeader";
+import ApplicationList from "@/components/applications/ApplicationList";
 import ServerErrorCard from "@/components/card/ServerErrorCard";
 import CustomPagination from "@/components/common/CustomPagination";
 import MyJobsLoading from "@/components/loader/MyJobsLoading";
-import MyJobsHeader from "@/components/myJobList/MyJobsHeader";
-import MyJobsList from "@/components/myJobList/MyJobsList";
 import { useGetApplicationsQuery } from "@/redux/features/application/applicationApi";
 import { Search } from "lucide-react";
 import React, { useState } from "react";
@@ -52,7 +52,7 @@ const ApplicationsPage = () => {
   if (!isLoading && !isFetching && !isError && applications?.length > 0) {
     content = (
       <>
-        <MyJobsList jobs={jobs} />
+        <ApplicationList applications={applications} />
         {meta?.totalPages > 1 && (
          <CustomPagination
            meta={meta}
@@ -76,7 +76,7 @@ const ApplicationsPage = () => {
   return (
     <>
       <div className="flex-1 overflow-auto p-4 md:p-6">
-        <MyJobsHeader
+        <ApplicationHeader
           meta={meta}
           setCurrentPage={setCurrentPage}
           setSearchTerm={setSearchTerm}

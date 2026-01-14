@@ -76,7 +76,7 @@ export const applicationApi = apiSlice.injectEndpoints({
       },
     }),
     getApplicationsByJobId: builder.query({
-      query: ({ args, jobId}) => {
+      query: ({ args, jobId }) => {
         const params = new URLSearchParams();
         if (args !== undefined && args.length > 0) {
           args.forEach((item: IParam) => {
@@ -160,6 +160,33 @@ export const applicationApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    changeCategoryStatus: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/category/update-category/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: (result) => {
+        if (result?.success) {
+          return [TagTypes.categories, TagTypes.categoryDropDown];
+        }
+        return [];
+      },
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          SuccessToast("Update Success");
+        } catch (err: any) {
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            ErrorToast("Something Went Wrong");
+          } else {
+            ErrorToast(message);
+          }
+        }
+      },
+    }),
   }),
 });
 
@@ -168,5 +195,5 @@ export const {
   useGetApplicationsQuery,
   useGetApplicationsByJobIdQuery,
   useGetAppliedJobIdsQuery,
-  useApplyJobMutation
+  useApplyJobMutation,
 } = applicationApi;
