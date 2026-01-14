@@ -47,9 +47,8 @@ export const applicationApi = apiSlice.injectEndpoints({
       providesTags: [TagTypes.appliedJobIds],
     }),
     getApplications: builder.query({
-      query: ({ args, jobId }) => {
+      query: (args) => {
         const params = new URLSearchParams();
-
         if (args !== undefined && args.length > 0) {
           args.forEach((item: IParam) => {
             if (item.value) {
@@ -58,7 +57,7 @@ export const applicationApi = apiSlice.injectEndpoints({
           });
         }
         return {
-          url: `/jobs/applications?jobId=${jobId}`,
+          url: `/application/get-applications`,
           method: "GET",
           params: params,
         };
@@ -66,6 +65,35 @@ export const applicationApi = apiSlice.injectEndpoints({
       keepUnusedDataFor: 600,
       providesTags: (result, error, arg) => [
         { type: TagTypes.applications, id: arg.jobId },
+      ],
+      async onQueryStarted(_arg, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+        } catch (err: any) {
+          const message = err?.error?.data?.message;
+          ErrorToast(message);
+        }
+      },
+    }),
+    getApplicationsByJobId: builder.query({
+      query: ({ args, jobId}) => {
+        const params = new URLSearchParams();
+        if (args !== undefined && args.length > 0) {
+          args.forEach((item: IParam) => {
+            if (item.value) {
+              params.append(item.name, item.value);
+            }
+          });
+        }
+        return {
+          url: `/application/get-applications/${jobId}`,
+          method: "GET",
+          params: params,
+        };
+      },
+      keepUnusedDataFor: 600,
+      providesTags: (result, error, arg) => [
+        { type: TagTypes.applicationsByJobId, id: arg.jobId },
       ],
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
@@ -138,6 +166,7 @@ export const applicationApi = apiSlice.injectEndpoints({
 export const {
   useGetAppliedJobsQuery,
   useGetApplicationsQuery,
+  useGetApplicationsByJobIdQuery,
   useGetAppliedJobIdsQuery,
   useApplyJobMutation
 } = applicationApi;

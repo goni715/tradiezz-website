@@ -24,6 +24,7 @@ const TagTypes = {
    blog: 'Blog',
    employerDetails: "EmployerDetails",
    applications: "Applications",
+   applicationsByJobId: "ApplicationsByJobId",
    notifications: "Notifications",
    termsConditions: "TermsConditions",
    privacyPolicy: "PrivacyPolicy",
