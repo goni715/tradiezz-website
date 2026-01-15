@@ -20,7 +20,7 @@ const CustomDatePicker = ({
 
   return (
     <>
-      <div>
+      <div className="w-full min-w-0">
         <label
           htmlFor={name}
           className="block text-sm font-medium text-gray-700"

@@ -201,8 +201,8 @@ const EditJobForm = ({ job }: TProps) => {
             control={control}
             placeholder="e.g.Plumber – Domestic Installations"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="col-span-2">
+          <div className="space-y-4">
+            <div className="">
               <CustomSelect
                 label="Category"
                 name="categoryId"
@@ -211,30 +211,34 @@ const EditJobForm = ({ job }: TProps) => {
                 disabled={categoryOptions.length === 0}
               />
             </div>
-            <CustomSelect
-              label="Job Type"
-              name="jobType"
-              control={control}
-              options={typeOptions}
-            />
-            <CustomSelect
-              label="Experience"
-              name="experience"
-              control={control}
-              options={experienceOptions}
-            />
-            <CustomDatePicker
-              label="Start Date"
-              name="startDate"
-              control={control}
-              placeholder="DD/MM/YYYY"
-            />
-            <CustomDatePicker
-              label="End Date (Optional)"
-              name="endDate"
-              control={control}
-              placeholder="DD/MM/YYYY"
-            />
+            <div className="flex flex-col gap-4 lg:flex-row">
+              <CustomSelect
+                label="Job Type"
+                name="jobType"
+                control={control}
+                options={typeOptions}
+              />
+              <CustomSelect
+                label="Experience"
+                name="experience"
+                control={control}
+                options={experienceOptions}
+              />
+            </div>
+            <div className="flex flex-col gap-4 lg:flex-row">
+              <CustomDatePicker
+                label="Start Date"
+                name="startDate"
+                control={control}
+                placeholder="DD/MM/YYYY"
+              />
+              <CustomDatePicker
+                label="End Date (Optional)"
+                name="endDate"
+                control={control}
+                placeholder="DD/MM/YYYY"
+              />
+            </div>
             <div className="col-span-2 space-y-3">
               <CustomTextArea
                 label="Skills (technical or soft skills, Comma Separated)"
@@ -250,18 +254,20 @@ const EditJobForm = ({ job }: TProps) => {
                 placeholder="Enter benifits"
               />
             </div>
-            <CustomDatePicker
-              label="Deadline"
-              name="deadline"
-              control={control}
-              placeholder="DD/MM/YYYY"
-            />
-            <CustomSelect
-              label="Rate Type"
-              name="rateType"
-              control={control}
-              options={rateOptions}
-            />
+            <div className="flex flex-col gap-4 lg:flex-row">
+              <CustomDatePicker
+                label="Deadline"
+                name="deadline"
+                control={control}
+                placeholder="DD/MM/YYYY"
+              />
+              <CustomSelect
+                label="Rate Type"
+                name="rateType"
+                control={control}
+                options={rateOptions}
+              />
+            </div>
             <div className="col-span-2 space-y-2">
               <h1 className="font-semibold">Salary Range</h1>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -287,22 +293,24 @@ const EditJobForm = ({ job }: TProps) => {
                 />
               </div>
             </div>
-            <CustomInput
-              label="Address"
-              name="address"
-              type="text"
-              control={control}
-              placeholder="Enter address"
-              disabled
-            />
-            <CustomInput
-              label="Postal Code"
-              name="postalCode"
-              type="text"
-              control={control}
-              placeholder="Enter postal code"
-              disabled
-            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <CustomInput
+                label="Address"
+                name="address"
+                type="text"
+                control={control}
+                placeholder="Enter address"
+                disabled
+              />
+              <CustomInput
+                label="Postal Code"
+                name="postalCode"
+                type="text"
+                control={control}
+                placeholder="Enter postal code"
+                disabled
+              />
+            </div>
           </div>
           <div className="order-1 lg:order-2 h-[350px] lg:h-[400px] mb-6">
             <LocationMap
@@ -322,7 +330,7 @@ const EditJobForm = ({ job }: TProps) => {
           <div className="mt-6">
             {isActive ? (
               <>
-              <SubmitButton isLoading={isLoading}>Save Changes</SubmitButton>
+                <SubmitButton isLoading={isLoading}>Save Changes</SubmitButton>
               </>
             ) : (
               <>

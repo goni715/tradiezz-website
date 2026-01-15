@@ -10,7 +10,11 @@ import { z } from "zod";
 import { createJobSchema } from "@/schema/job.schema";
 import CustomTextArea from "../form/CustomTextArea";
 import CustomSelect from "../form/CustomSelect";
-import { experienceOptions, rateOptions, typeOptions } from "@/data/job.options";
+import {
+  experienceOptions,
+  rateOptions,
+  typeOptions,
+} from "@/data/job.options";
 import CustomDatePicker from "../form/CustomDatePicker";
 import { useAppSelector } from "@/redux/hooks/hooks";
 import { useGetCategoryDropDownQuery } from "@/redux/features/category/categoryApi";
@@ -30,22 +34,16 @@ const PostJobForm = () => {
   // const { subscription_status } = useAppSelector((state) => state.subscription);
   const [createJob, { isLoading, isSuccess }] = useCreateJobMutation();
   useGetCategoryDropDownQuery(undefined);
-  const { categoryOptions } = useAppSelector((state)=> state.category);
-  const { isActive } = useAppSelector((state)=> state.subscription);
+  const { categoryOptions } = useAppSelector((state) => state.category);
+  const { isActive } = useAppSelector((state) => state.subscription);
 
-
-  const {
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-  } = useForm({
+  const { handleSubmit, control, setValue, watch } = useForm({
     resolver: zodResolver(createJobSchema),
     defaultValues: {
       latitude: "51.5072",
       longitude: "0.1276",
       address: "London, Greater London, England, United Kingdom",
-      postalCode: "SW1A 2DX"
+      postalCode: "SW1A 2DX",
     },
   });
 
@@ -76,7 +74,7 @@ const PostJobForm = () => {
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
-      router.push("/dashboard/employer/my-jobs")
+      router.push("/dashboard/employer/my-jobs");
     }
   }, [isLoading, isSuccess, router]);
 
@@ -87,7 +85,7 @@ const PostJobForm = () => {
       skills: skills.split(",").map((s) => s.trim()),
     };
 
-    createJob(finalValues)
+    createJob(finalValues);
 
     // if (subscription_status?.subscription_status === "None") {
     //   ErrorToast("You have no subscription");
@@ -98,11 +96,11 @@ const PostJobForm = () => {
 
   return (
     <div className="flex-1 overflow-auto">
-      <div className="max-6xl mx-auto p-4 sm:p-6 rounded-lg">
+      <div className="mx-auto p-4 sm:p-6 rounded-lg">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">Post a job</h1>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-white px-4 py-6 rounded-md space-y-4"
+          className="bg-white w-full px-4 py-6 rounded-md space-y-4"
         >
           <CustomInput
             label="Job Title"
@@ -111,41 +109,45 @@ const PostJobForm = () => {
             control={control}
             placeholder="e.g.Plumber – Domestic Installations"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="col-span-2">
+          <div className="test space-y-4">
+            <div className="">
               <CustomSelect
                 label="Category"
                 name="categoryId"
                 control={control}
                 options={categoryOptions}
-                disabled={categoryOptions.length===0}
+                disabled={categoryOptions.length === 0}
               />
             </div>
-            <CustomSelect
-              label="Job Type"
-              name="jobType"
-              control={control}
-              options={typeOptions}
-            />
-            <CustomSelect
-              label="Experience"
-              name="experience"
-              control={control}
-              options={experienceOptions}
-            />
-            <CustomDatePicker
-              label="Start Date"
-              name="startDate"
-              control={control}
-              placeholder="DD/MM/YYYY"
-            />
-            <CustomDatePicker
-              label="End Date (Optional)"
-              name="endDate"
-              control={control}
-              placeholder="DD/MM/YYYY"
-            />
-            <div className="col-span-2 space-y-3">
+            <div className="flex flex-col gap-4 lg:flex-row">
+              <CustomSelect
+                label="Job Type"
+                name="jobType"
+                control={control}
+                options={typeOptions}
+              />
+              <CustomSelect
+                label="Experience"
+                name="experience"
+                control={control}
+                options={experienceOptions}
+              />
+            </div>
+            <div className="flex flex-col gap-4 lg:flex-row">
+              <CustomDatePicker
+                label="Start Date"
+                name="startDate"
+                control={control}
+                placeholder="DD/MM/YYYY"
+              />
+              <CustomDatePicker
+                label="End Date (Optional)"
+                name="endDate"
+                control={control}
+                placeholder="DD/MM/YYYY"
+              />
+            </div>
+            <div className="space-y-3">
               <CustomTextArea
                 label="Skills (technical or soft skills, Comma Separated)"
                 name="skills"
@@ -160,18 +162,20 @@ const PostJobForm = () => {
                 placeholder="Enter benefits"
               />
             </div>
-            <CustomDatePicker
-              label="Deadline"
-              name="deadline"
-              control={control}
-              placeholder="DD/MM/YYYY"
-            />
-            <CustomSelect
-              label="Rate Type"
-              name="rateType"
-              control={control}
-              options={rateOptions}
-            />
+            <div className="flex flex-col gap-4 lg:flex-row">
+              <CustomDatePicker
+                label="Deadline"
+                name="deadline"
+                control={control}
+                placeholder="DD/MM/YYYY"
+              />
+              <CustomSelect
+                label="Rate Type"
+                name="rateType"
+                control={control}
+                options={rateOptions}
+              />
+            </div>
             <div className="col-span-2 space-y-2">
               <h1 className="font-semibold">Salary Range</h1>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -197,22 +201,24 @@ const PostJobForm = () => {
                 />
               </div>
             </div>
-            <CustomInput
-              label="Address"
-              name="address"
-              type="text"
-              control={control}
-              placeholder="Enter address"
-              disabled
-            />
-            <CustomInput
-              label="Postal Code"
-              name="postalCode"
-              type="text"
-              control={control}
-              placeholder="Enter postal code"
-              disabled
-            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <CustomInput
+                label="Address"
+                name="address"
+                type="text"
+                control={control}
+                placeholder="Enter address"
+                disabled
+              />
+              <CustomInput
+                label="Postal Code"
+                name="postalCode"
+                type="text"
+                control={control}
+                placeholder="Enter postal code"
+                disabled
+              />
+            </div>
           </div>
           <div className="order-1 lg:order-2 h-[350px] lg:h-[400px] mb-6">
             <LocationMap
@@ -232,7 +238,7 @@ const PostJobForm = () => {
           <div className="mt-6">
             {isActive ? (
               <>
-                 <SubmitButton isLoading={isLoading}>Post Job</SubmitButton>
+                <SubmitButton isLoading={isLoading}>Post Job</SubmitButton>
               </>
             ) : (
               <>
@@ -240,7 +246,7 @@ const PostJobForm = () => {
                   type="button"
                   onClick={() => {
                     WarningToast("You have no subscription");
-                    router.push("/dashboard/employer/subscription-plans")
+                    router.push("/dashboard/employer/subscription-plans");
                   }}
                   className="w-full flex items-center cursor-pointer justify-center gap-2 bg-primary text-white py-2 rounded-md hover:bg-dis transition disabled:bg-gray-800 disabled:cursor-not-allowed"
                 >
