@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { UserCircle, Cog } from "lucide-react";
+import { Cog, UserCircle } from "lucide-react";
 import SocialLinkForm from "./SocialLinkForm";
 import EmployerAccountSettings from "./AccountSettings/EmployerAccountSettings";
 import PersonalForm from "./PersonalForm/PersonalForm";
@@ -16,11 +16,11 @@ const tabItems = [
   //   key: "company",
   //   icon: User
   // },
-  {
-    title: "Social Media",
-    key: "social",
-    icon: UserCircle,
-  },
+  // {
+  //   title: "Social Media",
+  //   key: "social",
+  //   icon: UserCircle,
+  // },
   {
     title: "Account Settings",
     key: "account",

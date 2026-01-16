@@ -26,6 +26,7 @@ export type IApplication = {
   candidatePhone: string;
   candidateImg: string;
   candidateCV: string; // URL
+  candidateDescription: string;
   status: TApplicationStatus;
   workStatus: TWorkStatus;
   isReview: boolean;

@@ -12,7 +12,6 @@ const PostJobPage = () => {
   useCheckSubscriptionStatusQuery(undefined);
 
 
-
   return (
     <>
       <PostJobForm />

@@ -54,7 +54,7 @@ const MyJobItem = ({ job }: TProps) => {
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-sm text-gray-600">Applications</span>
                   <div className="flex items-center gap-1">
-                    <Eye className="w-4 h-4 text-gray-400 cursor-pointer" />
+                    <Eye onClick={()=>job?.applications > 0 && router.push(`/dashboard/employer/applications-by-job/${job._id}`)} className={`w-4 h-4 text-gray-400 ${job?.applications > 0 ? "cursor-pointer" : "cursor-not-allowed"} `} />
                     <span className="font-semibold text-gray-900">
                       {job.applications}
                     </span>

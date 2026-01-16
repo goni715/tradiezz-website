@@ -68,7 +68,7 @@ const SidebarLink = ({
       onClick={()=>router.push(href)}
       className={`flex w-full cursor-pointer items-center space-x-2 px-3 py-2 rounded-md ${
         active
-          ? "bg-[#E7F0FA] text-primary border-l-4 border-[#092443]"
+          ? "bg-light-gray text-primary border-l-4 border-[#092443]"
           : "text-gray-600 hover:bg-gray-100"
       }`}
     >

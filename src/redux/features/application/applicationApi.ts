@@ -46,6 +46,16 @@ export const applicationApi = apiSlice.injectEndpoints({
       keepUnusedDataFor: 600,
       providesTags: [TagTypes.appliedJobIds],
     }),
+    getSingleApplication: builder.query({
+      query: (id) => ({
+        url: `/application/get-single-application/${id}`,
+        method: "GET",
+      }),
+      keepUnusedDataFor: 600,
+      providesTags: (result, error, arg) => [
+        { type: TagTypes.singleApplication, id: arg },
+      ],
+    }),
     getApplications: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
@@ -166,9 +176,13 @@ export const applicationApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: (result) => {
+      invalidatesTags: (result, error, arg) => {
         if (result?.success) {
-          return [TagTypes.applications, TagTypes.applicationsByJobId];
+          return [
+            TagTypes.applications,
+            TagTypes.applicationsByJobId,
+            { type: TagTypes.job, id: arg.id },
+          ];
         }
         return [];
       },
@@ -219,9 +233,10 @@ export const applicationApi = apiSlice.injectEndpoints({
 export const {
   useGetAppliedJobsQuery,
   useGetApplicationsQuery,
+  useGetSingleApplicationQuery,
   useGetApplicationsByJobIdQuery,
   useGetAppliedJobIdsQuery,
   useApplyJobMutation,
   useUpdateApplicationMutation,
-  useDeleteApplicationMutation
+  useDeleteApplicationMutation,
 } = applicationApi;

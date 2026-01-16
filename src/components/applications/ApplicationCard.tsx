@@ -1,22 +1,18 @@
 "use client";
 
 import { IApplication } from "@/types/application.type";
-import {
-  Mail,
-  FileText,
-  Calendar,
-} from "lucide-react";
+import { Mail, FileText, Calendar, Eye } from "lucide-react";
 import UpdateApplicationStatusModal from "../modal/application/UpdateApplicationStatusModal";
 import UpdateWorkStatusModal from "../modal/application/UpdateWorkStatusModal";
 import DeleteApplicationModal from "../modal/application/DeleteApplicationModal";
-
-
+import { useRouter } from "next/navigation";
 
 type TProps = {
   application: IApplication;
 };
 
 const ApplicationCard = ({ application }: TProps) => {
+  const router = useRouter();
   const {
     _id,
     title,
@@ -26,14 +22,11 @@ const ApplicationCard = ({ application }: TProps) => {
     candidateCV,
     workStatus,
     createdAt,
-    status
+    status,
   } = application;
 
   const handleViewCV = () => {
-    window.open(
-      candidateCV,
-      "_blank"
-    );
+    window.open(candidateCV, "_blank");
   };
 
   const formatDate = (dateString: string) => {
@@ -60,8 +53,16 @@ const ApplicationCard = ({ application }: TProps) => {
           </div>
         </div>
 
-        {/* Status Badge */}
-        <UpdateApplicationStatusModal status={status} applicationId={_id}/>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={()=> router.push(`/dashboard/employer/applications/${_id}`)}
+            className="p-2 rounded-md border border-gray-200 text-gray-600 cursor-pointer hover:bg-gray-100 hover:text-gray-900 transition"
+            title="View Application"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          <UpdateApplicationStatusModal status={status} applicationId={_id} />
+        </div>
       </div>
 
       {/* Contact Information */}
@@ -90,10 +91,8 @@ const ApplicationCard = ({ application }: TProps) => {
       {/* Footer Section with Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-6">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600">
-            Work Status:{" "}
-          </span>
-          <UpdateWorkStatusModal workStatus={workStatus} applicationId={_id}/>
+          <span className="text-sm text-gray-600">Work Status: </span>
+          <UpdateWorkStatusModal workStatus={workStatus} applicationId={_id} />
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
@@ -104,7 +103,7 @@ const ApplicationCard = ({ application }: TProps) => {
             <FileText className="w-4 h-4" />
             <span>View CV</span>
           </button>
-          <DeleteApplicationModal applicationId={_id}/>
+          <DeleteApplicationModal applicationId={_id} />
         </div>
       </div>
     </div>
