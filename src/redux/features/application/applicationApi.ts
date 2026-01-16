@@ -187,6 +187,32 @@ export const applicationApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    deleteApplication: builder.mutation({
+      query: (id: string) => ({
+        url: `/application/delete-application/${id}`,
+        method: "DELETE",
+      }),
+      async onQueryStarted(args, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          SuccessToast("Application is deleted successfully");
+        } catch (err: any) {
+          const status = err?.error?.status;
+          const message = err?.error?.data?.message || "Something Went Wrong";
+          if (status === 500) {
+            ErrorToast("Something Went Wrong");
+          } else {
+            ErrorToast(message);
+          }
+        }
+      },
+      invalidatesTags: (result) => {
+        if (result?.success) {
+          return [TagTypes.applications, TagTypes.applicationsByJobId];
+        }
+        return [];
+      },
+    }),
   }),
 });
 
@@ -196,5 +222,6 @@ export const {
   useGetApplicationsByJobIdQuery,
   useGetAppliedJobIdsQuery,
   useApplyJobMutation,
-  useUpdateApplicationMutation
+  useUpdateApplicationMutation,
+  useDeleteApplicationMutation
 } = applicationApi;

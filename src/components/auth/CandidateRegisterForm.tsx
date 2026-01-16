@@ -375,24 +375,11 @@ const CandidateRegisterForm = () => {
 
               {watchedLocation && (
                 <div className="p-4 bg-muted rounded-lg space-y-1">
-                  <p className="font-medium">{watchedLocation.address}</p>
-
-                  {watchedLocation.city && (
-                    <p className="text-sm text-muted-foreground">
-                      City: {watchedLocation.city}
-                    </p>
-                  )}
-
                   {watchedLocation.postalCode && (
                     <p className="text-sm text-muted-foreground">
                       Postcode: {watchedLocation.postalCode}
                     </p>
                   )}
-
-                  <p className="text-sm text-muted-foreground">
-                    Lat: {watchedLocation.lat.toFixed(6)}, Lng:{" "}
-                    {watchedLocation.lng.toFixed(6)}
-                  </p>
                 </div>
               )}
 

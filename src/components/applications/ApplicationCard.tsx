@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import UpdateApplicationStatusModal from "../modal/application/UpdateApplicationStatusModal";
 import UpdateWorkStatusModal from "../modal/application/UpdateWorkStatusModal";
+import DeleteApplicationModal from "../modal/application/DeleteApplicationModal";
 
 
 
@@ -103,6 +104,7 @@ const ApplicationCard = ({ application }: TProps) => {
             <FileText className="w-4 h-4" />
             <span>View CV</span>
           </button>
+          <DeleteApplicationModal applicationId={_id}/>
         </div>
       </div>
     </div>
