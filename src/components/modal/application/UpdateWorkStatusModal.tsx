@@ -9,7 +9,7 @@ import SubmitButton from "../../form/SubmitButton";
 import { useUpdateApplicationMutation } from "@/redux/features/application/applicationApi";
 import { workStatusOptions } from "@/data/application.data";
 import { workStatusSchema } from "@/schema/application.schema";
-import { TWorkStatus } from "@/types/application.type";
+import { TApplicationStatus, TWorkStatus } from "@/types/application.type";
 import { CheckCircle2, Clock, Loader, PauseCircle } from "lucide-react";
 
 type TFormValues = z.infer<typeof workStatusSchema>;
@@ -54,17 +54,22 @@ const workStatusIcons = {
 type TProps = {
   applicationId: string;
   workStatus: TWorkStatus;
+  status: TApplicationStatus;
 };
 
-const UpdateWorkStatusModal = ({ applicationId, workStatus }: TProps) => {
+const UpdateWorkStatusModal = ({
+  applicationId,
+  workStatus,
+  status,
+}: TProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [changeStatus, { isLoading, isSuccess }] =
     useUpdateApplicationMutation();
   const { handleSubmit, control } = useForm<TFormValues>({
     resolver: zodResolver(workStatusSchema),
     defaultValues: {
-      workStatus
-    }
+      workStatus,
+    },
   });
 
   //if success
@@ -85,11 +90,14 @@ const UpdateWorkStatusModal = ({ applicationId, workStatus }: TProps) => {
     <>
       <button
         onClick={() => setModalOpen(true)}
-        className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full text-sm font-medium border transition-all ${workStatusColors[workStatus].bg} ${workStatusColors[workStatus].text} ${workStatusColors[workStatus].border} hover:shadow-md`}
+        disabled={status !== "accepted"}
+        className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full text-sm disabled:cursor-not-allowed font-medium border transition-all ${workStatusColors[workStatus].bg} ${workStatusColors[workStatus].text} ${workStatusColors[workStatus].border} hover:shadow-md`}
       >
         {workStatusIcons[workStatus]}
         <span className="capitalize">{workStatus}</span>
-        <FiEdit className="w-4 h-4 opacity-60 hover:opacity-100" />
+        {status === "accepted" && (
+          <FiEdit className="w-4 h-4 opacity-60 hover:opacity-100" />
+        )}
       </button>
 
       <Modal

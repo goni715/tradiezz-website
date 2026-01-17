@@ -9,6 +9,8 @@ import { IApplication } from "@/types/application.type";
 import findLabel from "@/utils/findLabel";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import UpdateApplicationStatusModal from "../modal/application/UpdateApplicationStatusModal";
+import UpdateWorkStatusModal from "../modal/application/UpdateWorkStatusModal";
 
 type TProps = {
   application: IApplication;
@@ -130,24 +132,16 @@ const ApplicationDetails = ({ application }: TProps) => {
               </div>
 
               {/* Application Status */}
-              {/* <div className="space-y-2">
+              <div className="space-y-2">
                 <div>
                   <p className="text-xs font-semibold text-[#64748B] mb-2">APPLICATION STATUS</p>
-                  <div className="inline-block px-3 py-1 rounded-full" style={{ backgroundColor: statusInfo.bg }}>
-                    <span style={{ color: statusInfo.text }} className="text-sm font-semibold">
-                      {statusInfo.label}
-                    </span>
-                  </div>
+                  <UpdateApplicationStatusModal status={application.status} applicationId={application._id} />
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-[#64748B] mb-2">WORK STATUS</p>
-                  <div className="inline-block px-3 py-1 rounded-full" style={{ backgroundColor: workStatusInfo.bg }}>
-                    <span style={{ color: workStatusInfo.text }} className="text-sm font-semibold">
-                      {workStatusInfo.label}
-                    </span>
-                  </div>
+                   <UpdateWorkStatusModal workStatus={application.workStatus} applicationId={application._id} status={application.status} />
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
 

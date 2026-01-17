@@ -92,7 +92,7 @@ const ApplicationCard = ({ application }: TProps) => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-6">
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600">Work Status: </span>
-          <UpdateWorkStatusModal workStatus={workStatus} applicationId={_id} />
+          <UpdateWorkStatusModal workStatus={workStatus} applicationId={_id} status={status} />
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">

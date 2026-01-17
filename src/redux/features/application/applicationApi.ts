@@ -181,7 +181,7 @@ export const applicationApi = apiSlice.injectEndpoints({
           return [
             TagTypes.applications,
             TagTypes.applicationsByJobId,
-            { type: TagTypes.job, id: arg.id },
+            { type: TagTypes.singleApplication, id: arg.id },
           ];
         }
         return [];

@@ -75,7 +75,7 @@ const UpdateApplicationStatusModal = ({ applicationId, status }: TProps) => {
     <>
       <div
         onClick={()=> setModalOpen(true)}
-        className={`px-3 py-2 flex items-center gap-2 cursor-pointer rounded-full text-sm font-medium border ${statusColors[status].bg} ${statusColors[status].text} ${statusColors[status].border}`}
+        className={`px-3 py-2 flex items-center gap-2 cursor-pointer rounded-full text-sm justify-center font-medium border ${statusColors[status].bg} ${statusColors[status].text} ${statusColors[status].border}`}
       >
         <span className="capitalize">{status}</span>
         <FiEdit className="w-4 h-4 opacity-60 hover:opacity-100" />
