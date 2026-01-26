@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { ChatBox } from "@/components/chatBox/ChatBox";
+import ChatBox from "@/components/chatBox/ChatBox";
 
 const MessagesPage = () => {
   const [selectedConversationId, setSelectedConversationId] = useState("1");

@@ -1,6 +1,6 @@
 'use client';
 
-import { ChatBox } from '@/components/chatBox/ChatBox';
+import ChatBox from '@/components/chatBox/ChatBox';
 import { useState } from 'react';
 
 const ConversationsPage = () => {
