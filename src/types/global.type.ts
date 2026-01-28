@@ -38,3 +38,7 @@ export type TProfile = {
 };
 
 export type TVisibility = "visible" | "hidden";
+
+export type TChildren = {
+  children: React.ReactNode;
+};
