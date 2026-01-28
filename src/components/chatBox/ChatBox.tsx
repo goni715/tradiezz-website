@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import { Send, ArrowLeft, Search } from "lucide-react";
 import Image from "next/image";
 import { useGetChatsQuery } from "@/redux/features/chat/chatApi";
@@ -11,8 +12,9 @@ import { IMessage } from "@/types/message.type";
 import useUserInfo from "@/hooks/useUserInfo";
 import ConversationItem from "./ConversationItem";
 import MessageItem from "./MessageItem";
+import { ChatContext } from "@/context/ChatContext";
 
-const ChatBox = ( ) => {
+const ChatBox = () => {
   const userInfo = useUserInfo();
   const currentUserId = userInfo?.userId;
   const [selectedConversationId, setSelectedConversationId] = useState("");
@@ -24,10 +26,19 @@ const ChatBox = ( ) => {
   const [showConversationList, setShowConversationList] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { searchTerm } = useDebounce(searchQuery); //debounce handled
+  const { messages, getMessages } =
+    useContext(ChatContext)!;
   const { data, isLoading } = useGetChatsQuery([
     { name: "searchTerm", value: searchTerm },
   ]);
   const conversations = data?.data || [];
+
+  //get messages
+  useEffect(() => {
+    if (selectedConversationId) {
+      getMessages(selectedConversationId);
+    }
+  }, [selectedConversationId]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -45,7 +56,7 @@ const ChatBox = ( ) => {
         chatId: selectedConversationId,
         text: inputValue,
         senderId: currentUserId,
-        createdAt: ""
+        createdAt: "",
         //timestamp: new Date(),
         //avatar: currentUserAvatar,
         //currentUserName,
@@ -180,7 +191,7 @@ const ChatBox = ( ) => {
             </div>
           ) : (
             <>
-              {allMessages?.length === 0 ? (
+              {messages?.length === 0 ? (
                 <>
                   <div className="flex h-full items-center justify-center text-center">
                     <div className="max-w-xs">
@@ -196,8 +207,13 @@ const ChatBox = ( ) => {
               ) : (
                 <>
                   <div className="flex flex-col gap-4">
-                    {allMessages.map((message, index) => (
-                      <MessageItem key={index} message={message} otherUserName={otherUserAvatar} otherUserAvatar={otherUserAvatar}/>
+                    {[...messages].reverse().map((message, index) => (
+                      <MessageItem
+                        key={index}
+                        message={message}
+                        otherUserName={otherUserName}
+                        otherUserAvatar={otherUserAvatar}
+                      />
                     ))}
                   </div>
                 </>

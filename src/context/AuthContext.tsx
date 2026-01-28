@@ -1,11 +1,9 @@
 "use client";
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
+import { Socket } from "socket.io-client";
 import customAxios from "@/config/customAxios";
-import { BASE_URL } from "@/constant/global.constant";
-import { ErrorToast } from "@/helper/ValidationHelper";
+// import { BASE_URL } from "@/constant/global.constant";
+import { SuccessToast } from "@/helper/ValidationHelper";
 
 
 interface IAuthContext {
@@ -43,7 +41,7 @@ const AuthContextprovider = ({ children }: { children: React.ReactNode})=> {
   const [loading, setLoading] = useState(false);
 
   //check if user is authenticated and if so, set the user data and connect the socket
-  const checkAuth = async () => {
+  /*const checkAuth = async () => {
     try {
       const { data } = await customAxios.get("/api/v1/auth/check");
       if (data?.success) {
@@ -51,9 +49,10 @@ const AuthContextprovider = ({ children }: { children: React.ReactNode})=> {
         connectSocket(data?.data);
       }
     } catch (err: any) {
+      console.log(err);
       ErrorToast(err.message);
     }
-  };
+  };*/
 
   //login function to handle user authentication and socket connection
   // const login = async (state: string, credentials: ILogin) => {
@@ -95,11 +94,11 @@ const AuthContextprovider = ({ children }: { children: React.ReactNode})=> {
     }
 
     delete customAxios.defaults.headers.common["token"];
-    toast.success("Logged out successfully");
+    SuccessToast("Logged out successfully");
   };
 
   //Connect socket function to handle socket connection and online user updates
-  const connectSocket = (userData: any) => {
+ /* const connectSocket = (userData: any) => {
     // If user data is unavailable, no need to connect the socket
     if (!userData) return;
 
@@ -134,11 +133,12 @@ const AuthContextprovider = ({ children }: { children: React.ReactNode})=> {
       setOnlineUsers(userIds);
     });
   };
+  */
 
   useEffect(() => {
     if (token) {
       customAxios.defaults.headers.common["token"] = token; //set token with all axios api request
-      checkAuth();
+      //checkAuth();
     }
   }, [token]);
 

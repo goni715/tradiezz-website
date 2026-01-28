@@ -42,3 +42,21 @@ export type TVisibility = "visible" | "hidden";
 export type TChildren = {
   children: React.ReactNode;
 };
+
+export type IUser = {
+  _id: string;
+  email: string;
+  fullName: string;
+  profilePic: string;
+  bio: string;
+};
+
+export interface TMessage {
+  _id: string;
+  senderId: string;
+  receiverId: string;
+  text: string;
+  seen: boolean;
+  image: string;
+  createdAt: string; // or Date if you convert to Date type in code
+}
