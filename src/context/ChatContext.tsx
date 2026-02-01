@@ -12,14 +12,12 @@ import { IMessage } from "@/types/message.type";
 type IChatContext = {
   messages: IMessage[];
   setMessages: React.Dispatch<React.SetStateAction<IMessage[]>>;
-  users: IUser[];
   selectedUser: IUser | null;
   setSelectedUser: React.Dispatch<React.SetStateAction<IUser | null>>;
   unseenMessages: Record<string, number>;
   setUnseenMessages: React.Dispatch<
     React.SetStateAction<Record<string, number>>
   >;
-  getUsers: () => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
   sendMessage: (
     selectedUser: IUser,
@@ -31,25 +29,11 @@ export const ChatContext = createContext<IChatContext | null>(null);
 
 const ChatContextProvider = ({ children }: TChildren) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [users, setUsers] = useState<IUser[]>([]);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [unseenMessages, setUnseenMessages] = useState<Record<string, number>>(
     {},
   );
   const { socket } = useContext(AuthContext);
-
-  // get all users for sidebar
-  const getUsers = async () => {
-    try {
-      const { data } = await customAxios.get(`/api/v1/message/get-users`);
-      if (data.success) {
-        setUsers(data.users);
-        setUnseenMessages(data.unseenMessages);
-      }
-    } catch (err: any) {
-      toast.error(err.message);
-    }
-  };
 
   // get messages for selected user
   const getMessages = async (conversationId: string) => {
@@ -123,9 +107,7 @@ const ChatContextProvider = ({ children }: TChildren) => {
     setMessages,
     sendMessage,
     getMessages,
-    users,
     selectedUser,
-    getUsers,
     setSelectedUser,
     unseenMessages,
     setUnseenMessages,

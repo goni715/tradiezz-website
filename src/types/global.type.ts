@@ -35,6 +35,7 @@ export type TProfile = {
   fullName: string;
   email: string;
   profileImg: string;
+  userId: string;
 };
 
 export type TVisibility = "visible" | "hidden";

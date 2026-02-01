@@ -62,12 +62,13 @@ export const authApi = apiSlice.injectEndpoints({
         try {
           const res = await queryFulfilled;
           const token = res?.data?.data?.accessToken;
-          const { fullName, email, profileImg } = jwtDecode(token) as IAuthUser;
+          const { fullName, email, profileImg, userId } = jwtDecode(token) as IAuthUser;
           setToken(token);
           setUserDetails({
             fullName,
             email,
-            profileImg
+            profileImg,
+            userId
           })
           SuccessToast("Login Success");
           setTimeout(() => {
