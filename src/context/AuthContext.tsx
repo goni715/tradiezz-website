@@ -24,41 +24,30 @@ export const AuthContext = createContext(initialValue);
 const AuthContextprovider = ({ children }: { children: React.ReactNode }) => {
   const token = getToken();
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
-  const [socket, setSocket] = useState<Socket | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const [loading, setLoading] = useState(false);
   const user = getUserDetails();
   const currentUserId = user?.userId || "";
-
-
-  //check if user is authenticated and if so, set the user data and connect the socket
-  const checkAuth = () => {
-    if (currentUserId) {
-      connectSocket(currentUserId);
-    }
-  };
 
   //Connect socket function to handle socket connection and online user updates
   const connectSocket = (userId: string) => {
     // If user data is unavailable, no need to connect the socket
     if (!userId) return;
 
-    console.log(socket);
-
     // ✅ Socket already connected → skip reconnect
-    if (socket && socket.connected) {
-      console.log("Socket already connected:", socket.id);
+    if (socketRef.current?.connected) {
+      console.log("Socket already connected:", socketRef.current.id);
       return;
     }
 
     const newSocket = io(SOCKET_BASE_URL, {
       query: {
-        userId: userId, // optional: send logged in user ID
+        userId, // optional: send logged in user ID
       },
     });
 
     //newSocket.connect(); //manully triggered
-    setSocket(newSocket);
+    socketRef.current = newSocket;
 
     newSocket.on("connect", () => {
       console.log("✅ Socket connected:", newSocket.id);
@@ -78,14 +67,20 @@ const AuthContextprovider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    if (token) {
-      checkAuth();
+    if (token && currentUserId) {
+      connectSocket(currentUserId);
     }
+
+    return () => {
+      // ✅ cleanup on unmount
+      socketRef.current?.disconnect();
+      socketRef.current = null;
+    };
   }, [token]);
 
   const value = {
     onlineUsers,
-    socket,
+    socket: socketRef.current,
     loading,
     setLoading,
   };
