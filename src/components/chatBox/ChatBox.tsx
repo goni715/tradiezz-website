@@ -4,15 +4,15 @@
 import React, { useRef, useEffect, useState, useContext } from "react";
 import { Send, ArrowLeft, Search } from "lucide-react";
 import Image from "next/image";
-import { useGetChatsQuery } from "@/redux/features/chat/chatApi";
 import ChatLaoding from "../loader/ChatLoading";
 import { IChat } from "@/types/chat.type";
-import useDebounce from "@/hooks/useDebounce";
 import { IMessage } from "@/types/message.type";
 import useUserInfo from "@/hooks/useUserInfo";
 import ConversationItem from "./ConversationItem";
 import MessageItem from "./MessageItem";
 import { ChatContext } from "@/context/ChatContext";
+import { AuthContext } from "@/context/AuthContext";
+import { Socket } from "socket.io-client";
 
 const ChatBox = () => {
   const userInfo = useUserInfo();
@@ -20,19 +20,22 @@ const ChatBox = () => {
   const [selectedConversationId, setSelectedConversationId] = useState("");
   const [otherUserName, setOtherUserName] = useState("Creative Director");
   const [otherUserAvatar, setOtherUserAvatar] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [allMessages, setAllMessages] = useState<IMessage[]>([]);
   const [showConversationList, setShowConversationList] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { searchTerm } = useDebounce(searchQuery); //debounce handled
-  const { messages, getMessages } =
-    useContext(ChatContext)!;
-  const { data, isLoading } = useGetChatsQuery([
-    { name: "searchTerm", value: searchTerm },
-  ]);
-  const conversations = data?.data || [];
-
+  const {
+    messages,
+    getMessages,
+    setMessages,
+    selectedReceiverId,
+    setSelectedReceiverId,
+    searchQuery,
+    setSearchQuery,
+    conversations,
+    setConversations,
+    isLoading,
+  } = useContext(ChatContext)!;
+  const { socket } = useContext(AuthContext);
 
   //get messages
   useEffect(() => {
@@ -49,7 +52,8 @@ const ChatBox = () => {
         scrollArea.scrollTop = scrollArea.scrollHeight;
       }, 0);
     }
-  }, [allMessages]);
+  }, [messages]);
+
 
   const handleSendMessage = () => {
     if (inputValue.trim()) {
@@ -57,12 +61,30 @@ const ChatBox = () => {
         chatId: selectedConversationId,
         text: inputValue,
         senderId: currentUserId,
-        createdAt: "",
-        //timestamp: new Date(),
-        //avatar: currentUserAvatar,
-        //currentUserName,
+        createdAt: new Date().toISOString(),
       };
-      setAllMessages([...allMessages, newMessage]);
+      setMessages([...messages, newMessage]);
+
+      const newConversation = {
+        _id: selectedConversationId,
+        receiverId: selectedReceiverId,
+        fullName: otherUserName,
+        profileImg: otherUserAvatar,
+        lastMessage: inputValue,
+        updatedAt: new Date().toISOString(),
+      };
+
+      (socket as Socket).emit("sendMessage", {
+        ...newMessage,
+        receiverId: selectedReceiverId,
+      });
+
+      const withoutCurrentConversations = conversations?.filter(
+        (cv) => cv._id !== selectedConversationId,
+      );
+
+
+      setConversations([newConversation, ...withoutCurrentConversations]);
       setInputValue("");
     }
   };
@@ -134,6 +156,7 @@ const ChatBox = () => {
                     conversation={conversation}
                     selectedConversationId={selectedConversationId}
                     setSelectedConversationId={setSelectedConversationId}
+                    setSelectedReceiverId={setSelectedReceiverId}
                     setOtherUserName={setOtherUserName}
                     setOtherUserAvatar={setOtherUserAvatar}
                     setShowConversationList={setShowConversationList}
@@ -208,7 +231,7 @@ const ChatBox = () => {
               ) : (
                 <>
                   <div className="flex flex-col gap-4">
-                    {[...messages].reverse().map((message, index) => (
+                    {messages.map((message, index) => (
                       <MessageItem
                         key={index}
                         message={message}

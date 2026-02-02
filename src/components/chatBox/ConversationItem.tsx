@@ -6,6 +6,7 @@ type TProps = {
   conversation: IChat;
   selectedConversationId: string;
   setSelectedConversationId: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedReceiverId: React.Dispatch<React.SetStateAction<string>>;
   setOtherUserName: React.Dispatch<React.SetStateAction<string>>;
   setOtherUserAvatar: React.Dispatch<React.SetStateAction<string>>;
   setShowConversationList: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,6 +16,7 @@ const ConversationItem = ({
   conversation,
   selectedConversationId,
   setSelectedConversationId,
+  setSelectedReceiverId,
   setOtherUserName,
   setOtherUserAvatar,
   setShowConversationList
@@ -24,6 +26,7 @@ const ConversationItem = ({
       <div
         onClick={() => {
           setSelectedConversationId(conversation._id);
+          setSelectedReceiverId(conversation.receiverId);
           setOtherUserName(conversation.fullName);
           setOtherUserAvatar(
             conversation.profileImg || "/images/profile_placeholder.png",
