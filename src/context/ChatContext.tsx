@@ -19,10 +19,6 @@ type IChatContext = {
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   selectedReceiverId: string;
   setSelectedReceiverId: React.Dispatch<React.SetStateAction<string>>;
-  unseenMessages: Record<string, number>;
-  setUnseenMessages: React.Dispatch<
-    React.SetStateAction<Record<string, number>>
-  >;
   getMessages: (userId: string) => Promise<void>;
   conversations: IChat[];
   setConversations: React.Dispatch<React.SetStateAction<IChat[]>>;
@@ -35,9 +31,7 @@ const ChatContextProvider = ({ children }: TChildren) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [conversations, setConversations] = useState<IChat[]>([]);
   const [selectedReceiverId, setSelectedReceiverId] = useState("");
-  const [unseenMessages, setUnseenMessages] = useState<Record<string, number>>(
-    {},
-  );
+
   const user = getUserDetails();
   const currentUserId = user?.userId;
   /*=== Conversations fetching ===*/
@@ -80,43 +74,31 @@ const ChatContextProvider = ({ children }: TChildren) => {
     socket.on(
       "newMessage",
       async (newMessage: IMessage & { receiverId: string }) => {
-        console.log("New Message Received", newMessage);
-
         if (currentUserId === newMessage.receiverId) {
-          const currentConversation = conversations?.find(
-            (cv) => cv._id === newMessage.chatId,
-          );
+          setConversations((prev) => {
+            const currentConversation = prev.find(
+              (cv) => cv._id === newMessage.chatId,
+            );
 
-          const withoutCurrentConversations = conversations?.filter(
-            (cv) => cv._id !== newMessage.chatId,
-          );
+            if (!currentConversation) return prev;
 
-          console.log(currentConversation);
-          console.log("without con", withoutCurrentConversations);
+            const withoutCurrent = prev.filter(
+              (cv) => cv._id !== newMessage.chatId,
+            );
 
-          if (currentConversation) {
-            const newConversation = {
-              ...currentConversation,
-              lastMessage: newMessage.text,
-              updatedAt: new Date().toISOString(),
-            };
-            setConversations([newConversation, ...withoutCurrentConversations]);
-          }
+            return [
+              {
+                ...currentConversation,
+                lastMessage: newMessage.text,
+                updatedAt: new Date().toISOString(),
+              },
+              ...withoutCurrent,
+            ];
+          });
         }
 
         if (selectedReceiverId && newMessage.senderId === selectedReceiverId) {
-          //newMessage.seen = true;
-
           setMessages((prev) => [...prev, newMessage]);
-          //update the seen message
-          //await customAxios.put(`/api/v1/message/mark/${newMessage?._id}`);
-        } else {
-          setUnseenMessages((prev) => ({
-            ...prev,
-            [newMessage.senderId]: prev[newMessage.senderId]
-              ? prev[newMessage.senderId] + 1
-              : 1,
-          }));
         }
       },
     );
@@ -140,8 +122,6 @@ const ChatContextProvider = ({ children }: TChildren) => {
     setSearchQuery,
     selectedReceiverId,
     setSelectedReceiverId,
-    unseenMessages,
-    setUnseenMessages,
     conversations,
     isLoading,
     setConversations,

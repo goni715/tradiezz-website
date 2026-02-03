@@ -135,33 +135,6 @@ export const candidateApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    uploadCV: builder.mutation({
-      query: (data) => ({
-        url: `/auth/candidate_resume_upload`,
-        method: "PATCH",
-        body: data,
-      }),
-      invalidatesTags: (result, error, arg) => {
-        if (result?.success) {
-          return [
-            TagTypes.candidates,
-            TagTypes.favouriteCandidates,
-            { type: TagTypes.candidate, id: arg },
-          ];
-        }
-        return [];
-      },
-      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
-        try {
-          const res = await queryFulfilled;
-          const msg = res?.data?.message;
-          SuccessToast(msg);
-        } catch (err: any) {
-          const message = err?.error?.data?.message;
-          ErrorToast(message);
-        }
-      },
-    }),
   }),
 });
 
@@ -172,5 +145,4 @@ export const {
   useAddRemoveFavoriteCandidateMutation,
   useSendAccessRequestMutation,
   useGetFavouriteCandidatesQuery,
-  useUploadCVMutation,
 } = candidateApi;

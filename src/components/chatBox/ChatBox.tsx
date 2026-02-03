@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useContext } from "react";
-import { Send, ArrowLeft, Search } from "lucide-react";
+import { Send, ArrowLeft, Search, Smile } from "lucide-react";
 import Image from "next/image";
 import ChatLaoding from "../loader/ChatLoading";
 import { IChat } from "@/types/chat.type";
@@ -13,6 +13,7 @@ import MessageItem from "./MessageItem";
 import { ChatContext } from "@/context/ChatContext";
 import { AuthContext } from "@/context/AuthContext";
 import { Socket } from "socket.io-client";
+import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 
 const ChatBox = () => {
   const userInfo = useUserInfo();
@@ -36,6 +37,11 @@ const ChatBox = () => {
     isLoading,
   } = useContext(ChatContext)!;
   const { socket } = useContext(AuthContext);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  /* ========== Online Users ==========*/
+  const { onlineUsers } = useContext(AuthContext);
+  /* ========== Online Users ==========*/
 
   //get messages
   useEffect(() => {
@@ -53,7 +59,6 @@ const ChatBox = () => {
       }, 0);
     }
   }, [messages]);
-
 
   const handleSendMessage = () => {
     if (inputValue.trim()) {
@@ -83,9 +88,9 @@ const ChatBox = () => {
         (cv) => cv._id !== selectedConversationId,
       );
 
-
       setConversations([newConversation, ...withoutCurrentConversations]);
       setInputValue("");
+      setShowEmojiPicker(false);
     }
   };
 
@@ -96,19 +101,9 @@ const ChatBox = () => {
     }
   };
 
-  // const formatConversationTime = (date: Date) => {
-  //   const now = new Date();
-  //   const diffMinutes = Math.floor(
-  //     (now.getTime() - date.getTime()) / (1000 * 60),
-  //   );
-
-  //   if (diffMinutes < 60) return `${diffMinutes}m`;
-  //   const diffHours = Math.floor(diffMinutes / 60);
-  //   if (diffHours < 24) return `${diffHours}h`;
-  //   const diffDays = Math.floor(diffHours / 24);
-  //   if (diffDays < 7) return `${diffDays}d`;
-  //   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  // };
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    setInputValue((prev) => prev + emojiData.emoji);
+  };
 
   if (isLoading) {
     return <ChatLaoding />;
@@ -191,7 +186,9 @@ const ChatBox = () => {
                 <h2 className="text-sm font-semibold text-foreground truncate">
                   {otherUserName}
                 </h2>
-                {/* <p className="text-xs text-muted-foreground">Active now</p> */}
+                {onlineUsers.includes(selectedReceiverId) && (
+                  <p className="text-xs text-muted-foreground">Active now</p>
+                )}
               </div>
             </div>
           </div>
@@ -253,32 +250,34 @@ const ChatBox = () => {
               Select a conversation to start typing
             </div>
           ) : (
-            <div className="flex items-end gap-2">
-              {/* <button className="h-10 w-10 flex items-center justify-center text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors">
-                <Paperclip className="h-5 w-5" />
-              </button> */}
+            <div className="flex items-center gap-2 relative">
+              <button
+                onClick={() => setShowEmojiPicker((p) => !p)}
+                className="h-10 w-10 flex items-center justify-center"
+              >
+                <Smile />
+              </button>
 
-              <div className="flex-1 relative">
-                <input
-                  type="text"
-                  placeholder="Aa"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  className="w-full px-4 py-2.5 rounded-full border border-border bg-muted text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:bg-card focus:ring-2 focus:ring-accent transition-colors"
-                />
-              </div>
+              {showEmojiPicker && (
+                <div className="absolute bottom-14 left-0 z-50">
+                  <EmojiPicker onEmojiClick={handleEmojiClick} />
+                </div>
+              )}
 
-              {/* <button className="h-10 w-10 flex items-center justify-center text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors">
-                <Smile className="h-5 w-5" />
-              </button> */}
+              <input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyPress}
+                placeholder="Aa"
+                className="flex-1 px-4 py-2 rounded-full border bg-muted"
+              />
 
               <button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim()}
-                className="h-10 w-10 rounded-full flex cursor-pointer items-center justify-center bg-prime text-prime-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+                className="h-10 w-10 rounded-full bg-prime text-prime-foreground flex items-center justify-center disabled:opacity-50"
               >
-                <Send className="h-5 w-5" />
+                <Send />
               </button>
             </div>
           )}

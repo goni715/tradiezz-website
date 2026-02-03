@@ -36,7 +36,7 @@ const AuthContextprovider = ({ children }: { children: React.ReactNode }) => {
 
     // ✅ Socket already connected → skip reconnect
     if (socketRef.current?.connected) {
-      console.log("Socket already connected:", socketRef.current.id);
+      //console.log("Socket already connected:", socketRef.current.id);
       return;
     }
 
@@ -50,16 +50,16 @@ const AuthContextprovider = ({ children }: { children: React.ReactNode }) => {
     socketRef.current = newSocket;
 
     newSocket.on("connect", () => {
-      console.log("✅ Socket connected:", newSocket.id);
+     // console.log("✅ Socket connected:", newSocket.id);
     });
 
     newSocket.on("disconnect", () => {
-      console.log("❌ Socket disconnected!");
+      //console.log("❌ Socket disconnected!");
     });
 
-    newSocket.on("connect_error", (err) => {
-      console.log("⚠️ Socket connection error:", err.message);
-    });
+    // newSocket.on("connect_error", (err) => {
+    //   console.log("⚠️ Socket connection error:", err.message);
+    // });
 
     newSocket.on("getOnlineUsers", (userIds: string[]) => {
       setOnlineUsers(userIds);

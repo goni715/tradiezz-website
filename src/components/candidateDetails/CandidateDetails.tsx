@@ -18,7 +18,6 @@ const CandidateDetails = ({ candidateData }: TProps) => {
     });
   };
 
-  console.log(candidateData);
 
   const calculateAge = (birthDate: string) => {
     const today = new Date();

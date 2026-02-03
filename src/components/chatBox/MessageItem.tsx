@@ -2,6 +2,8 @@ import useUserInfo from "@/hooks/useUserInfo";
 import { IMessage } from "@/types/message.type";
 import Image from "next/image";
 import React from "react";
+import { format } from "timeago.js";
+
 
 type TProps = {
   message: IMessage;
@@ -12,15 +14,8 @@ type TProps = {
 const MessageItem = ({ message, otherUserName, otherUserAvatar }: TProps) => {
   const userInfo = useUserInfo();
   const currentUserId = userInfo?.userId;
-  const currentUserAvatar = userInfo?.profileImg || "/images/profile_placeholder.png";
-
-  // const formatTime = (date: Date) => {
-  //   return date.toLocaleTimeString("en-US", {
-  //     hour: "numeric",
-  //     minute: "2-digit",
-  //   });
-  // };
-
+  const currentUserAvatar =
+    userInfo?.profileImg || "/images/profile_placeholder.png";
 
   return (
     <>
@@ -45,7 +40,9 @@ const MessageItem = ({ message, otherUserName, otherUserAvatar }: TProps) => {
           }`}
         >
           {message.senderId !== currentUserId && (
-            <p className="text-xs text-muted-foreground px-3">{otherUserName}</p>
+            <p className="text-xs text-muted-foreground px-3">
+              {otherUserName}
+            </p>
           )}
           <div
             className={`rounded-2xl px-4 py-2.5 text-sm wrap-break-word ${
@@ -56,9 +53,9 @@ const MessageItem = ({ message, otherUserName, otherUserAvatar }: TProps) => {
           >
             {message.text}
           </div>
-          {/* <p className="text-xs text-muted-foreground px-3">
-            {formatTime(message.timestamp)}
-          </p> */}
+          <p className="text-xs text-muted-foreground px-3">
+            {format(message.createdAt)}
+          </p>
         </div>
 
         {message.senderId === currentUserId && (
