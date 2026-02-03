@@ -125,26 +125,6 @@ const MobileMenu = ({ setIsMenuOpen }: TProps) => {
                     </div>
                     <span className="text-sm">{userInfo?.fullName}</span>
                   </div>
-                  {/* <div className="flex gap-3">
-                <div
-                className="relative ml-auto cursor-pointer"
-                onClick={() => handleNavigate("/dashboard/candidate/messages")}
-                >
-                <MessageCircleMore size={20} />
-                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
-                2
-                </span>
-                </div>
-                <div
-                className="relative ml-auto cursor-pointer"
-                onClick={() => handleNavigate("/notifications")}
-                >
-                <Bell size={20} />
-                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
-                2
-                </span>
-                </div>
-                </div> */}
                 </div>
               </>
             ) : (

@@ -26,6 +26,8 @@
   --color-muted: #eff0f4;
   --color-muted-foreground: #8b8fa3;
   --color-border: #ededed;
+  --color-destructive: #EF4444;           /* red-500 */
+  --color-destructive-foreground: #FFFFFF;
 }
 
 body {

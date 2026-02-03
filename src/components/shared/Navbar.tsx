@@ -4,12 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
-import MobileMenu from "./MobileMenu";
+//import MobileMenu from "./MobileMenu";
 import { usePathname } from "next/navigation";
 import useUserInfo from "@/hooks/useUserInfo";
 import DashboardButton from "./DashboardButton";
 import { logout } from "@/helper/SessionHelper";
 import UserImg from "./UserImg";
+import MobileNewMenu from "./MobileNewMenu";
 
 const Navbar = () => {
   const userInfo = useUserInfo();
@@ -89,36 +90,6 @@ const Navbar = () => {
               </Link>
             </>
           )}
-          {/* <button
-            onClick={() => router.push("/dashboard/candidate/messages")}
-            className="relative rounded-full p-1 cursor-pointer hover:bg-white/10"
-          >
-            <MessageCircleMore size={20} />
-            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
-              2
-            </span>
-          </button>
-          <button
-            onClick={() => router.push("/notifications")}
-            className="relative rounded-full p-1 cursor-pointer hover:bg-white/10"
-          >
-            <Bell size={20} />
-            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-[4px] text-[10px] leading-tight flex items-center justify-center rounded-full bg-red-500 text-white">
-              2
-            </span>
-          </button> */}
-
-          {/* <div onClick={() => router.push("/dashboard/candidate/settings")} className="flex items-center gap-2 cursor-pointer">
-            <div className="h-8 w-8 rounded-full">
-              <Image
-                src="/images/avatar.png"
-                alt="user"
-                width={500}
-                height={600}
-              />
-            </div>
-            <span className="text-sm">Andrew Ainsley</span>
-          </div> */}
           {userInfo && userInfo.userId && <UserImg/>}
         </div>
 
@@ -134,7 +105,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isMenuOpen && <MobileMenu setIsMenuOpen={setIsMenuOpen} />}
+      {isMenuOpen && <MobileNewMenu setIsMenuOpen={setIsMenuOpen} userInfo={userInfo}/>}
     </nav>
   );
 }
