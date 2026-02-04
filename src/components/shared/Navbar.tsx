@@ -10,7 +10,7 @@ import useUserInfo from "@/hooks/useUserInfo";
 import DashboardButton from "./DashboardButton";
 import { logout } from "@/helper/SessionHelper";
 import UserImg from "./UserImg";
-import MobileNewMenu from "./MobileNewMenu";
+import MobileMenu from "./MobileMenu";
 
 const Navbar = () => {
   const userInfo = useUserInfo();
@@ -20,7 +20,7 @@ const Navbar = () => {
 
 
   return (
-    <nav className="sticky top-0 h-[88px] z-50 w-full bg-white text-primary shadow-md">
+    <nav className="sticky top-0 h-22 z-50 w-full bg-white text-primary shadow-md">
       <div className="mx-auto h-full flex max-w-7xl items-center justify-between px-4 py-3">
         {/* Logo */}
         <Link href="/" className="flex items-center">
@@ -105,7 +105,7 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isMenuOpen && <MobileNewMenu setIsMenuOpen={setIsMenuOpen} userInfo={userInfo}/>}
+      {isMenuOpen && <MobileMenu setIsMenuOpen={setIsMenuOpen} userInfo={userInfo}/>}
     </nav>
   );
 }
