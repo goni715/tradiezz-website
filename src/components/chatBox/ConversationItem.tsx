@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Image from "next/image";
 import { IChat } from "@/types/chat.type";
 import { format } from "timeago.js";
@@ -23,6 +23,9 @@ const ConversationItem = ({
   setOtherUserAvatar,
   setShowConversationList,
 }: TProps) => {
+  const [imgSrc, setImgSrc] = useState(
+    conversation.profileImg || "/images/profile_placeholder.png",
+  );
   const { onlineUsers } = useContext(AuthContext);
   const isOnline = onlineUsers?.includes(conversation.receiverId);
 
@@ -47,15 +50,12 @@ const ConversationItem = ({
         <div className="flex items-start gap-3">
           <div className="relative">
             <Image
-              src={conversation.profileImg || "/images/profile_placeholder.png"}
+              src={imgSrc}
               alt={"chat_img"}
               className="h-12 w-12 rounded-full shrink-0 object-cover"
               height={600}
               width={600}
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/images/profile_placeholder.png";
-              }}
+              onError={() => setImgSrc("/images/profile_placeholder.png")}
             />
             {isOnline && (
               <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-background" />
