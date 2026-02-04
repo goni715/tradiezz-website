@@ -82,7 +82,6 @@ const MobileMenu = ({ setIsMenuOpen, userInfo, onLogout }: TProps) => {
     <div className="md:hidden fixed inset-0 top-0 z-40 bg-background border-b border-border">
       <div className="h-full overflow-y-auto flex flex-col">
         {/* Header Section */}
-        {/* Header Section */}
         <div className="sticky top-0 bg-background border-b border-border p-4">
           <div className="flex items-center justify-between">
             {userInfo?.userId ? (
@@ -110,7 +109,7 @@ const MobileMenu = ({ setIsMenuOpen, userInfo, onLogout }: TProps) => {
                     {userInfo?.fullName}
                   </p>
                   <p className="text-xs text-muted-foreground capitalize">
-                    {userInfo?.role}
+                    {userInfo?.role==="candidate" ? "Job Seeker" : "Employer"}
                   </p>
                 </div>
               </div>

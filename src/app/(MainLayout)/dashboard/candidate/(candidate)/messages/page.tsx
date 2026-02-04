@@ -5,7 +5,7 @@ const MessagesPage = () => {
  
 
   return (
-    <div className="w-full">
+    <div className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
       <ChatBox/>
     </div>
   );

@@ -176,7 +176,7 @@ const ChatBox = () => {
       >
         {/* Header */}
         {selectedConversationId && (
-          <div className="border-b px-4 py-4 flex items-center gap-3">
+          <div className="border-b border-gray-300 px-4 py-4 flex items-center gap-3">
             <button
               onClick={() => setShowConversationList(true)}
               className="md:hidden"
@@ -227,7 +227,7 @@ const ChatBox = () => {
 
         {/* Input */}
         {selectedConversationId && (
-          <div className="border-t p-4 flex items-center gap-2 relative">
+          <div className="border-t border-gray-300 p-4 flex items-center gap-2 relative">
             <button onClick={() => setShowEmojiPicker((p) => !p)}>
               <Smile />
             </button>
@@ -243,7 +243,7 @@ const ChatBox = () => {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyPress}
               placeholder="Aa"
-              className="flex-1 px-4 py-2 rounded-full bg-muted border"
+              className="flex-1 px-4 py-2 rounded-full bg-muted border border-gray-300"
             />
 
             <button
