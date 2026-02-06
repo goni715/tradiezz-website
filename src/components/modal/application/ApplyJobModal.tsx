@@ -31,10 +31,10 @@ const ApplyJobModal = ({ jobId }: TProps) => {
       <Button
         onClick={() => {
           if (!userInfo) {
-            WarningToast("Please login as job seeker to proceed");
+            WarningToast("Please log in to apply for this job.");
             return;
           } else if (userInfo.role !== "candidate") {
-            WarningToast("Please login as job seeker to proceed");
+            WarningToast("Only job seekers can apply for this job.");
             return;
           } else {
             setModalOpen(true);

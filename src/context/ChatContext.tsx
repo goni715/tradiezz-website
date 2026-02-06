@@ -37,9 +37,13 @@ const ChatContextProvider = ({ children }: TChildren) => {
   /*=== Conversations fetching ===*/
   const [searchQuery, setSearchQuery] = useState("");
   const { searchTerm } = useDebounce(searchQuery); //debounce handled
-  const { data, isLoading } = useGetChatsQuery([
+  const { data, isLoading, refetch } = useGetChatsQuery([
     { name: "searchTerm", value: searchTerm },
-    { refetchOnMountOrArgChange: true },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+    },
   ]);
   /*=== Conversations fetching ===*/
   const { socket } = useContext(AuthContext);
@@ -50,6 +54,10 @@ const ChatContextProvider = ({ children }: TChildren) => {
       setConversations(data?.data);
     }
   }, [data]);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   // get messages for selected user
   const getMessages = async (conversationId: string) => {
@@ -99,6 +107,17 @@ const ChatContextProvider = ({ children }: TChildren) => {
 
         if (selectedReceiverId && newMessage.senderId === selectedReceiverId) {
           setMessages((prev) => [...prev, newMessage]);
+        }
+      },
+    );
+
+    socket.on(
+      "newConversation",
+      (newConversation: IChat & { currentUserId: string }) => {
+        if (currentUserId === newConversation.currentUserId) {
+          setConversations((prev) => {
+            return [newConversation, ...prev];
+          });
         }
       },
     );

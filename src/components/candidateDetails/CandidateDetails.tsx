@@ -1,9 +1,15 @@
 "use client";
 
-import { candidateExperienceOptions, employmentTypeOptions, workRateOptions, workTypeOptions } from "@/data/candidate.options";
+import {
+  candidateExperienceOptions,
+  employmentTypeOptions,
+  workRateOptions,
+  workTypeOptions,
+} from "@/data/candidate.options";
 import { ISingleCandidate } from "@/types/candidate.type";
 import findLabel from "@/utils/findLabel";
 import Image from "next/image";
+import SendMessageModal from "../modal/message/SendMessageModal";
 
 type TProps = {
   candidateData: ISingleCandidate;
@@ -18,15 +24,15 @@ const CandidateDetails = ({ candidateData }: TProps) => {
     });
   };
 
-
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="flex gap-6 items-start">
+      <header className="border-b border-gray-200 bg-slate-50 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+          <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+            {/* Profile Image */}
             <div className="shrink-0">
-              <div className="w-24 h-24 rounded-lg bg-gray-100 overflow-hidden border-2 border-blue-100">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg bg-gray-100 overflow-hidden border-2 border-blue-100">
                 <Image
                   src={
                     candidateData.profileImg ||
@@ -43,26 +49,38 @@ const CandidateDetails = ({ candidateData }: TProps) => {
                 />
               </div>
             </div>
-            <div className="flex-1">
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                {candidateData?.fullName} rtghrtgrt
-              </h1>
-              <p className="text-lg text-gray-600 mb-4">
-                {candidateData.subCategory} in {candidateData.category}
-              </p>
-              <div className="flex gap-4 text-sm">
-                <span className="text-gray-600">
-                  <span className="font-semibold text-gray-900">
-                    {candidateData.ratings}
-                  </span>{" "}
-                  Rating
-                </span>
-                <span className="text-gray-600">
-                  <span className="font-semibold text-gray-900">
-                    {candidateData.totalReview}
-                  </span>{" "}
-                  Reviews
-                </span>
+
+            {/* Info */}
+            <div className="flex-1 w-full">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-1">
+                    {candidateData?.fullName}
+                  </h1>
+
+                  <p className="text-base sm:text-lg text-gray-600 mb-3">
+                    {candidateData.subCategory} in {candidateData.category}
+                  </p>
+
+                  <div className="flex gap-4 text-sm">
+                    <span className="text-gray-600">
+                      <span className="font-semibold text-gray-900">
+                        {candidateData.ratings}
+                      </span>{" "}
+                      Rating
+                    </span>
+
+                    <span className="text-gray-600">
+                      <span className="font-semibold text-gray-900">
+                        {candidateData.totalReview}
+                      </span>{" "}
+                      Reviews
+                    </span>
+                  </div>
+                </div>
+
+                {/* Message Button */}
+               <SendMessageModal partnerId={candidateData.userId} />
               </div>
             </div>
           </div>
@@ -109,13 +127,20 @@ const CandidateDetails = ({ candidateData }: TProps) => {
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
-                  <p className="text-xs text-gray-600 uppercase font-semibold mb-1">Experience Level</p>
+                  <p className="text-xs text-gray-600 uppercase font-semibold mb-1">
+                    Experience Level
+                  </p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {findLabel(candidateExperienceOptions, candidateData?.experience)}
+                    {findLabel(
+                      candidateExperienceOptions,
+                      candidateData?.experience,
+                    )}
                   </p>
                 </div>
                 <div className="bg-white rounded-lg p-4 border border-gray-200">
-                  <p className="text-xs text-gray-600 uppercase font-semibold mb-1">Work Type</p>
+                  <p className="text-xs text-gray-600 uppercase font-semibold mb-1">
+                    Work Type
+                  </p>
                   <p className="text-lg font-semibold text-gray-900">
                     {findLabel(workTypeOptions, candidateData?.workType)}
                   </p>
@@ -201,12 +226,19 @@ const CandidateDetails = ({ candidateData }: TProps) => {
                     Employment Type
                   </p>
                   <p className="text-gray-900 font-medium">
-                    {findLabel(employmentTypeOptions, candidateData?.employmentType)}
+                    {findLabel(
+                      employmentTypeOptions,
+                      candidateData?.employmentType,
+                    )}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-600 uppercase font-semibold mb-1">Work Rate</p>
-                  <p className="text-gray-900 font-medium">{findLabel(workRateOptions, candidateData?.workRate)}</p>
+                  <p className="text-xs text-gray-600 uppercase font-semibold mb-1">
+                    Work Rate
+                  </p>
+                  <p className="text-gray-900 font-medium">
+                    {findLabel(workRateOptions, candidateData?.workRate)}
+                  </p>
                 </div>
               </div>
             </div>

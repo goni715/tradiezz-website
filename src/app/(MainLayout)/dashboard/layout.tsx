@@ -7,9 +7,11 @@ type TProps = {
 const PrivateLayout = ({ children }: TProps) => {
   return (
     <>
-    <PrivateRoute>
-      {children}
-    </PrivateRoute>
+      <PrivateRoute>
+        {/* <AuthContextprovider> */}
+        {children}
+        {/* </AuthContextprovider> */}
+      </PrivateRoute>
     </>
   );
 };
