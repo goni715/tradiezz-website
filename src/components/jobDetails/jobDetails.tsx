@@ -7,7 +7,6 @@ import getJobTypeColor from "@/utils/getJobTypeColor"
 import findLabel from "@/utils/findLabel"
 import { FaPoundSign } from "react-icons/fa"
 import { typeOptions } from "@/data/job.options"
-import useUserInfo from "@/hooks/useUserInfo"
 import ApplyJobModal from "../modal/application/ApplyJobModal"
 
 
@@ -17,7 +16,8 @@ type TProps = {
 
 const JobDetails = ( { job } : TProps) => {
   const isDeadlineSoon = new Date(job.deadline) < new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
-  const userInfo = useUserInfo();
+
+
 
   return (
     <div className="min-h-full bg-gray-50 rounded-md">
@@ -34,7 +34,7 @@ const JobDetails = ( { job } : TProps) => {
               >
                 {findLabel(typeOptions, job.jobType)}
               </span>
-              {userInfo?.userId && userInfo.role==="candidate" && <ApplyJobModal jobId={job._id}/>}
+              <ApplyJobModal jobId={job._id}/>
             </div>
           </div>
         </div>

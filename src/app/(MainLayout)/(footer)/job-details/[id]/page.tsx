@@ -8,7 +8,7 @@ import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { useParams } from "next/navigation";
 
 const JobDetailPage = () => {
- const params = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
   const { data, isLoading, isError, error } = useGetSingleJobQuery(params.id);
   const job = data?.data?.job || {};
   const fetchError = error as FetchBaseQueryError;

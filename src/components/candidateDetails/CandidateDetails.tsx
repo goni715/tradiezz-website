@@ -19,20 +19,6 @@ const CandidateDetails = ({ candidateData }: TProps) => {
   };
 
 
-  const calculateAge = (birthDate: string) => {
-    const today = new Date();
-    const birth = new Date(birthDate);
-    let age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < birth.getDate())
-    ) {
-      age--;
-    }
-    return age;
-  };
-
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -76,9 +62,6 @@ const CandidateDetails = ({ candidateData }: TProps) => {
                     {candidateData.totalReview}
                   </span>{" "}
                   Reviews
-                </span>
-                <span className="text-gray-600">
-                  {calculateAge(candidateData.dateOfBirth)} years old
                 </span>
               </div>
             </div>

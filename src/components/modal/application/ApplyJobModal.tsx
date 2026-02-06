@@ -3,6 +3,8 @@ import { Button, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { CgSpinnerTwo } from "react-icons/cg";
 import { useApplyJobMutation } from "@/redux/features/application/applicationApi";
+import useUserInfo from "@/hooks/useUserInfo";
+import { WarningToast } from "@/helper/ValidationHelper";
 
 type TProps = {
   jobId: string;
@@ -10,6 +12,7 @@ type TProps = {
 const ApplyJobModal = ({ jobId }: TProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [applyJob, { isLoading, isSuccess }] = useApplyJobMutation();
+  const userInfo = useUserInfo();
 
   useEffect(() => {
     if (!isLoading) {
@@ -26,7 +29,17 @@ const ApplyJobModal = ({ jobId }: TProps) => {
   return (
     <>
       <Button
-        onClick={() => setModalOpen(true)}
+        onClick={() => {
+          if (!userInfo) {
+            WarningToast("Please login as job seeker to proceed");
+            return;
+          } else if (userInfo.role !== "candidate") {
+            WarningToast("Please login as job seeker to proceed");
+            return;
+          } else {
+            setModalOpen(true);
+          }
+        }}
         className="w-full md:w-auto cursor-pointer bg-primary hover:bg-[#152a61] text-white flex items-center gap-2"
       >
         Apply Now
