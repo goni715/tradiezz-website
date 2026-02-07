@@ -1,17 +1,19 @@
+import CandidateRoute from "@/components/PrivateRoute/CandidateRoute";
 import PrivateRoute from "@/components/PrivateRoute/PrivateRoute";
 import React from "react";
 
 type TProps = {
   children: React.ReactNode;
 };
-const PrivateLayout = ({ children }: TProps) => {
+
+const CandidateRouteLayout = ({ children }: TProps) => {
   return (
     <>
       <PrivateRoute>
-        {children}
+        <CandidateRoute>{children}</CandidateRoute>
       </PrivateRoute>
     </>
   );
 };
 
-export default PrivateLayout;
+export default CandidateRouteLayout;

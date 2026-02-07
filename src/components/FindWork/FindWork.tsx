@@ -81,7 +81,7 @@ const FindWork = () => {
               </div>
 
               {/* Location */}
-              <div className="w-full md:w-[200px]">
+              <div className="w-full md:w-50">
                 <input
                   type="text"
                   value={location}
@@ -92,7 +92,7 @@ const FindWork = () => {
               </div>
 
               {/* Postal Code */}
-              <div className="w-full md:w-[160px]">
+              <div className="w-full md:w-40">
                 <input
                   type="text"
                   value={postalCode}

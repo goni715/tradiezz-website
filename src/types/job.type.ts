@@ -211,6 +211,7 @@ export type IMyJob = {
 
 
 export interface ISingleJob {
+  userId: string; //employerUserId
   _id: string;
   title: string;
   jobType: TJobType

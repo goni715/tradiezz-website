@@ -50,8 +50,7 @@ export default function RootLayout({
           />
 
           {children}
-
-          <Toaster position="top-center" />
+          <Toaster position="top-right" />
         </GlobalProvider>
       </body>
     </html>

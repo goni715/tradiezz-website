@@ -2,6 +2,7 @@
 import AuthenticationCard from "@/components/card/AuthenticationCard";
 import JobDescription from "@/components/jobDetails/JobDescription";
 import JobDetails from "@/components/jobDetails/jobDetails";
+import RelatedJobs from "@/components/jobDetails/RelatedJobs";
 import JobDetailsLoading from "@/components/loader/JobDetailsLoading";
 import { useGetSingleJobQuery } from "@/redux/features/job/jobApi";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -11,6 +12,7 @@ const JobDetailPage = () => {
   const params = useParams<{ id: string }>();
   const { data, isLoading, isError, error } = useGetSingleJobQuery(params.id);
   const job = data?.data?.job || {};
+  const relatedJobs = data?.data?.relatedJobs || [];
   const fetchError = error as FetchBaseQueryError;
 
   if (isLoading) {
@@ -31,16 +33,13 @@ const JobDetailPage = () => {
 
   if (!isLoading && !isError && job?._id) {
     return (
-      <main className="min-h-full bg-white p-4 rounded-md max-w-7xl mx-auto px-4 py-8">
-        {/* <div className="pb-4 flex items-center gap-6">
-                        <ArrowLeft className="cursor-pointer" onClick={() => navigate(-1)} />
-                        <h1 className="text-xl font-medium text-gray-900">
-                            Job Details
-                        </h1>
-                    </div> */}
-        <JobDetails job={job} />
-        <JobDescription description={job.description} />
-      </main>
+      <>
+        <main className="min-h-full bg-white p-4 rounded-md max-w-7xl mx-auto px-4 py-8">
+          <JobDetails job={job} />
+          <JobDescription description={job.description} />
+          {relatedJobs?.length > 0 && <RelatedJobs jobs={relatedJobs} />}
+        </main>
+      </>
     );
   }
 };
