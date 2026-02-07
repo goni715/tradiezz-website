@@ -3,6 +3,7 @@ import { Calendar, ArrowRight, Eye } from 'lucide-react';
 import Image from 'next/image';
 import { IBlog } from '@/types/blog.type';
 import moment from "moment";
+import Link from 'next/link';
 
 interface PostCardProps {
   blog: IBlog;
@@ -43,13 +44,13 @@ const BlogCard: React.FC<PostCardProps> = ({ blog }) => {
         {/* <p className="text-gray-600 mb-4 line-clamp-3 flex-1">
           {post.excerpt}
         </p> */}
-        <a
+        <Link
           href={`/blogs/${blog._id}`}
           className="inline-flex items-center text-amber-600 hover:text-amber-700 font-medium transition-colors duration-200 group mt-auto"
         >
           Read more 
           <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform duration-200" />
-        </a>
+        </Link>
       </div>
     </div>
   );

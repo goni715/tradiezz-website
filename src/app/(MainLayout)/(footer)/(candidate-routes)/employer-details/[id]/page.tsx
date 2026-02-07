@@ -1,7 +1,7 @@
 'use client'
 
 import SendEmployerMessageModal from '@/components/modal/message/SendEmployerMessageModal'
-import { Mail, MessageSquare, Globe, Linkedin, Facebook, Instagram } from 'lucide-react'
+import { Globe, Linkedin, Facebook, Instagram } from 'lucide-react'
 import Image from 'next/image'
 
 interface EmployerData {
